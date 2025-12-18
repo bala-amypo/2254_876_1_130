@@ -1,6 +1,5 @@
 package com.example.demo.controller;
 import java.util.NoSuchElementException;
-
 import com.example.demo.model.WarrantyClaimRecord;
 import com.example.demo.service.WarrantyClaimService;
 import io.swagger.v3.oas.annotations.tags.Tag;
