@@ -8,12 +8,18 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface FraudAlertRepository extends JpaRepository<FraudAlertRecord, Long> {
+public interface FraudAlertRecordRepository extends JpaRepository<FraudAlertRecord, Long> {
 
-    // Get all unresolved alerts
-    @Query("SELECT f FROM FraudAlertRecord f WHERE f.resolved = false")
-    List<FraudAlertRecord> findUnresolvedAlerts();
-
-    // Get alerts by claimId
+    // Find all alerts for a specific claim ID
     List<FraudAlertRecord> findByClaimId(Long claimId);
+
+    // Find all unresolved alerts
+    List<FraudAlertRecord> findByResolvedFalse();
+
+    // Custom query: search alerts by keyword in alertReason
+    @Query("SELECT f FROM FraudAlertRecord f WHERE f.alertReason LIKE %?1%")
+    List<FraudAlertRecord> findByAlertReasonContaining(String keyword);
+
+    // Optional: find alert by exact alertReason
+    FraudAlertRecord findByAlertReason(String alertReason);
 }
