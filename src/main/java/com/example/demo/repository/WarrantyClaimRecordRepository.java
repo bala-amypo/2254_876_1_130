@@ -1,71 +1,16 @@
-package com.example.demo.model;
+package com.example.demo.repository;
 
-import jakarta.persistence.*;
-import java.time.LocalDateTime;
+import com.example.demo.model.WarrantyClaimRecord;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-@Entity
-@Table(name = "warranty_claim_records")
-public class WarrantyClaimRecord {
+import java.util.List;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+@Repository
+public interface WarrantyClaimRecordRepository
+        extends JpaRepository<WarrantyClaimRecord, Long> {
 
-    private String serialNumber;
-    private String claimantName;
-    private String claimantEmail;
-    private String claimReason;
-    private String status;
+    boolean existsBySerialNumberAndClaimReason(String serialNumber, String claimReason);
 
-    private LocalDateTime submittedAt;
-
-    @ManyToOne
-    private DeviceOwnershipRecord device;
-
-    public WarrantyClaimRecord() {
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getSerialNumber() {
-        return serialNumber;
-    }
-
-    public void setSerialNumber(String serialNumber) {
-        this.serialNumber = serialNumber;
-    }
-
-    public String getClaimReason() {
-        return claimReason;
-    }
-
-    public void setClaimReason(String claimReason) {
-        this.claimReason = claimReason;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public LocalDateTime getSubmittedAt() {
-        return submittedAt;
-    }
-
-    public void setSubmittedAt(LocalDateTime submittedAt) {
-        this.submittedAt = submittedAt;
-    }
-
-    public DeviceOwnershipRecord getDevice() {
-        return device;
-    }
-
-    public void setDevice(DeviceOwnershipRecord device) {
-        this.device = device;
-    }
+    List<WarrantyClaimRecord> findBySerialNumber(String serialNumber);
 }
