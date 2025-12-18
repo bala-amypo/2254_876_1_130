@@ -1,22 +1,71 @@
-package com.example.demo.repository;
+package com.example.demo.model;
 
-import com.example.demo.model.WarrantyClaimRecord;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
+import jakarta.persistence.*;
+import java.time.LocalDateTime;
 
-import java.util.List;
-import java.util.Optional;
+@Entity
+@Table(name = "warranty_claim_records")
+public class WarrantyClaimRecord {
 
-@Repository
-public interface WarrantyClaimRecordRepository extends JpaRepository<WarrantyClaimRecord, Long> {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    Optional<WarrantyClaimRecord> findById(Long id);
+    private String serialNumber;
+    private String claimantName;
+    private String claimantEmail;
+    private String claimReason;
+    private String status;
 
-    List<WarrantyClaimRecord> findAll();
+    private LocalDateTime submittedAt;
 
-    List<WarrantyClaimRecord> findBySerialNumber(String serialNumber);
+    @ManyToOne
+    private DeviceOwnershipRecord device;
 
-    boolean existsBySerialNumberAndClaimReason(String serialNumber, String claimReason);
+    public WarrantyClaimRecord() {
+    }
 
-    List<WarrantyClaimRecord> findByStatus(String status);
+    public Long getId() {
+        return id;
+    }
+
+    public String getSerialNumber() {
+        return serialNumber;
+    }
+
+    public void setSerialNumber(String serialNumber) {
+        this.serialNumber = serialNumber;
+    }
+
+    public String getClaimReason() {
+        return claimReason;
+    }
+
+    public void setClaimReason(String claimReason) {
+        this.claimReason = claimReason;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public LocalDateTime getSubmittedAt() {
+        return submittedAt;
+    }
+
+    public void setSubmittedAt(LocalDateTime submittedAt) {
+        this.submittedAt = submittedAt;
+    }
+
+    public DeviceOwnershipRecord getDevice() {
+        return device;
+    }
+
+    public void setDevice(DeviceOwnershipRecord device) {
+        this.device = device;
+    }
 }

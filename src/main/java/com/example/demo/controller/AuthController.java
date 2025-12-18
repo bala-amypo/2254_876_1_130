@@ -1,39 +1,25 @@
-package com.example.demo.controller;
+package com.example.demo.dto;
 
-import com.example.demo.dto.AuthRequest;
-import com.example.demo.dto.AuthResponse;
-import com.example.demo.dto.LoginRequest;
-import com.example.demo.dto.RegisterRequest;
-import com.example.demo.model.User;
-import com.example.demo.security.JwtTokenProvider;
-import com.example.demo.service.UserService;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+public class AuthRequest {
 
-import java.util.Set;
+    private String email;
+    private String password;
 
-@RestController
-@RequestMapping("/auth")
-@RequiredArgsConstructor
-@Tag(name = "Auth", description = "Authentication APIs")
-public class AuthController {
+    public AuthRequest() {}
 
-    private final UserService userService;
-    private final JwtTokenProvider jwtTokenProvider;
-
-    @PostMapping("/register")
-    public ResponseEntity<AuthResponse> register(@RequestBody RegisterRequest request) {
-        User user = userService.registerUser(request);
-        String token = jwtTokenProvider.createToken(user.getId(), user.getEmail(), user.getRoles());
-        return ResponseEntity.ok(new AuthResponse(token, user.getId(), user.getEmail(), user.getRoles()));
+    public String getEmail() {
+        return email;
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest request) {
-        User user = userService.loginUser(request);
-        String token = jwtTokenProvider.createToken(user.getId(), user.getEmail(), user.getRoles());
-        return ResponseEntity.ok(new AuthResponse(token, user.getId(), user.getEmail(), user.getRoles()));
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }
