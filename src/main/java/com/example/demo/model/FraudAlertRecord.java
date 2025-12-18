@@ -9,26 +9,21 @@ public class FraudAlertRecord {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long claimId;
-
     @Column(nullable = false)
     private String alertReason;
 
     @Column(nullable = false)
-    private String status; // "PENDING" or "RESOLVED"
-
-    public FraudAlertRecord() {}
+    private boolean resolved = false;   // ✅ Add this field
 
     // Getters and setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
-    public Long getClaimId() { return claimId; }
-    public void setClaimId(Long claimId) { this.claimId = claimId; }
-
     public String getAlertReason() { return alertReason; }
     public void setAlertReason(String alertReason) { this.alertReason = alertReason; }
 
-    public String getStatus() { return status; }
-    public void setStatus(String status) { this.status = status; }
+    public boolean isResolved() { return resolved; }     // getter
+    public void setResolved(boolean resolved) {         // setter
+        this.resolved = resolved;
+    }
 }
