@@ -8,8 +8,6 @@ import com.example.demo.service.StolenDeviceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -20,26 +18,21 @@ public class StolenDeviceServiceImpl implements StolenDeviceService {
     private final DeviceOwnershipRecordRepository deviceRepository;
 
     @Override
-    public StolenDeviceReport reportStolen(StolenDeviceReport report) {
-        DeviceOwnershipRecord device = deviceRepository.findBySerialNumber(report.getSerialNumber())
-                .orElseThrow(() -> new NoSuchElementException("Device not found"));
+    public StolenDeviceReport reportStolenDevice(String serialNumber) {
+        Optional<DeviceOwnershipRecord> deviceOpt = deviceRepository.findBySerialNumber(serialNumber);
+        if (deviceOpt.isEmpty()) {
+            throw new IllegalArgumentException("Device not found for serial number: " + serialNumber);
+        }
 
-        report.setDevice(device);
+        StolenDeviceReport report = new StolenDeviceReport();
+        report.setDevice(deviceOpt.get()); // correctly set the device
+        report.setReported(true); // assuming you have a reported flag
         return stolenRepository.save(report);
     }
 
     @Override
-    public List<StolenDeviceReport> getReportsBySerial(String serialNumber) {
+    public Optional<StolenDeviceReport> getBySerial(String serialNumber) {
+        // Repository should return Optional
         return stolenRepository.findBySerialNumber(serialNumber);
-    }
-
-    @Override
-    public Optional<StolenDeviceReport> getReportById(Long id) {
-        return stolenRepository.findById(id);
-    }
-
-    @Override
-    public List<StolenDeviceReport> getAllReports() {
-        return stolenRepository.findAll();
     }
 }
