@@ -1,49 +1,39 @@
 package com.example.demo.controller;
-import java.util.NoSuchElementException;
+
 import com.example.demo.model.WarrantyClaimRecord;
 import com.example.demo.service.WarrantyClaimService;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/claims")
-@RequiredArgsConstructor
-@Tag(name = "Claim", description = "Warranty Claim APIs")
+@RequestMapping("/warranty")
 public class WarrantyClaimController {
 
     private final WarrantyClaimService claimService;
 
-    @PostMapping
-    public ResponseEntity<WarrantyClaimRecord> submitClaim(@RequestBody WarrantyClaimRecord claim) {
-        return ResponseEntity.ok(claimService.submitClaim(claim));
+    public WarrantyClaimController(WarrantyClaimService claimService) {
+        this.claimService = claimService;
     }
 
-    @GetMapping
-    public ResponseEntity<List<WarrantyClaimRecord>> getAllClaims() {
-        return ResponseEntity.ok(claimService.getAllClaims());
+    @PostMapping("/submit")
+    public WarrantyClaimRecord submitClaim(@RequestBody WarrantyClaimRecord claim) {
+        return claimService.submitClaim(claim);
+    }
+
+    @GetMapping("/all")
+    public List<WarrantyClaimRecord> getAllClaims() {
+        return claimService.getAllClaims();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<WarrantyClaimRecord> getClaimById(@PathVariable Long id) {
-        return claimService.getClaimById(id)
-                .map(ResponseEntity::ok)
-                .orElseThrow(() -> new NoSuchElementException("Offer not found"));
+    public Optional<WarrantyClaimRecord> getClaimById(@PathVariable Long id) {
+        return claimService.getClaimById(id);
     }
 
-    @GetMapping("/serial/{serialNumber}")
-    public ResponseEntity<List<WarrantyClaimRecord>> getClaimsBySerial(@PathVariable String serialNumber) {
-        return ResponseEntity.ok(claimService.getClaimsBySerial(serialNumber));
-    }
-
-    @PutMapping("/{id}/status")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<WarrantyClaimRecord> updateClaimStatus(@PathVariable Long id,
-                                                                 @RequestParam String status) {
-        return ResponseEntity.ok(claimService.updateClaimStatus(id, status));
+    @PutMapping("/update/{id}")
+    public WarrantyClaimRecord updateClaimStatus(@PathVariable Long id, @RequestParam String status) {
+        return claimService.updateClaimStatus(id, status);
     }
 }

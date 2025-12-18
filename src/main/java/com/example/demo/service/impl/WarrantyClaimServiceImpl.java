@@ -6,6 +6,7 @@ import com.example.demo.service.WarrantyClaimService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class WarrantyClaimServiceImpl implements WarrantyClaimService {
@@ -25,5 +26,32 @@ public class WarrantyClaimServiceImpl implements WarrantyClaimService {
     public WarrantyClaimRecord resolveClaim(WarrantyClaimRecord claim) {
         claim.setStatus("RESOLVED");
         return claimRepository.save(claim);
+    }
+
+    @Override
+    public WarrantyClaimRecord submitClaim(WarrantyClaimRecord claim) {
+        claim.setStatus("PENDING");
+        return claimRepository.save(claim);
+    }
+
+    @Override
+    public List<WarrantyClaimRecord> getAllClaims() {
+        return claimRepository.findAll();
+    }
+
+    @Override
+    public Optional<WarrantyClaimRecord> getClaimById(Long id) {
+        return claimRepository.findById(id);
+    }
+
+    @Override
+    public WarrantyClaimRecord updateClaimStatus(Long id, String status) {
+        Optional<WarrantyClaimRecord> opt = claimRepository.findById(id);
+        if(opt.isPresent()) {
+            WarrantyClaimRecord claim = opt.get();
+            claim.setStatus(status);
+            return claimRepository.save(claim);
+        }
+        return null;
     }
 }
