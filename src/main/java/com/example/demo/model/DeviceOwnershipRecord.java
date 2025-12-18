@@ -41,6 +41,7 @@ public class DeviceOwnershipRecord {
         public void setOwnerEmail(String ownerEmail) {
             this.ownerEmail = ownerEmail;
         }
+        
         }
 
         
