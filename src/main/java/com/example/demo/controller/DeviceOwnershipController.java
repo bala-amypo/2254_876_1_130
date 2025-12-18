@@ -1,64 +1,48 @@
-package com.example.demo.model;
+package com.example.demo.controller;
 
-import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.hibernate.annotations.CreationTimestamp;
+import com.example.demo.model.DeviceOwnershipRecord;
+import com.example.demo.service.DeviceOwnershipService;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
-@Entity
-@Table(name = "device_ownership_records")
-@Getter
-@Setter
-@NoArgsConstructor
-public class DeviceOwnershipRecord {
+@RestController
+@RequestMapping("/api/devices")
+@RequiredArgsConstructor
+@Tag(name = "Device", description = "Device Ownership APIs")
+public class DeviceOwnershipController {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private final DeviceOwnershipService deviceService;
 
-    @Column(nullable = false, unique = true)
-    private String serialNumber;
-
-    @Column(nullable = false)
-    private String ownerName;
-
-    private String ownerEmail;
-
-    private LocalDate purchaseDate;
-
-    @Column(nullable = false)
-    private LocalDate warrantyExpiration;
-
-    @Column(nullable = false)
-    private Boolean active = true;
-
-    @CreationTimestamp
-    private LocalDateTime createdAt;
-
-    @OneToMany(mappedBy = "device", cascade = CascadeType.ALL)
-    private Set<WarrantyClaimRecord> warrantyClaims = new HashSet<>();
-
-    @OneToMany(mappedBy = "device", cascade = CascadeType.ALL)
-    private Set<StolenDeviceReport> stolenReports = new HashSet<>();
-
-    @PrePersist
-    private void prePersist() {
-        if (active == null) active = true;
+    @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<DeviceOwnershipRecord> registerDevice(@RequestBody DeviceOwnershipRecord device) {
+        return ResponseEntity.ok(deviceService.registerDevice(device));
     }
 
-    public DeviceOwnershipRecord(String serialNumber, String ownerName, String ownerEmail,
-                                 LocalDate purchaseDate, LocalDate warrantyExpiration, Boolean active) {
-        this.serialNumber = serialNumber;
-        this.ownerName = ownerName;
-        this.ownerEmail = ownerEmail;
-        this.purchaseDate = purchaseDate;
-        this.warrantyExpiration = warrantyExpiration;
-        this.active = active != null ? active : true;
+    @GetMapping
+    public ResponseEntity<List<DeviceOwnershipRecord>> getAllDevices() {
+        return ResponseEntity.ok(deviceService.getAllDevices());
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<DeviceOwnershipRecord> getDeviceById(@PathVariable Long id) {
+        return ResponseEntity.ok(deviceService.updateDeviceStatus(id, true));
+    }
+
+    @GetMapping("/serial/{serialNumber}")
+    public ResponseEntity<DeviceOwnershipRecord> getDeviceBySerial(@PathVariable String serialNumber) {
+        return ResponseEntity.ok(deviceService.getBySerial(serialNumber));
+    }
+
+    @PutMapping("/{id}/status")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<DeviceOwnershipRecord> updateDeviceStatus(@PathVariable Long id,
+                                                                    @RequestParam boolean active) {
+        return ResponseEntity.ok(deviceService.updateDeviceStatus(id, active));
     }
 }
