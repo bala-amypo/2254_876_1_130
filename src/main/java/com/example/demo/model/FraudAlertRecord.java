@@ -1,26 +1,21 @@
 package com.example.demo.model;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
+@Getter
+@Setter
 public class FraudAlertRecord {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long claimId;
+    @Column(nullable = false)
+    private String serialNumber;
+
+    @Column(nullable = false)
     private String alertReason;
-    private boolean resolved;
-
-    public FraudAlertRecord() {
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setResolved(boolean resolved) {
-        this.resolved = resolved;
-    }
 }
