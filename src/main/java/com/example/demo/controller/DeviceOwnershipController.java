@@ -9,7 +9,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/devices")
-@Tag(name = "Device Ownership Controller")
+@Tag(name = "Device Ownership")
 public class DeviceOwnershipController {
 
     private final DeviceOwnershipService service;
