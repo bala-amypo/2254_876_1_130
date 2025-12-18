@@ -28,4 +28,23 @@ public class FraudAlertRecord {
     @Column(nullable = false)
     private String alertType;
 
-    @Column(n
+    @Column(nullable = false)
+    private String severity; // LOW, MEDIUM, HIGH, CRITICAL
+
+    private String message;
+
+    @CreationTimestamp
+    private LocalDateTime alertDate;
+
+    @Column(nullable = false)
+    private Boolean resolved = false;
+
+    public FraudAlertRecord(Long claimId, String serialNumber, String alertType, String severity, String message) {
+        this.claimId = claimId;
+        this.serialNumber = serialNumber;
+        this.alertType = alertType;
+        this.severity = severity;
+        this.message = message;
+        this.resolved = false;
+    }
+}

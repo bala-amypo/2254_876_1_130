@@ -1,18 +1,45 @@
-package com.example.demo.service;
+package com.example.demo.service.impl;
 
 import com.example.demo.model.FraudAlertRecord;
+import com.example.demo.repository.FraudAlertRecordRepository;
+import com.example.demo.service.FraudAlertService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
-public interface FraudAlertService {
+@Service
+@RequiredArgsConstructor
+public class FraudAlertServiceImpl implements FraudAlertService {
 
-    FraudAlertRecord createAlert(FraudAlertRecord alert);
+    private final FraudAlertRecordRepository alertRepository;
 
-    FraudAlertRecord resolveAlert(Long id);
+    @Override
+    public FraudAlertRecord createAlert(FraudAlertRecord alert) {
+        return alertRepository.save(alert);
+    }
 
-    List<FraudAlertRecord> getAlertsBySerial(String serialNumber);
+    @Override
+    public FraudAlertRecord resolveAlert(Long id) {
+        FraudAlertRecord alert = alertRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Alert not found"));
+        alert.setResolved(true);
+        return alertRepository.save(alert);
+    }
 
-    List<FraudAlertRecord> getAlertsByClaim(Long claimId);
+    @Override
+    public List<FraudAlertRecord> getAlertsBySerial(String serialNumber) {
+        return alertRepository.findBySerialNumber(serialNumber);
+    }
 
-    List<FraudAlertRecord> getAllAlerts();
+    @Override
+    public List<FraudAlertRecord> getAlertsByClaim(Long claimId) {
+        return alertRepository.findByClaimId(claimId);
+    }
+
+    @Override
+    public List<FraudAlertRecord> getAllAlerts() {
+        return alertRepository.findAll();
+    }
 }
