@@ -1,24 +1,35 @@
 package com.example.demo.model;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
 
 @Entity
-@Getter
-@Setter
 public class StolenDeviceReport {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String serialNumber;
 
-    private String reportReason;
+    @Column(nullable = false)
+    private String status; // "REPORTED" or "RESOLVED"
 
     @ManyToOne
-    @JoinColumn(name = "device_id")
     private DeviceOwnershipRecord device;
+
+    public StolenDeviceReport() {}
+
+    // Getters and setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+
+    public String getSerialNumber() { return serialNumber; }
+    public void setSerialNumber(String serialNumber) { this.serialNumber = serialNumber; }
+
+    public String getStatus() { return status; }
+    public void setStatus(String status) { this.status = status; }
+
+    public DeviceOwnershipRecord getDevice() { return device; }
+    public void setDevice(DeviceOwnershipRecord device) { this.device = device; }
 }
