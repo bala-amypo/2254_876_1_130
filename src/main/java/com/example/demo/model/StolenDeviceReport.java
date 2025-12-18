@@ -17,4 +17,8 @@ public class StolenDeviceReport {
     private String serialNumber;
 
     private String reportReason;
+
+    @ManyToOne
+    @JoinColumn(name = "device_id")
+    private DeviceOwnershipRecord device;
 }

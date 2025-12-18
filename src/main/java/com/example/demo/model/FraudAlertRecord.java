@@ -18,4 +18,8 @@ public class FraudAlertRecord {
 
     @Column(nullable = false)
     private String alertReason;
+
+    private boolean resolved = false;
+
+    private Long claimId;
 }

@@ -18,9 +18,7 @@ public class DeviceOwnershipRecord {
     @Column(nullable = false, unique = true)
     private String serialNumber;
 
-    @Column(nullable = false)
-    private Boolean active = true;
+    private boolean active = true;
 
-    @Column(nullable = false)
     private LocalDate warrantyExpiration;
 }
