@@ -1,71 +1,32 @@
 package com.example.demo.model;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "warranty_claims")
+@Getter
+@Setter
 public class WarrantyClaimRecord {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String serialNumber;
 
+    @Column(nullable = false)
     private String claimReason;
 
-    private String status;
-
-    private LocalDateTime submittedAt;
+    @Column(nullable = false)
+    private String status = "PENDING";
 
     @ManyToOne
     @JoinColumn(name = "device_id")
     private DeviceOwnershipRecord device;
 
-    // getters & setters
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getSerialNumber() {
-        return serialNumber;
-    }
-
-    public void setSerialNumber(String serialNumber) {
-        this.serialNumber = serialNumber;
-    }
-
-    public String getClaimReason() {
-        return claimReason;
-    }
-
-    public void setClaimReason(String claimReason) {
-        this.claimReason = claimReason;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public LocalDateTime getSubmittedAt() {
-        return submittedAt;
-    }
-
-    public void setSubmittedAt(LocalDateTime submittedAt) {
-        this.submittedAt = submittedAt;
-    }
-
-    public DeviceOwnershipRecord getDevice() {
-        return device;
-    }
-
-    public void setDevice(DeviceOwnershipRecord device) {
-        this.device = device;
-    }
+    private LocalDateTime submittedAt;
 }
