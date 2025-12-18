@@ -3,45 +3,52 @@ package com.example.demo.model;
 import jakarta.persistence.*;
 
 @Entity
+@Table(name = "device_ownership_record")
 public class DeviceOwnershipRecord {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @Column(unique = true, nullable = false)
     private String serialNumber;
 
-    @Column(nullable = false)
-    private String ownerEmail;
+    private String deviceName;
+
+    private Boolean active = true;
 
     public DeviceOwnershipRecord() {
-        }
+    }
 
-        public Long getId() {
-            return id;
-        }
+    public Long getId() {
+        return id;
+    }
 
-        public void setId(Long id) {
-            this.id = id;
-        }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-        public String getSerialNumber() {
-            return serialNumber;
-        }
+    public String getSerialNumber() {
+        return serialNumber;
+    }
 
-        public void setSerialNumber(String serialNumber) {
-            this.serialNumber = serialNumber;
-        }
+    public void setSerialNumber(String serialNumber) {
+        this.serialNumber = serialNumber;
+    }
 
-        public String getOwnerEmail() {
-            return ownerEmail;
-        }
+    public String getDeviceName() {
+        return deviceName;
+    }
 
-        public void setOwnerEmail(String ownerEmail) {
-            this.ownerEmail = ownerEmail;
-        }
-        
-        }
+    public void setDeviceName(String deviceName) {
+        this.deviceName = deviceName;
+    }
 
-        
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
+}
