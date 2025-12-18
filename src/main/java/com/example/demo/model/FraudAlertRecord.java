@@ -7,7 +7,7 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-public class FraudAlert {
+public class FraudAlertRecord {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
