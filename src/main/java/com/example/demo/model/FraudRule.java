@@ -14,9 +14,6 @@ public class FraudRule {
     private String description;
     private boolean active;
 
-    public FraudRule() {
-    }
-
     public Long getId() {
         return id;
     }
@@ -25,15 +22,31 @@ public class FraudRule {
         return ruleCode;
     }
 
+    public void setRuleCode(String ruleCode) {
+        this.ruleCode = ruleCode;
+    }
+
     public String getRuleType() {
         return ruleType;
+    }
+
+    public void setRuleType(String ruleType) {
+        this.ruleType = ruleType;
     }
 
     public String getDescription() {
         return description;
     }
 
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public boolean getActive() {
         return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 }
