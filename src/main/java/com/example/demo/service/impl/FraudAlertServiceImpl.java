@@ -2,14 +2,13 @@ package com.example.demo.service.impl;
 
 import com.example.demo.model.FraudAlertRecord;
 import com.example.demo.repository.FraudAlertRepository;
-import com.example.demo.service.FraudAlertService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
-public class FraudAlertServiceImpl implements FraudAlertService {
+public class FraudAlertServiceImpl {
 
     private final FraudAlertRepository alertRepository;
 
@@ -17,22 +16,27 @@ public class FraudAlertServiceImpl implements FraudAlertService {
         this.alertRepository = alertRepository;
     }
 
-    @Override
+    // Get all alerts
     public List<FraudAlertRecord> getAllAlerts() {
-        return alertRepository.findAll();   // ✅ returns List
+        return alertRepository.findAll();
     }
 
-    @Override
+    // Get alert by ID
     public Optional<FraudAlertRecord> getAlertById(Long id) {
-        return alertRepository.findById(id);   // ✅ returns Optional
+        return alertRepository.findById(id);
     }
 
-    @Override
+    // Resolve alert
     public void resolveAlert(Long id) {
-        Optional<FraudAlertRecord> alert = alertRepository.findById(id);
-        alert.ifPresent(a -> {
-            a.setResolved(true);   // ✅ now works
-            alertRepository.save(a);
+        Optional<FraudAlertRecord> alertOpt = alertRepository.findById(id);
+        alertOpt.ifPresent(alert -> {
+            alert.setResolved(true);
+            alertRepository.save(alert);
         });
+    }
+
+    // Save new alert
+    public FraudAlertRecord saveAlert(FraudAlertRecord alert) {
+        return alertRepository.save(alert);
     }
 }

@@ -2,43 +2,24 @@ package com.example.demo.service.impl;
 
 import com.example.demo.model.DeviceOwnershipRecord;
 import com.example.demo.repository.DeviceOwnershipRecordRepository;
-import com.example.demo.service.DeviceOwnershipService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Service
-@RequiredArgsConstructor
-public class DeviceOwnershipServiceImpl implements DeviceOwnershipService {
+public class DeviceOwnershipServiceImpl {
 
     private final DeviceOwnershipRecordRepository deviceRepository;
 
-    @Override
-    public DeviceOwnershipRecord registerDevice(DeviceOwnershipRecord device) {
-        if (deviceRepository.existsBySerialNumber(device.getSerialNumber())) {
-            throw new IllegalArgumentException("Serial number already exists");
-        }
-        return deviceRepository.save(device);
+    public DeviceOwnershipServiceImpl(DeviceOwnershipRecordRepository deviceRepository) {
+        this.deviceRepository = deviceRepository;
     }
 
-    @Override
-    public DeviceOwnershipRecord getBySerial(String serialNumber) {
-        return deviceRepository.findBySerialNumber(serialNumber)
-                .orElseThrow(() -> new NoSuchElementException("Device not found"));
+    public Optional<DeviceOwnershipRecord> getDeviceBySerial(String serialNumber) {
+        return deviceRepository.findBySerialNumber(serialNumber);
     }
 
-    @Override
-    public List<DeviceOwnershipRecord> getAllDevices() {
-        return deviceRepository.findAll();
-    }
-
-    @Override
-    public DeviceOwnershipRecord updateDeviceStatus(Long id, boolean active) {
-        DeviceOwnershipRecord device = deviceRepository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("Device not found"));
-        device.setActive(active);
+    public DeviceOwnershipRecord saveDevice(DeviceOwnershipRecord device) {
         return deviceRepository.save(device);
     }
 }

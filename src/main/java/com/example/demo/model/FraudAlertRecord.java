@@ -10,20 +10,46 @@ public class FraudAlertRecord {
     private Long id;
 
     @Column(nullable = false)
+    private Long claimId;
+
+    @Column(nullable = false)
     private String alertReason;
 
     @Column(nullable = false)
-    private boolean resolved = false;   // ✅ Add this field
+    private boolean resolved = false;
 
-    // Getters and setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public FraudAlertRecord() {
+    }
 
-    public String getAlertReason() { return alertReason; }
-    public void setAlertReason(String alertReason) { this.alertReason = alertReason; }
+    public Long getId() {
+        return id;
+    }
 
-    public boolean isResolved() { return resolved; }     // getter
-    public void setResolved(boolean resolved) {         // setter
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getClaimId() {
+        return claimId;
+    }
+
+    public void setClaimId(Long claimId) {
+        this.claimId = claimId;
+    }
+
+    public String getAlertReason() {
+        return alertReason;
+    }
+
+    public void setAlertReason(String alertReason) {
+        this.alertReason = alertReason;
+    }
+
+    public boolean isResolved() {
+        return resolved;
+    }
+
+    public void setResolved(boolean resolved) {
         this.resolved = resolved;
     }
 }
