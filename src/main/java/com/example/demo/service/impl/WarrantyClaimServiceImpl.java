@@ -1,12 +1,12 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.model.DeviceOwnershipRecord;
-import com.example.demo.model.StolenDeviceReport;
 import com.example.demo.model.WarrantyClaimRecord;
 import com.example.demo.repository.DeviceOwnershipRecordRepository;
 import com.example.demo.repository.StolenDeviceReportRepository;
 import com.example.demo.repository.WarrantyClaimRecordRepository;
 import com.example.demo.service.WarrantyClaimService;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +14,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -25,29 +26,35 @@ public class WarrantyClaimServiceImpl implements WarrantyClaimService {
 
     @Override
     public WarrantyClaimRecord submitClaim(WarrantyClaimRecord claim) {
-        DeviceOwnershipRecord device = deviceRepository.findBySerialNumber(claim.getSerialNumber())
-                .orElseThrow(() -> new NoSuchElementException("Offer not found"));
 
-        // Check if device is active
+        DeviceOwnershipRecord device = deviceRepository
+                .findBySerialNumber(claim.getSerialNumber())
+                .orElseThrow(() -> new NoSuchElementException("Device not found"));
+
+        // Default status
+        claim.setStatus("APPROVED");
+
+        // 1️⃣ Check if device is active
         if (!device.getActive()) {
             claim.setStatus("FLAGGED");
         }
 
-        // Check if device reported stolen
-        boolean isStolen = stolenRepository.existsBySerialNumber(device.getSerialNumber());
-        if (isStolen) {
+        // 2️⃣ Check if device reported stolen
+        boolean stolen = stolenRepository.existsBySerialNumber(device.getSerialNumber());
+        if (stolen) {
             claim.setStatus("FLAGGED");
         }
 
-        // Check warranty expiration
+        // 3️⃣ Check warranty expiration
         LocalDate today = LocalDate.now();
         if (device.getWarrantyExpiration().isBefore(today)) {
             claim.setStatus("FLAGGED");
         }
 
-        // Check duplicate claim (same serial + reason)
+        // 4️⃣ Check duplicate claim
         boolean duplicate = claimRepository.existsBySerialNumberAndClaimReason(
-                claim.getSerialNumber(), claim.getClaimReason()
+                claim.getSerialNumber(),
+                claim.getClaimReason()
         );
         if (duplicate) {
             claim.setStatus("FLAGGED");
@@ -55,13 +62,17 @@ public class WarrantyClaimServiceImpl implements WarrantyClaimService {
 
         claim.setDevice(device);
         claim.setSubmittedAt(LocalDateTime.now());
+
         return claimRepository.save(claim);
     }
 
     @Override
     public WarrantyClaimRecord updateClaimStatus(Long claimId, String status) {
-        WarrantyClaimRecord claim = claimRepository.findById(claimId)
-                .orElseThrow(() -> new NoSuchElementException("Offer not found"));
+
+        WarrantyClaimRecord claim = claimRepository
+                .findById(claimId)
+                .orElseThrow(() -> new NoSuchElementException("Claim not found"));
+
         claim.setStatus(status);
         return claimRepository.save(claim);
     }
