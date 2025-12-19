@@ -1,26 +1,14 @@
-package com.example.demo.service.impl;
-
-import com.example.demo.entity.*;
-import com.example.demo.repository.*;
-import com.example.demo.service.WarrantyClaimService;
-import org.springframework.stereotype.Service;
-
-import java.time.LocalDate;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
-
 @Service
 public class WarrantyClaimServiceImpl implements WarrantyClaimService {
 
     private final WarrantyClaimRecordRepository claimRepo;
-    private final DeviceOwnershipRecordRepository deviceRepo;
-    private final StolenDeviceReportRepository stolenRepo;
+    private final DeviceOwnershipRepository deviceRepo;
+    private final StolenDeviceRepository stolenRepo;
 
     public WarrantyClaimServiceImpl(
             WarrantyClaimRecordRepository claimRepo,
-            DeviceOwnershipRecordRepository deviceRepo,
-            StolenDeviceReportRepository stolenRepo
+            DeviceOwnershipRepository deviceRepo,
+            StolenDeviceRepository stolenRepo
     ) {
         this.claimRepo = claimRepo;
         this.deviceRepo = deviceRepo;
@@ -33,22 +21,19 @@ public class WarrantyClaimServiceImpl implements WarrantyClaimService {
         DeviceOwnershipRecord device = deviceRepo
                 .findBySerialNumber(claim.getSerialNumber())
                 .orElseThrow(() ->
-                        new NoSuchElementException("Offer not found"));
+                        new NoSuchElementException("Device not found"));
 
         boolean flagged = false;
 
-        // Duplicate claim check
         if (claimRepo.existsBySerialNumberAndClaimReason(
                 claim.getSerialNumber(), claim.getClaimReason())) {
             flagged = true;
         }
 
-        // Warranty expired
         if (device.getWarrantyExpiration().isBefore(LocalDate.now())) {
             flagged = true;
         }
 
-        // Stolen device
         if (stolenRepo.existsBySerialNumber(claim.getSerialNumber())) {
             flagged = true;
         }

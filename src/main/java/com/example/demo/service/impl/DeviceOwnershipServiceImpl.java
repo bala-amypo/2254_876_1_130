@@ -1,19 +1,9 @@
-package com.example.demo.service.impl;
-
-import com.example.demo.entity.DeviceOwnershipRecord;
-import com.example.demo.repository.DeviceOwnershipRecordRepository;
-import com.example.demo.service.DeviceOwnershipService;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.NoSuchElementException;
-
 @Service
 public class DeviceOwnershipServiceImpl implements DeviceOwnershipService {
 
-    private final DeviceOwnershipRecordRepository deviceRepo;
+    private final DeviceOwnershipRepository deviceRepo;
 
-    public DeviceOwnershipServiceImpl(DeviceOwnershipRecordRepository deviceRepo) {
+    public DeviceOwnershipServiceImpl(DeviceOwnershipRepository deviceRepo) {
         this.deviceRepo = deviceRepo;
     }
 

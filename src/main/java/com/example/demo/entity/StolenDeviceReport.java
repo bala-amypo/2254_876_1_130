@@ -11,7 +11,11 @@ public class StolenDeviceReport {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String reportReason;
+    @Column(nullable = false)
+    private String serialNumber;
+
+    @Column(nullable = false)
+    private String reporterName;
 
     @Column(nullable = false)
     private LocalDateTime reportedAt;
@@ -21,27 +25,18 @@ public class StolenDeviceReport {
     private DeviceOwnershipRecord deviceOwnershipRecord;
 
     @PrePersist
-    protected void onCreate() {
+    public void prePersist() {
         this.reportedAt = LocalDateTime.now();
     }
 
-    // Getters & Setters
-    public Long getId() {
-        return id;
-    }
-
-    public String getReportReason() {
-        return reportReason;
-    }
-
-    public void setReportReason(String reportReason) {
-        this.reportReason = reportReason;
-    }
-
-    public DeviceOwnershipRecord getDeviceOwnershipRecord() {
-        return deviceOwnershipRecord;
-    }
-
+    // Getters and setters
+    public Long getId() { return id; }
+    public String getSerialNumber() { return serialNumber; }
+    public void setSerialNumber(String serialNumber) { this.serialNumber = serialNumber; }
+    public String getReporterName() { return reporterName; }
+    public void setReporterName(String reporterName) { this.reporterName = reporterName; }
+    public LocalDateTime getReportedAt() { return reportedAt; }
+    public DeviceOwnershipRecord getDeviceOwnershipRecord() { return deviceOwnershipRecord; }
     public void setDeviceOwnershipRecord(DeviceOwnershipRecord deviceOwnershipRecord) {
         this.deviceOwnershipRecord = deviceOwnershipRecord;
     }
