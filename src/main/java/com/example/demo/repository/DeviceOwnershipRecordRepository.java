@@ -1,10 +1,11 @@
 package com.example.demo.repository;
 
-import com.example.demo.model.DeviceOwnershipRecord;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
+import com.example.demo.model.DeviceOwnershipRecord;
 
-@Repository
+/**
+ * Repository for DeviceOwnershipRecord entity
+ */
 public interface DeviceOwnershipRepository extends JpaRepository<DeviceOwnershipRecord, Long> {
-    DeviceOwnershipRecord findBySerialNumber(String serialNumber);
+    // Add custom query methods here if needed
 }

@@ -1,49 +1,29 @@
 package com.example.demo.controller;
 
-import com.example.demo.model.WarrantyClaimRecord;
-import com.example.demo.service.WarrantyClaimService;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.example.demo.model.WarrantyClaimRecord;
+import com.example.demo.repository.WarrantyClaimRepository;
+
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 @RestController
-@RequestMapping("/api/claims")
-@Tag(name = "WarrantyClaim", description = "Warranty claim management APIs")
+@RequestMapping("/warranty-claims")
+@Tag(name = "Warranty Claims", description = "Operations related to warranty claims")
 public class WarrantyClaimController {
 
-    private final WarrantyClaimService claimService;
+    private final WarrantyClaimRepository repository;
 
-    public WarrantyClaimController(WarrantyClaimService claimService) {
-        this.claimService = claimService;
-    }
-
-    @PostMapping
-    public ResponseEntity<WarrantyClaimRecord> submitClaim(@RequestBody WarrantyClaimRecord claim) {
-        return ResponseEntity.ok(claimService.submitClaim(claim));
-    }
-
-    @PutMapping("/{id}/status")
-    public ResponseEntity<WarrantyClaimRecord> updateStatus(@PathVariable Long id,
-                                                            @RequestParam String status) {
-        return ResponseEntity.ok(claimService.updateClaimStatus(id, status));
+    public WarrantyClaimController(WarrantyClaimRepository repository) {
+        this.repository = repository;
     }
 
     @GetMapping
-    public ResponseEntity<List<WarrantyClaimRecord>> getAllClaims() {
-        return ResponseEntity.ok(claimService.getAllClaims());
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<WarrantyClaimRecord> getById(@PathVariable Long id) {
-        return claimService.getClaimById(id)
-                .map(ResponseEntity::ok)
-                .orElseThrow(() -> new java.util.NoSuchElementException("Offer not found"));
-    }
-
-    @GetMapping("/serial/{serialNumber}")
-    public ResponseEntity<List<WarrantyClaimRecord>> getBySerial(@PathVariable String serialNumber) {
-        return ResponseEntity.ok(claimService.getClaimsBySerial(serialNumber));
+    public List<WarrantyClaimRecord> getAllClaims() {
+        return repository.findAll();
     }
 }

@@ -12,31 +12,16 @@ public class WarrantyClaimRecord {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String deviceSerialNumber;
-    private String claimStatus;
+    private String claimDescription;
+    private String status;
 
-    // Getters and setters
-    public Long getId() {
-        return id;
-    }
+    // Getters and Setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    public String getClaimDescription() { return claimDescription; }
+    public void setClaimDescription(String claimDescription) { this.claimDescription = claimDescription; }
 
-    public String getDeviceSerialNumber() {
-        return deviceSerialNumber;
-    }
-
-    public void setDeviceSerialNumber(String deviceSerialNumber) {
-        this.deviceSerialNumber = deviceSerialNumber;
-    }
-
-    public String getClaimStatus() {
-        return claimStatus;
-    }
-
-    public void setClaimStatus(String claimStatus) {
-        this.claimStatus = claimStatus;
-    }
+    public String getStatus() { return status; }
+    public void setStatus(String status) { this.status = status; }
 }
