@@ -1,21 +1,26 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.repository.DeviceOwnershipRepository;
+import com.example.demo.repository.WarrantyClaimRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class StolenDeviceServiceImpl {
 
     private final DeviceOwnershipRepository deviceOwnershipRepository;
+    private final WarrantyClaimRepository warrantyClaimRepository;
 
-    public StolenDeviceServiceImpl(DeviceOwnershipRepository deviceOwnershipRepository) {
+    @Autowired
+    public StolenDeviceServiceImpl(DeviceOwnershipRepository deviceOwnershipRepository,
+                                   WarrantyClaimRepository warrantyClaimRepository) {
         this.deviceOwnershipRepository = deviceOwnershipRepository;
+        this.warrantyClaimRepository = warrantyClaimRepository;
     }
 
-    public void deactivateDevice(String serialNumber) {
-        deviceOwnershipRepository.findBySerialNumber(serialNumber).ifPresent(device -> {
-            device.setActive(false);
-            deviceOwnershipRepository.save(device);
-        });
+    // Example method
+    public boolean isDeviceStolen(String serialNumber) {
+        return deviceOwnershipRepository.findAll().stream()
+                .noneMatch(d -> d.getDeviceSerialNumber().equals(serialNumber));
     }
 }

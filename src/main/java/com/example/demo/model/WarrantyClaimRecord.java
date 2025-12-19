@@ -1,25 +1,21 @@
 package com.example.demo.model;
 
-import jakarta.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 
 @Entity
-@Table(name = "warranty_claim_records")
 public class WarrantyClaimRecord {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
-    private String serialNumber;
+    private String deviceSerialNumber;
+    private String claimStatus;
 
-    @OneToMany(mappedBy = "warrantyClaim", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<FraudAlertRecord> fraudAlerts = new ArrayList<>();
-
-    // getters and setters
-
+    // Getters and setters
     public Long getId() {
         return id;
     }
@@ -28,19 +24,19 @@ public class WarrantyClaimRecord {
         this.id = id;
     }
 
-    public String getSerialNumber() {
-        return serialNumber;
+    public String getDeviceSerialNumber() {
+        return deviceSerialNumber;
     }
 
-    public void setSerialNumber(String serialNumber) {
-        this.serialNumber = serialNumber;
+    public void setDeviceSerialNumber(String deviceSerialNumber) {
+        this.deviceSerialNumber = deviceSerialNumber;
     }
 
-    public List<FraudAlertRecord> getFraudAlerts() {
-        return fraudAlerts;
+    public String getClaimStatus() {
+        return claimStatus;
     }
 
-    public void setFraudAlerts(List<FraudAlertRecord> fraudAlerts) {
-        this.fraudAlerts = fraudAlerts;
+    public void setClaimStatus(String claimStatus) {
+        this.claimStatus = claimStatus;
     }
 }
