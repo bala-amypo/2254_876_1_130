@@ -1,29 +1,21 @@
 package com.example.demo.controller;
 
-import java.util.List;
+import org.springframework.web.bind.annotation.*;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import com.example.demo.model.WarrantyClaimRecord;
-import com.example.demo.repository.WarrantyClaimRepository;
-
-import io.swagger.v3.oas.annotations.tags.Tag;
+import com.example.demo.service.WarrantyClaimService;
 
 @RestController
-@RequestMapping("/warranty-claims")
-@Tag(name = "Warranty Claims", description = "Operations related to warranty claims")
+@RequestMapping("/api/warranty")
 public class WarrantyClaimController {
 
-    private final WarrantyClaimRepository repository;
+    private final WarrantyClaimService service;
 
-    public WarrantyClaimController(WarrantyClaimRepository repository) {
-        this.repository = repository;
+    public WarrantyClaimController(WarrantyClaimService service) {
+        this.service = service;
     }
 
-    @GetMapping
-    public List<WarrantyClaimRecord> getAllClaims() {
-        return repository.findAll();
+    @GetMapping("/check/{serialNumber}")
+    public boolean checkWarranty(@PathVariable String serialNumber) {
+        return service.isWarrantyValid(serialNumber);
     }
 }

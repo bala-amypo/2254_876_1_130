@@ -1,22 +1,35 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.model.DeviceOwnershipRecord;
-import com.example.demo.repository.DeviceOwnershipRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import java.time.LocalDate;
 
+import org.springframework.stereotype.Service;
+
+import com.example.demo.model.DeviceOwnershipRecord;
+import com.example.demo.repository.DeviceOwnershipRecordRepository;
+import com.example.demo.service.WarrantyClaimService;
+
 @Service
-public class WarrantyClaimServiceImpl {
+public class WarrantyClaimServiceImpl implements WarrantyClaimService {
 
-    @Autowired
-    private DeviceOwnershipRepository deviceRepo;
+    private final DeviceOwnershipRecordRepository repository;
 
+    public WarrantyClaimServiceImpl(
+            DeviceOwnershipRecordRepository repository) {
+        this.repository = repository;
+    }
+
+    @Override
     public boolean isWarrantyValid(String serialNumber) {
-        DeviceOwnershipRecord device = deviceRepo.findBySerialNumber(serialNumber);
-        if (device == null) return false;
-        LocalDate expiration = device.getWarrantyExpiration();
-        return expiration != null && expiration.isAfter(LocalDate.now());
+
+        DeviceOwnershipRecord device =
+                repository.findBySerialNumber(serialNumber)
+                          .orElse(null);
+
+        if (device == null) {
+            return false;
+        }
+
+        return device.getWarrantyExpiration()
+                     .isAfter(LocalDate.now());
     }
 }

@@ -1,15 +1,24 @@
-package com.example.demo.repository;
+package com.example.demo.service.impl;
 
-import java.util.Optional;
+import org.springframework.stereotype.Service;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
+import com.example.demo.repository.DeviceOwnershipRecordRepository;
+import com.example.demo.service.StolenDeviceService;
 
-import com.example.demo.model.DeviceOwnershipRecord;
+@Service
+public class StolenDeviceServiceImpl implements StolenDeviceService {
 
-@Repository
-public interface DeviceOwnershipRecordRepository
-        extends JpaRepository<DeviceOwnershipRecord, Long> {
+    private final DeviceOwnershipRecordRepository repository;
 
-    Optional<DeviceOwnershipRecord> findBySerialNumber(String serialNumber);
+    public StolenDeviceServiceImpl(
+            DeviceOwnershipRecordRepository repository) {
+        this.repository = repository;
+    }
+
+    @Override
+    public boolean isStolen(String serialNumber) {
+        return repository.findBySerialNumber(serialNumber)
+                .map(device -> !device.isActive())
+                .orElse(false);
+    }
 }
