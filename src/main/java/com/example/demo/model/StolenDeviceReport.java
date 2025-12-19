@@ -17,14 +17,13 @@ public class StolenDeviceReport {
     @Column(nullable = false)
     private String reportedBy;
 
-    @Column
     private String details;
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime reportDate;
 
-    @ManyToOne
-    @JoinColumn(name = "device_id", nullable = false)
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "device_id")
     private DeviceOwnershipRecord device;
 
     public StolenDeviceReport() {
@@ -36,9 +35,11 @@ public class StolenDeviceReport {
     }
 
     @PrePersist
-    protected void onCreate() {
+    public void onCreate() {
         this.reportDate = LocalDateTime.now();
     }
+
+    // getters & setters
 
     public Long getId() {
         return id;
