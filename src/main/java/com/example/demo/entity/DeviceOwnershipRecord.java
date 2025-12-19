@@ -23,7 +23,6 @@ public class DeviceOwnershipRecord {
     @Column
     private String ownerEmail;
 
-    @Column
     private LocalDate purchaseDate;
 
     @Column(nullable = false)
@@ -46,7 +45,73 @@ public class DeviceOwnershipRecord {
     private List<StolenDeviceReport> stolenReports = new ArrayList<>();
 
     @PrePersist
-    public void prePersist() {
+    protected void onCreate() {
         this.createdAt = LocalDateTime.now();
+    }
+
+    // ===== GETTERS & SETTERS (FIX) =====
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getSerialNumber() {
+        return serialNumber;
+    }
+
+    public void setSerialNumber(String serialNumber) {
+        this.serialNumber = serialNumber;
+    }
+
+    public String getOwnerName() {
+        return ownerName;
+    }
+
+    public void setOwnerName(String ownerName) {
+        this.ownerName = ownerName;
+    }
+
+    public String getOwnerEmail() {
+        return ownerEmail;
+    }
+
+    public void setOwnerEmail(String ownerEmail) {
+        this.ownerEmail = ownerEmail;
+    }
+
+    public LocalDate getPurchaseDate() {
+        return purchaseDate;
+    }
+
+    public void setPurchaseDate(LocalDate purchaseDate) {
+        this.purchaseDate = purchaseDate;
+    }
+
+    public LocalDate getWarrantyExpiration() {
+        return warrantyExpiration;
+    }
+
+    public void setWarrantyExpiration(LocalDate warrantyExpiration) {
+        this.warrantyExpiration = warrantyExpiration;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public List<WarrantyClaimRecord> getClaims() {
+        return claims;
+    }
+
+    public List<StolenDeviceReport> getStolenReports() {
+        return stolenReports;
     }
 }

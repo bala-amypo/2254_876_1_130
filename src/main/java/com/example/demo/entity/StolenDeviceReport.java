@@ -11,34 +11,18 @@ public class StolenDeviceReport {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
-    private String serialNumber;
+    private String reportReason;
 
     @Column(nullable = false)
-    private String reportedBy;
+    private LocalDateTime reportedAt;
 
-    @Column(nullable = false, updatable = false)
-    private LocalDateTime reportDate;
-
-    @Column
-    private String details;
-
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "device_id", nullable = false)
-    private DeviceOwnershipRecord device;
-
-    public StolenDeviceReport() {
-    }
-
-    public StolenDeviceReport(String serialNumber, String reportedBy, DeviceOwnershipRecord device) {
-        this.serialNumber = serialNumber;
-        this.reportedBy = reportedBy;
-        this.device = device;
-    }
+    private DeviceOwnershipRecord deviceOwnershipRecord;
 
     @PrePersist
-    public void prePersist() {
-        this.reportDate = LocalDateTime.now();
+    protected void onCreate() {
+        this.reportedAt = LocalDateTime.now();
     }
 
     // Getters & Setters
@@ -46,39 +30,19 @@ public class StolenDeviceReport {
         return id;
     }
 
-    public String getSerialNumber() {
-        return serialNumber;
+    public String getReportReason() {
+        return reportReason;
     }
 
-    public void setSerialNumber(String serialNumber) {
-        this.serialNumber = serialNumber;
+    public void setReportReason(String reportReason) {
+        this.reportReason = reportReason;
     }
 
-    public String getReportedBy() {
-        return reportedBy;
+    public DeviceOwnershipRecord getDeviceOwnershipRecord() {
+        return deviceOwnershipRecord;
     }
 
-    public void setReportedBy(String reportedBy) {
-        this.reportedBy = reportedBy;
-    }
-
-    public LocalDateTime getReportDate() {
-        return reportDate;
-    }
-
-    public String getDetails() {
-        return details;
-    }
-
-    public void setDetails(String details) {
-        this.details = details;
-    }
-
-    public DeviceOwnershipRecord getDevice() {
-        return device;
-    }
-
-    public void setDevice(DeviceOwnershipRecord device) {
-        this.device = device;
+    public void setDeviceOwnershipRecord(DeviceOwnershipRecord deviceOwnershipRecord) {
+        this.deviceOwnershipRecord = deviceOwnershipRecord;
     }
 }
