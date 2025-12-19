@@ -26,15 +26,9 @@ public class StolenDeviceReport {
     @JoinColumn(name = "device_id", nullable = false)
     private DeviceOwnershipRecord device;
 
-    public StolenDeviceReport() {
-    }
+    public StolenDeviceReport() { }
 
-    public StolenDeviceReport(
-            String serialNumber,
-            String reportedBy,
-            String details,
-            DeviceOwnershipRecord device
-    ) {
+    public StolenDeviceReport(String serialNumber, String reportedBy, String details, DeviceOwnershipRecord device) {
         this.serialNumber = serialNumber;
         this.reportedBy = reportedBy;
         this.details = details;
@@ -46,27 +40,10 @@ public class StolenDeviceReport {
         this.reportDate = LocalDateTime.now();
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public String getSerialNumber() {
-        return serialNumber;
-    }
-
-    public String getReportedBy() {
-        return reportedBy;
-    }
-
-    public String getDetails() {
-        return details;
-    }
-
-    public LocalDateTime getReportDate() {
-        return reportDate;
-    }
-
-    public DeviceOwnershipRecord getDevice() {
-        return device;
-    }
+    public Long getId() { return id; }
+    public String getSerialNumber() { return serialNumber; }
+    public String getReportedBy() { return reportedBy; }
+    public String getDetails() { return details; }
+    public LocalDateTime getReportDate() { return reportDate; }
+    public DeviceOwnershipRecord getDevice() { return device; }
 }

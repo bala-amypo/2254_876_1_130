@@ -16,31 +16,18 @@ public class DeviceOwnershipRecord {
     @Column(nullable = false)
     private String ownerName;
 
-    public DeviceOwnershipRecord() {
-    }
+    public DeviceOwnershipRecord() { }
 
     public DeviceOwnershipRecord(String serialNumber, String ownerName) {
         this.serialNumber = serialNumber;
         this.ownerName = ownerName;
     }
 
-    public Long getId() {
-        return id;
-    }
+    public Long getId() { return id; }
 
-    public String getSerialNumber() {
-        return serialNumber;
-    }
+    public String getSerialNumber() { return serialNumber; }
+    public void setSerialNumber(String serialNumber) { this.serialNumber = serialNumber; }
 
-    public void setSerialNumber(String serialNumber) {
-        this.serialNumber = serialNumber;
-    }
-
-    public String getOwnerName() {
-        return ownerName;
-    }
-
-    public void setOwnerName(String ownerName) {
-        this.ownerName = ownerName;
-    }
+    public String getOwnerName() { return ownerName; }
+    public void setOwnerName(String ownerName) { this.ownerName = ownerName; }
 }
