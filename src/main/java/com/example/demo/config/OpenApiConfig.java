@@ -14,6 +14,6 @@ public class OpenApiConfig {
     public OpenAPI customOpenAPI() {
         return new OpenAPI()
                 .info(new Info().title("Demo API").version("1.0.0"))
-                .addServersItem(new Server().url("http://localhost:8080"));
+                .addServersItem(new Server().url("https://9027.pro604cr.amypo.ai"));
     }
 }
