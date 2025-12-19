@@ -38,10 +38,8 @@ public class DeviceOwnershipRecord {
     @OneToMany(mappedBy = "device", cascade = CascadeType.ALL)
     private List<StolenDeviceReport> stolenReports;
 
-    // ✅ No-args constructor
     public DeviceOwnershipRecord() {}
 
-    // ✅ Core constructor
     public DeviceOwnershipRecord(String serialNumber, String ownerName, LocalDate warrantyExpiration) {
         this.serialNumber = serialNumber;
         this.ownerName = ownerName;
