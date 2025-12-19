@@ -1,19 +1,25 @@
-package com.example.demo.service;
+package com.example.demo.model;
 
-import com.example.demo.model.DeviceOwnershipRecord;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 
-import java.util.List;
-import java.util.Optional;
+@Entity
+public class DeviceOwnershipRecord {
 
-public interface DeviceOwnershipService {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    DeviceOwnershipRecord registerDevice(DeviceOwnershipRecord device);
+    private String deviceSerialNumber;
+    private String ownerName;
 
-    DeviceOwnershipRecord updateDeviceStatus(Long id, boolean active);
-
-    Optional<DeviceOwnershipRecord> getBySerial(String serialNumber);
-
-    Optional<DeviceOwnershipRecord> getById(Long id);
-
-    List<DeviceOwnershipRecord> getAllDevices();
+    // Getters and setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+    public String getDeviceSerialNumber() { return deviceSerialNumber; }
+    public void setDeviceSerialNumber(String deviceSerialNumber) { this.deviceSerialNumber = deviceSerialNumber; }
+    public String getOwnerName() { return ownerName; }
+    public void setOwnerName(String ownerName) { this.ownerName = ownerName; }
 }
