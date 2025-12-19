@@ -4,9 +4,5 @@ import com.example.demo.model.StolenDeviceReport;
 
 public interface StolenDeviceService {
 
-    StolenDeviceReport reportStolenDevice(
-            String serialNumber,
-            String reportedBy,
-            String details
-    );
+    StolenDeviceReport reportStolenDevice(String serialNumber, String reportedBy, String details);
 }
