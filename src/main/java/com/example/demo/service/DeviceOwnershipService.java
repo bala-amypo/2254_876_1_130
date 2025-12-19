@@ -1,8 +1,16 @@
-// package com.example.demo.service;
+package com.example.demo.service;
 
-// import com.example.demo.model.DeviceOwnershipRecord;
+import com.example.demo.entity.DeviceOwnershipRecord;
 
-// public interface DeviceOwnershipService {
+import java.util.List;
 
-//     DeviceOwnershipRecord registerDevice(DeviceOwnershipRecord device);
-// }
+public interface DeviceOwnershipService {
+
+    DeviceOwnershipRecord registerDevice(DeviceOwnershipRecord device);
+
+    DeviceOwnershipRecord getBySerial(String serialNumber);
+
+    List<DeviceOwnershipRecord> getAllDevices();
+
+    DeviceOwnershipRecord updateDeviceStatus(Long id, boolean active);
+}
