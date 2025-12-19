@@ -1,7 +1,7 @@
 package com.example.demo.model;
 
 import jakarta.persistence.*;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "device_ownership_records")
@@ -18,56 +18,31 @@ public class DeviceOwnershipRecord {
     private String ownerName;
 
     @Column(nullable = false)
-    private Boolean active = true;
+    private LocalDate warrantyExpiration;
 
     @Column(nullable = false)
-    private LocalDateTime createdAt;
+    private Boolean active = true;
 
-    public DeviceOwnershipRecord() { }
+    public DeviceOwnershipRecord() {}
 
-    public DeviceOwnershipRecord(String serialNumber, String ownerName) {
+    public DeviceOwnershipRecord(String serialNumber, String ownerName, LocalDate warrantyExpiration) {
         this.serialNumber = serialNumber;
         this.ownerName = ownerName;
+        this.warrantyExpiration = warrantyExpiration;
+        this.active = true;
     }
 
-    @PrePersist
-    protected void onCreate() {
-        this.createdAt = LocalDateTime.now();
-        if (this.active == null) {
-            this.active = true;
-        }
-    }
+    public Long getId() { return id; }
 
-    // -------- Getters & Setters --------
-    public Long getId() {
-        return id;
-    }
+    public String getSerialNumber() { return serialNumber; }
+    public void setSerialNumber(String serialNumber) { this.serialNumber = serialNumber; }
 
-    public String getSerialNumber() {
-        return serialNumber;
-    }
+    public String getOwnerName() { return ownerName; }
+    public void setOwnerName(String ownerName) { this.ownerName = ownerName; }
 
-    public void setSerialNumber(String serialNumber) {
-        this.serialNumber = serialNumber;
-    }
+    public LocalDate getWarrantyExpiration() { return warrantyExpiration; }
+    public void setWarrantyExpiration(LocalDate warrantyExpiration) { this.warrantyExpiration = warrantyExpiration; }
 
-    public String getOwnerName() {
-        return ownerName;
-    }
-
-    public void setOwnerName(String ownerName) {
-        this.ownerName = ownerName;
-    }
-
-    public Boolean getActive() {
-        return active;
-    }
-
-    public void setActive(Boolean active) {
-        this.active = active;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
+    public Boolean getActive() { return active; }
+    public void setActive(Boolean active) { this.active = active; }
 }
