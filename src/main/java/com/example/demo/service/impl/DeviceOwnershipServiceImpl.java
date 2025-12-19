@@ -1,7 +1,7 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.entity.DeviceOwnershipRecord;
-import com.example.demo.repository.DeviceOwnershipRepository;
+import com.example.demo.repository.DeviceOwnershipRecordRepository;
 import com.example.demo.service.DeviceOwnershipService;
 import org.springframework.stereotype.Service;
 
@@ -11,7 +11,7 @@ import java.util.NoSuchElementException;
 @Service
 public class DeviceOwnershipServiceImpl implements DeviceOwnershipService {
 
-    private final DeviceOwnershipRepository deviceRepo;
+    private final DeviceOwnershipRecordRepository deviceRepo;
 
     public DeviceOwnershipServiceImpl(DeviceOwnershipRepository deviceRepo) {
         this.deviceRepo = deviceRepo;
