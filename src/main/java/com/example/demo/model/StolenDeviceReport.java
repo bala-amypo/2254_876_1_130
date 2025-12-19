@@ -11,40 +11,40 @@ public class StolenDeviceReport {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String serialNumber;
 
     @Column(nullable = false)
     private String reportedBy;
 
+    private String details;
+
     @Column(nullable = false)
     private LocalDateTime reportDate;
 
-    private String details;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "device_id")
+    @ManyToOne
+    @JoinColumn(name = "device_id", nullable = false)
     private DeviceOwnershipRecord device;
-
-    // -------- Constructors --------
 
     public StolenDeviceReport() {
     }
 
-    public StolenDeviceReport(String serialNumber, String reportedBy, String details) {
+    public StolenDeviceReport(
+            String serialNumber,
+            String reportedBy,
+            String details,
+            DeviceOwnershipRecord device
+    ) {
         this.serialNumber = serialNumber;
         this.reportedBy = reportedBy;
         this.details = details;
+        this.device = device;
     }
-
-    // -------- Lifecycle --------
 
     @PrePersist
     protected void onCreate() {
         this.reportDate = LocalDateTime.now();
     }
-
-    // -------- Getters and Setters --------
 
     public Long getId() {
         return id;
@@ -54,35 +54,19 @@ public class StolenDeviceReport {
         return serialNumber;
     }
 
-    public void setSerialNumber(String serialNumber) {
-        this.serialNumber = serialNumber;
-    }
-
     public String getReportedBy() {
         return reportedBy;
-    }
-
-    public void setReportedBy(String reportedBy) {
-        this.reportedBy = reportedBy;
-    }
-
-    public LocalDateTime getReportDate() {
-        return reportDate;
     }
 
     public String getDetails() {
         return details;
     }
 
-    public void setDetails(String details) {
-        this.details = details;
+    public LocalDateTime getReportDate() {
+        return reportDate;
     }
 
     public DeviceOwnershipRecord getDevice() {
         return device;
-    }
-
-    public void setDevice(DeviceOwnershipRecord device) {
-        this.device = device;
     }
 }
