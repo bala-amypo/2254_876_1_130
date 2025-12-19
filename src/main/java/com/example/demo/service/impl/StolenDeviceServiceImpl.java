@@ -2,48 +2,43 @@ package com.example.demo.service.impl;
 
 import com.example.demo.entity.DeviceOwnershipRecord;
 import com.example.demo.entity.StolenDeviceReport;
-import com.example.demo.repository.DeviceOwnershipRecordRepository;
-import com.example.demo.repository.StolenDeviceReportRepository;
+import com.example.demo.repository.DeviceOwnershipRepository;
+import com.example.demo.repository.StolenDeviceRepository;
 import com.example.demo.service.StolenDeviceService;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @Service
 public class StolenDeviceServiceImpl implements StolenDeviceService {
 
-    private final StolenDeviceReportRepository stolenRepo;
-    private final DeviceOwnershipRecordRepository deviceRepo;
+    private final StolenDeviceRepository stolenDeviceRepository;
+    private final DeviceOwnershipRepository deviceOwnershipRepository;
 
-    public StolenDeviceServiceImpl(StolenDeviceReportRepository stolenRepo,
-                                   DeviceOwnershipRecordRepository deviceRepo) {
-        this.stolenRepo = stolenRepo;
-        this.deviceRepo = deviceRepo;
+    // ✅ Constructor injection (NO @Autowired)
+    public StolenDeviceServiceImpl(
+            StolenDeviceRepository stolenDeviceRepository,
+            DeviceOwnershipRepository deviceOwnershipRepository
+    ) {
+        this.stolenDeviceRepository = stolenDeviceRepository;
+        this.deviceOwnershipRepository = deviceOwnershipRepository;
     }
 
     @Override
-    public StolenDeviceReport reportStolen(StolenDeviceReport report) {
-        DeviceOwnershipRecord device = deviceRepo.findBySerialNumber(report.getSerialNumber())
-                .orElseThrow(() -> new NoSuchElementException("Device not found"));
+    public StolenDeviceReport reportStolenDevice(String serialNumber, String reason) {
 
-        report.setDevice(device);
-        return stolenRepo.save(report);
-    }
+        // 🔹 Find device by serial number
+        DeviceOwnershipRecord device = deviceOwnershipRepository
+                .findBySerialNumber(serialNumber)
+                .orElseThrow(() ->
+                        new RuntimeException("Device not found with serial: " + serialNumber)
+                );
 
-    @Override
-    public List<StolenDeviceReport> getReportsBySerial(String serialNumber) {
-        return stolenRepo.findBySerialNumber(serialNumber);
-    }
+        // 🔹 Create stolen report
+        StolenDeviceReport report = new StolenDeviceReport();
+        report.setReportReason(reason);
 
-    @Override
-    public Optional<StolenDeviceReport> getReportById(Long id) {
-        return stolenRepo.findById(id);
-    }
+        // 🔹 Set relationship (IMPORTANT)
+        report.setDeviceOwnershipRecord(device);
 
-    @Override
-    public List<StolenDeviceReport> getAllReports() {
-        return stolenRepo.findAll();
+        return stolenDeviceRepository.save(report);
     }
 }
