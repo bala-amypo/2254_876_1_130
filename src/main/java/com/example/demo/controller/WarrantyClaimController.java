@@ -1,7 +1,10 @@
 package com.example.demo.controller;
 
+import java.util.List;
+
 import org.springframework.web.bind.annotation.*;
 
+import com.example.demo.model.WarrantyClaimRecord;
 import com.example.demo.service.WarrantyClaimService;
 
 @RestController
@@ -17,5 +20,10 @@ public class WarrantyClaimController {
     @GetMapping("/check/{serialNumber}")
     public boolean checkWarranty(@PathVariable String serialNumber) {
         return service.isWarrantyValid(serialNumber);
+    }
+
+    @GetMapping("/claims")
+    public List<WarrantyClaimRecord> getAllClaims() {
+        return service.getAllClaims();
     }
 }
