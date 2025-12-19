@@ -7,10 +7,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("/api/stolen-devices")
-@Tag(name = "StolenDevice", description = "Stolen Device Management APIs")
+@Tag(name = "StolenDevice", description = "Stolen Device APIs")
 public class StolenDeviceController {
 
     private final StolenDeviceService stolenDeviceService;
@@ -36,7 +37,7 @@ public class StolenDeviceController {
         return stolenDeviceService.getReportById(id)
                 .map(ResponseEntity::ok)
                 .orElseThrow(() ->
-                        new java.util.NoSuchElementException("Request not found"));
+                        new NoSuchElementException("Request not found"));
     }
 
     @GetMapping("/serial/{serialNumber}")
