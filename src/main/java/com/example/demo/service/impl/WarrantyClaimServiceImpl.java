@@ -1,8 +1,17 @@
-import org.springframework.stereotype.Service; // for @Service
-import java.util.List;                       // for List
-import java.util.Optional;                   // for Optional
-import java.util.NoSuchElementException;     // for exceptions
-import java.time.LocalDate;                  // for LocalDate
+package com.example.demo.service.impl;
+
+import com.example.demo.entity.DeviceOwnershipRecord;
+import com.example.demo.entity.WarrantyClaimRecord;
+import com.example.demo.repository.DeviceOwnershipRepository;
+import com.example.demo.repository.StolenDeviceRepository;
+import com.example.demo.repository.WarrantyClaimRecordRepository;
+import com.example.demo.service.WarrantyClaimService;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Service
 public class WarrantyClaimServiceImpl implements WarrantyClaimService {
@@ -31,15 +40,18 @@ public class WarrantyClaimServiceImpl implements WarrantyClaimService {
 
         boolean flagged = false;
 
+        // Duplicate claim check
         if (claimRepo.existsBySerialNumberAndClaimReason(
                 claim.getSerialNumber(), claim.getClaimReason())) {
             flagged = true;
         }
 
+        // Warranty expired
         if (device.getWarrantyExpiration().isBefore(LocalDate.now())) {
             flagged = true;
         }
 
+        // Stolen device
         if (stolenRepo.existsBySerialNumber(claim.getSerialNumber())) {
             flagged = true;
         }
