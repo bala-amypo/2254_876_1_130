@@ -2,7 +2,7 @@ package com.example.demo.service;
 
 import java.util.List;
 
-import com.example.demo.model.FraudAlertRecord;
+import com.example.demo.entity.FraudAlertRecord;
 
 public interface FraudAlertService {
 
