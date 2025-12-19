@@ -1,10 +1,6 @@
 package com.example.demo.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-
+import jakarta.persistence.*;
 import java.time.LocalDate;
 
 @Entity
@@ -18,16 +14,36 @@ public class DeviceOwnershipRecord {
     private boolean active;
     private LocalDate warrantyExpiration;
 
-    // Getters and setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    // Getters and Setters
+    public Long getId() {
+        return id;
+    }
 
-    public String getSerialNumber() { return serialNumber; }
-    public void setSerialNumber(String serialNumber) { this.serialNumber = serialNumber; }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    public boolean isActive() { return active; }
-    public void setActive(boolean active) { this.active = active; }
+    public String getSerialNumber() {
+        return serialNumber;
+    }
 
-    public LocalDate getWarrantyExpiration() { return warrantyExpiration; }
-    public void setWarrantyExpiration(LocalDate warrantyExpiration) { this.warrantyExpiration = warrantyExpiration; }
+    public void setSerialNumber(String serialNumber) {
+        this.serialNumber = serialNumber;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    public LocalDate getWarrantyExpiration() {
+        return warrantyExpiration;
+    }
+
+    public void setWarrantyExpiration(LocalDate warrantyExpiration) {
+        this.warrantyExpiration = warrantyExpiration;
+    }
 }
