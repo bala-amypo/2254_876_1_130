@@ -1,6 +1,7 @@
 package com.example.demo.model;
 
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "device_ownership_records")
@@ -16,6 +17,12 @@ public class DeviceOwnershipRecord {
     @Column(nullable = false)
     private String ownerName;
 
+    @Column(nullable = false)
+    private Boolean active = true;
+
+    @Column(nullable = false)
+    private LocalDateTime createdAt;
+
     public DeviceOwnershipRecord() { }
 
     public DeviceOwnershipRecord(String serialNumber, String ownerName) {
@@ -23,11 +30,44 @@ public class DeviceOwnershipRecord {
         this.ownerName = ownerName;
     }
 
-    public Long getId() { return id; }
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+        if (this.active == null) {
+            this.active = true;
+        }
+    }
 
-    public String getSerialNumber() { return serialNumber; }
-    public void setSerialNumber(String serialNumber) { this.serialNumber = serialNumber; }
+    // -------- Getters & Setters --------
+    public Long getId() {
+        return id;
+    }
 
-    public String getOwnerName() { return ownerName; }
-    public void setOwnerName(String ownerName) { this.ownerName = ownerName; }
+    public String getSerialNumber() {
+        return serialNumber;
+    }
+
+    public void setSerialNumber(String serialNumber) {
+        this.serialNumber = serialNumber;
+    }
+
+    public String getOwnerName() {
+        return ownerName;
+    }
+
+    public void setOwnerName(String ownerName) {
+        this.ownerName = ownerName;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
 }
