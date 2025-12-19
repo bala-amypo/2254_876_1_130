@@ -1,7 +1,6 @@
 package com.example.demo.model;
 
 import jakarta.persistence.*;
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "fraud_alert_records")
@@ -14,21 +13,33 @@ public class FraudAlertRecord {
     @Column(nullable = false)
     private String description;
 
-    @Column(nullable = false)
-    private LocalDateTime createdAt;
+    @ManyToOne
+    @JoinColumn(name = "warranty_claim_id")
+    private WarrantyClaimRecord warrantyClaim;
 
-    public FraudAlertRecord() {}
+    // getters and setters
 
-    public FraudAlertRecord(String description) {
-        this.description = description;
-        this.createdAt = LocalDateTime.now();
+    public Long getId() {
+        return id;
     }
 
-    public Long getId() { return id; }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    public String getDescription() { return description; }
-    public void setDescription(String description) { this.description = description; }
+    public String getDescription() {
+        return description;
+    }
 
-    public LocalDateTime getCreatedAt() { return createdAt; }
-    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public WarrantyClaimRecord getWarrantyClaim() {
+        return warrantyClaim;
+    }
+
+    public void setWarrantyClaim(WarrantyClaimRecord warrantyClaim) {
+        this.warrantyClaim = warrantyClaim;
+    }
 }

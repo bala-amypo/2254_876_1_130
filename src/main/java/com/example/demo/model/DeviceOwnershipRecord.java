@@ -1,6 +1,7 @@
 package com.example.demo.model;
 
 import jakarta.persistence.*;
+
 import java.time.LocalDate;
 
 @Entity
@@ -15,34 +16,42 @@ public class DeviceOwnershipRecord {
     private String serialNumber;
 
     @Column(nullable = false)
-    private String ownerName;
-
-    @Column(nullable = false)
     private LocalDate warrantyExpiration;
 
     @Column(nullable = false)
-    private Boolean active = true;
+    private boolean active;
 
-    public DeviceOwnershipRecord() {}
+    // getters and setters
 
-    public DeviceOwnershipRecord(String serialNumber, String ownerName, LocalDate warrantyExpiration) {
-        this.serialNumber = serialNumber;
-        this.ownerName = ownerName;
-        this.warrantyExpiration = warrantyExpiration;
-        this.active = true;
+    public Long getId() {
+        return id;
     }
 
-    public Long getId() { return id; }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    public String getSerialNumber() { return serialNumber; }
-    public void setSerialNumber(String serialNumber) { this.serialNumber = serialNumber; }
+    public String getSerialNumber() {
+        return serialNumber;
+    }
 
-    public String getOwnerName() { return ownerName; }
-    public void setOwnerName(String ownerName) { this.ownerName = ownerName; }
+    public void setSerialNumber(String serialNumber) {
+        this.serialNumber = serialNumber;
+    }
 
-    public LocalDate getWarrantyExpiration() { return warrantyExpiration; }
-    public void setWarrantyExpiration(LocalDate warrantyExpiration) { this.warrantyExpiration = warrantyExpiration; }
+    public LocalDate getWarrantyExpiration() {
+        return warrantyExpiration;
+    }
 
-    public Boolean getActive() { return active; }
-    public void setActive(Boolean active) { this.active = active; }
+    public void setWarrantyExpiration(LocalDate warrantyExpiration) {
+        this.warrantyExpiration = warrantyExpiration;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
 }
