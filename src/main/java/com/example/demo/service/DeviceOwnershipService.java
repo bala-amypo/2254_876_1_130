@@ -1,8 +1,8 @@
-package com.example.demo.service;
+// package com.example.demo.service;
 
-import com.example.demo.model.DeviceOwnershipRecord;
+// import com.example.demo.model.DeviceOwnershipRecord;
 
-public interface DeviceOwnershipService {
+// public interface DeviceOwnershipService {
 
-    DeviceOwnershipRecord registerDevice(DeviceOwnershipRecord device);
-}
+//     DeviceOwnershipRecord registerDevice(DeviceOwnershipRecord device);
+// }

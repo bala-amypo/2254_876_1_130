@@ -1,8 +1,8 @@
-package com.example.demo.service;
+// package com.example.demo.service;
 
-import com.example.demo.model.StolenDeviceReport;
+// import com.example.demo.model.StolenDeviceReport;
 
-public interface StolenDeviceService {
+// public interface StolenDeviceService {
 
-    StolenDeviceReport reportStolenDevice(String serialNumber, String reportedBy, String details);
-}
+//     StolenDeviceReport reportStolenDevice(String serialNumber, String reportedBy, String details);
+// }
