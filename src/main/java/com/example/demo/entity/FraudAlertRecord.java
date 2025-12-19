@@ -1,8 +1,14 @@
-package com.example.demo.model;
+package com.example.demo.entity;
 
 import java.time.LocalDateTime;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "fraud_alert_records")
@@ -32,14 +38,6 @@ public class FraudAlertRecord {
     @Column(nullable = false, updatable = false)
     private LocalDateTime alertDate;
 
-    @ManyToOne
-    @JoinColumn(name = "claim_ref_id")
-    private WarrantyClaimRecord warrantyClaim;
-
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
-
     public FraudAlertRecord() {
     }
 
@@ -66,8 +64,6 @@ public class FraudAlertRecord {
         }
     }
 
-    // ===== Getters & Setters =====
-
     public Long getId() {
         return id;
     }
@@ -84,24 +80,12 @@ public class FraudAlertRecord {
         return serialNumber;
     }
 
-    public void setSerialNumber(String serialNumber) {
-        this.serialNumber = serialNumber;
-    }
-
     public String getAlertType() {
         return alertType;
     }
 
-    public void setAlertType(String alertType) {
-        this.alertType = alertType;
-    }
-
     public String getSeverity() {
         return severity;
-    }
-
-    public void setSeverity(String severity) {
-        this.severity = severity;
     }
 
     public String getMessage() {
