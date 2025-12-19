@@ -1,3 +1,9 @@
+import org.springframework.stereotype.Service; // for @Service
+import java.util.List;                       // for List
+import java.util.Optional;                   // for Optional
+import java.util.NoSuchElementException;     // for exceptions
+import java.time.LocalDate;                  // for LocalDate
+
 @Service
 public class DeviceOwnershipServiceImpl implements DeviceOwnershipService {
 
