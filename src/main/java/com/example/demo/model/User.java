@@ -1,34 +1,74 @@
-package com.example.demo.model;
+package com.example.demo.entity;
 
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
+@Table(
+    name = "users",
+    uniqueConstraints = @UniqueConstraint(columnNames = "email")
+)
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String name;
+
+    @Column(nullable = false, unique = true)
     private String email;
+
+    // Must always be stored as HASHED
+    @Column(nullable = false)
     private String password;
-    private String roles;
 
-    public User() {}
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(
+        name = "user_roles",
+        joinColumns = @JoinColumn(name = "user_id")
+    )
+    @Column(name = "role", nullable = false)
+    private Set<String> roles = new HashSet<>();
 
-    public User(String name, String email, String password, String roles) {
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
+    // One user can have many fraud alerts
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<FraudAlertRecord> fraudAlertRecords = new HashSet<>();
+
+    // -------- Constructors --------
+
+    public User() {
+    }
+
+    public User(String name, String email, String password, Set<String> roles) {
         this.name = name;
         this.email = email;
         this.password = password;
-        this.roles = roles;
+        this.roles = (roles == null || roles.isEmpty())
+                ? Set.of("USER")
+                : roles;
     }
+
+    // -------- Lifecycle Hooks --------
+
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+        if (this.roles == null || this.roles.isEmpty()) {
+            this.roles = Set.of("USER");
+        }
+    }
+
+    // -------- Getters & Setters --------
 
     public Long getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getName() {
@@ -51,15 +91,24 @@ public class User {
         return password;
     }
 
+    // IMPORTANT: password should already be encoded before calling this
     public void setPassword(String password) {
         this.password = password;
     }
 
-    public String getRoles() {
+    public Set<String> getRoles() {
         return roles;
     }
 
-    public void setRoles(String roles) {
+    public void setRoles(Set<String> roles) {
         this.roles = roles;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public Set<FraudAlertRecord> getFraudAlertRecords() {
+        return fraudAlertRecords;
     }
 }
