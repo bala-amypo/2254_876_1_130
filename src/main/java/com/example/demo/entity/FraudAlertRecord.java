@@ -1,45 +1,25 @@
-// package com.example.demo.model;
+package com.example.demo.entity;
 
-// import jakarta.persistence.*;
+import jakarta.persistence.*;
 
-// @Entity
-// @Table(name = "fraud_alert_records")
-// public class FraudAlertRecord {
+@Entity
+@Table(name = "fraud_alert_records")
+public class FraudAlertRecord {
 
-//     @Id
-//     @GeneratedValue(strategy = GenerationType.IDENTITY)
-//     private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-//     @Column(nullable = false)
-//     private String description;
+    @ManyToOne
+    @JoinColumn(name = "claim_id", nullable = false)
+    private WarrantyClaimRecord warrantyClaimRecord;
 
-//     @ManyToOne
-//     @JoinColumn(name = "warranty_claim_id")
-//     private WarrantyClaimRecord warrantyClaim;
+    @Column(nullable = false)
+    private String alertReason;
 
-//     // getters and setters
-
-//     public Long getId() {
-//         return id;
-//     }
-
-//     public void setId(Long id) {
-//         this.id = id;
-//     }
-
-//     public String getDescription() {
-//         return description;
-//     }
-
-//     public void setDescription(String description) {
-//         this.description = description;
-//     }
-
-//     public WarrantyClaimRecord getWarrantyClaim() {
-//         return warrantyClaim;
-//     }
-
-//     public void setWarrantyClaim(WarrantyClaimRecord warrantyClaim) {
-//         this.warrantyClaim = warrantyClaim;
-//     }
-// }
+    public FraudAlertRecord() {}
+    public FraudAlertRecord(WarrantyClaimRecord claim, String reason) {
+        this.warrantyClaimRecord = claim;
+        this.alertReason = reason;
+    }
+}

@@ -1,75 +1,29 @@
-// package com.example.demo.model;
+package com.example.demo.entity;
 
-// import java.time.LocalDate;
+import jakarta.persistence.*;
+import java.time.LocalDate;
 
-// import jakarta.persistence.*;
+@Entity
+@Table(name = "device_ownership_records")
+public class DeviceOwnershipRecord {
 
-// @Entity
-// @Table(name = "device_ownership")
-// public class DeviceOwnershipRecord {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-//     @Id
-//     @GeneratedValue(strategy = GenerationType.IDENTITY)
-//     private Long id;
+    @Column(unique = true, nullable = false)
+    private String serialNumber;
 
-//     @Column(nullable = false, unique = true)
-//     private String serialNumber;
+    @Column(nullable = false)
+    private LocalDate warrantyExpiration;
 
-//     private String ownerName;
+    // Constructors, getters, setters
+    public DeviceOwnershipRecord() {}
+    public DeviceOwnershipRecord(String serialNumber, LocalDate warrantyExpiration) {
+        this.serialNumber = serialNumber;
+        this.warrantyExpiration = warrantyExpiration;
+    }
 
-//     private LocalDate purchaseDate;
-
-//     private LocalDate warrantyExpiration;
-
-//     private boolean active;
-
-//     /* Getters and Setters */
-
-//     public Long getId() {
-//         return id;
-//     }
-
-//     public void setId(Long id) {
-//         this.id = id;
-//     }
-
-//     public String getSerialNumber() {
-//         return serialNumber;
-//     }
-
-//     public void setSerialNumber(String serialNumber) {
-//         this.serialNumber = serialNumber;
-//     }
-
-//     public String getOwnerName() {
-//         return ownerName;
-//     }
-
-//     public void setOwnerName(String ownerName) {
-//         this.ownerName = ownerName;
-//     }
-
-//     public LocalDate getPurchaseDate() {
-//         return purchaseDate;
-//     }
-
-//     public void setPurchaseDate(LocalDate purchaseDate) {
-//         this.purchaseDate = purchaseDate;
-//     }
-
-//     public LocalDate getWarrantyExpiration() {
-//         return warrantyExpiration;
-//     }
-
-//     public void setWarrantyExpiration(LocalDate warrantyExpiration) {
-//         this.warrantyExpiration = warrantyExpiration;
-//     }
-
-//     public boolean isActive() {
-//         return active;
-//     }
-
-//     public void setActive(boolean active) {
-//         this.active = active;
-//     }
-// }
+    public String getSerialNumber() { return serialNumber; }
+    public LocalDate getWarrantyExpiration() { return warrantyExpiration; }
+}
