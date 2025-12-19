@@ -1,4 +1,5 @@
 package com.example.demo.model;
+
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
@@ -26,25 +27,18 @@ public class StolenDeviceReport {
     @JoinColumn(name = "device_id", nullable = false)
     private DeviceOwnershipRecord device;
 
-    // -------- Constructors --------
-
     public StolenDeviceReport() {
     }
 
-    public StolenDeviceReport(String serialNumber, String reportedBy, DeviceOwnershipRecord device) {
+    public StolenDeviceReport(String serialNumber, String reportedBy) {
         this.serialNumber = serialNumber;
         this.reportedBy = reportedBy;
-        this.device = device;
     }
-
-    // -------- Lifecycle --------
 
     @PrePersist
     protected void onCreate() {
         this.reportDate = LocalDateTime.now();
     }
-
-    // -------- Getters & Setters --------
 
     public Long getId() {
         return id;
