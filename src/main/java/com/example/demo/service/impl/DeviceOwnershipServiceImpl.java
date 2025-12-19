@@ -1,25 +1,33 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.model.DeviceOwnershipRecord;
-import com.example.demo.repository.DeviceOwnershipRecordRepository;
+import com.example.demo.entity.DeviceOwnership;
+import com.example.demo.repository.DeviceOwnershipRepository;
+import com.example.demo.service.DeviceOwnershipService;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import java.util.List;
 
-@Service
-public class DeviceOwnershipServiceImpl {
+@Service   
+public class DeviceOwnershipServiceImpl implements DeviceOwnershipService {
 
-    private final DeviceOwnershipRecordRepository deviceRepository;
+    private final DeviceOwnershipRepository repository;
 
-    public DeviceOwnershipServiceImpl(DeviceOwnershipRecordRepository deviceRepository) {
-        this.deviceRepository = deviceRepository;
+    public DeviceOwnershipServiceImpl(DeviceOwnershipRepository repository) {
+        this.repository = repository;
     }
 
-    public Optional<DeviceOwnershipRecord> getDeviceBySerial(String serialNumber) {
-        return deviceRepository.findBySerialNumber(serialNumber);
+    @Override
+    public DeviceOwnership save(DeviceOwnership deviceOwnership) {
+        return repository.save(deviceOwnership);
     }
 
-    public DeviceOwnershipRecord saveDevice(DeviceOwnershipRecord device) {
-        return deviceRepository.save(device);
+    @Override
+    public List<DeviceOwnership> getAll() {
+        return repository.findAll();
+    }
+
+    @Override
+    public DeviceOwnership getById(Long id) {
+        return repository.findById(id).orElse(null);
     }
 }
