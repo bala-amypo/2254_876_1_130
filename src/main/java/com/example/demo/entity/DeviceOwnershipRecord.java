@@ -35,11 +35,11 @@ public class DeviceOwnershipRecord {
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    @OneToMany(mappedBy = "deviceOwnershipRecord", cascade = CascadeType.ALL, orphanRemoval = true)
-private List<WarrantyClaimRecord> claims = new ArrayList<>();
+    @OneToMany(mappedBy = "device", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<WarrantyClaimRecord> claims = new ArrayList<>();
 
-@OneToMany(mappedBy = "deviceOwnershipRecord", cascade = CascadeType.ALL, orphanRemoval = true)
-private List<StolenDeviceReport> stolenReports = new ArrayList<>();
+    @OneToMany(mappedBy = "device", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<StolenDeviceReport> stolenReports = new ArrayList<>();
 
     public DeviceOwnershipRecord() {
     }
