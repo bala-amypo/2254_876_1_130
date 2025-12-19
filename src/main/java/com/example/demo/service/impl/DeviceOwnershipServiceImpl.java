@@ -1,28 +1,26 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.model.DeviceOwnershipRecord;
-import com.example.demo.repository.DeviceOwnershipRepository;
-import com.example.demo.service.DeviceOwnershipService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.example.demo.model.DeviceOwnershipRecord;
+import com.example.demo.repository.DeviceOwnershipRecordRepository;
+import com.example.demo.service.DeviceOwnershipService;
 
 @Service
 public class DeviceOwnershipServiceImpl implements DeviceOwnershipService {
 
-    @Autowired
-    private DeviceOwnershipRepository deviceRepo;
+    private final DeviceOwnershipRecordRepository repository;
 
-    @Override
-    public DeviceOwnershipRecord findBySerialNumber(String serialNumber) {
-        return deviceRepo.findBySerialNumber(serialNumber);
+    public DeviceOwnershipServiceImpl(
+            DeviceOwnershipRecordRepository repository) {
+        this.repository = repository;
     }
 
     @Override
-    public void activateDevice(String serialNumber) {
-        DeviceOwnershipRecord device = deviceRepo.findBySerialNumber(serialNumber);
-        if (device != null) {
-            device.setActive(true);
-            deviceRepo.save(device);
-        }
+    public DeviceOwnershipRecord registerDevice(
+            DeviceOwnershipRecord device) {
+
+        device.setActive(true);
+        return repository.save(device);
     }
 }

@@ -1,25 +1,24 @@
 package com.example.demo.controller;
 
-import com.example.demo.model.DeviceOwnershipRecord;
-import com.example.demo.service.DeviceOwnershipService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import com.example.demo.model.DeviceOwnershipRecord;
+import com.example.demo.service.DeviceOwnershipService;
+
 @RestController
-@RequestMapping("/device")
+@RequestMapping("/api/devices")
 public class DeviceOwnershipController {
 
-    @Autowired
-    private DeviceOwnershipService deviceService;
+    private final DeviceOwnershipService service;
 
-    @GetMapping("/{serialNumber}")
-    public DeviceOwnershipRecord getDevice(@PathVariable String serialNumber) {
-        return deviceService.findBySerialNumber(serialNumber);
+    public DeviceOwnershipController(DeviceOwnershipService service) {
+        this.service = service;
     }
 
-    @PostMapping("/activate/{serialNumber}")
-    public String activateDevice(@PathVariable String serialNumber) {
-        deviceService.activateDevice(serialNumber);
-        return "Device activated: " + serialNumber;
+    @PostMapping("/register")
+    public DeviceOwnershipRecord register(
+            @RequestBody DeviceOwnershipRecord device) {
+
+        return service.registerDevice(device);
     }
 }
