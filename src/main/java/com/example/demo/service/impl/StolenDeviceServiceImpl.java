@@ -1,7 +1,7 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.model.DeviceOwnershipRecord;
-import com.example.demo.model.StolenDeviceReport;
+import com.example.demo.model.DeviceOwnershipRecord;   // ✅ ADD HERE
+import com.example.demo.model.StolenDeviceReport;      // ✅ ADD HERE
 import com.example.demo.repository.DeviceOwnershipRecordRepository;
 import com.example.demo.repository.StolenDeviceReportRepository;
 import com.example.demo.service.StolenDeviceService;

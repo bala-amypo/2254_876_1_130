@@ -1,4 +1,4 @@
-package com.example.demo.model;
+package com.example.demo.model;   // ✅ MUST MATCH FOLDER
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
@@ -28,37 +28,17 @@ public class StolenDeviceReport {
         this.reportedAt = LocalDateTime.now();
     }
 
-    // ✅ GETTERS & SETTERS
+    // getters & setters
+    public Long getId() { return id; }
 
-    public Long getId() {
-        return id;
-    }
+    public String getSerialNumber() { return serialNumber; }
+    public void setSerialNumber(String serialNumber) { this.serialNumber = serialNumber; }
 
-    public String getSerialNumber() {
-        return serialNumber;
-    }
+    public String getReason() { return reason; }
+    public void setReason(String reason) { this.reason = reason; }
 
-    public void setSerialNumber(String serialNumber) {
-        this.serialNumber = serialNumber;
-    }
+    public DeviceOwnershipRecord getDevice() { return device; }
+    public void setDevice(DeviceOwnershipRecord device) { this.device = device; }
 
-    public String getReason() {
-        return reason;
-    }
-
-    public void setReason(String reason) {
-        this.reason = reason;
-    }
-
-    public DeviceOwnershipRecord getDevice() {
-        return device;
-    }
-
-    public void setDevice(DeviceOwnershipRecord device) {
-        this.device = device;
-    }
-
-    public LocalDateTime getReportedAt() {
-        return reportedAt;
-    }
+    public LocalDateTime getReportedAt() { return reportedAt; }
 }

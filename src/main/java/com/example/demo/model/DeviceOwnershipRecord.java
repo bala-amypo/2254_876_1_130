@@ -1,4 +1,4 @@
-package com.example.demo.model;
+package com.example.demo.model;  
 
 import jakarta.persistence.*;
 import java.time.LocalDate;
@@ -7,8 +7,8 @@ import java.util.List;
 
 @Entity
 @Table(
-    name = "device_ownership_records",
-    uniqueConstraints = @UniqueConstraint(columnNames = "serialNumber")
+        name = "device_ownership_records",
+        uniqueConstraints = @UniqueConstraint(columnNames = "serialNumber")
 )
 public class DeviceOwnershipRecord {
 
@@ -55,61 +55,26 @@ public class DeviceOwnershipRecord {
         }
     }
 
-    // ✅ GETTERS & SETTERS
+    // getters & setters
+    public Long getId() { return id; }
 
-    public Long getId() {
-        return id;
-    }
+    public String getSerialNumber() { return serialNumber; }
+    public void setSerialNumber(String serialNumber) { this.serialNumber = serialNumber; }
 
-    public String getSerialNumber() {
-        return serialNumber;
-    }
+    public String getOwnerName() { return ownerName; }
+    public void setOwnerName(String ownerName) { this.ownerName = ownerName; }
 
-    public void setSerialNumber(String serialNumber) {
-        this.serialNumber = serialNumber;
-    }
+    public String getOwnerEmail() { return ownerEmail; }
+    public void setOwnerEmail(String ownerEmail) { this.ownerEmail = ownerEmail; }
 
-    public String getOwnerName() {
-        return ownerName;
-    }
+    public LocalDate getPurchaseDate() { return purchaseDate; }
+    public void setPurchaseDate(LocalDate purchaseDate) { this.purchaseDate = purchaseDate; }
 
-    public void setOwnerName(String ownerName) {
-        this.ownerName = ownerName;
-    }
+    public LocalDate getWarrantyExpiration() { return warrantyExpiration; }
+    public void setWarrantyExpiration(LocalDate warrantyExpiration) { this.warrantyExpiration = warrantyExpiration; }
 
-    public String getOwnerEmail() {
-        return ownerEmail;
-    }
+    public Boolean getActive() { return active; }
+    public void setActive(Boolean active) { this.active = active; }
 
-    public void setOwnerEmail(String ownerEmail) {
-        this.ownerEmail = ownerEmail;
-    }
-
-    public LocalDate getPurchaseDate() {
-        return purchaseDate;
-    }
-
-    public void setPurchaseDate(LocalDate purchaseDate) {
-        this.purchaseDate = purchaseDate;
-    }
-
-    public LocalDate getWarrantyExpiration() {
-        return warrantyExpiration;
-    }
-
-    public void setWarrantyExpiration(LocalDate warrantyExpiration) {
-        this.warrantyExpiration = warrantyExpiration;
-    }
-
-    public Boolean getActive() {
-        return active;
-    }
-
-    public void setActive(Boolean active) {
-        this.active = active;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
+    public LocalDateTime getCreatedAt() { return createdAt; }
 }
