@@ -1,54 +1,51 @@
-package com.example.demo.model;
+package com.example.demo.service.impl;
 
-import jakarta.persistence.*;
-import java.time.LocalDateTime;
+import com.example.demo.model.DeviceOwnershipRecord;
+import com.example.demo.model.StolenDeviceReport;
+import com.example.demo.repository.DeviceOwnershipRecordRepository;
+import com.example.demo.repository.StolenDeviceReportRepository;
+import com.example.demo.service.StolenDeviceService;
+import org.springframework.stereotype.Service;
 
-@Entity
-@Table(name = "stolen_device_reports")
-public class StolenDeviceReport {
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+@Service
+public class StolenDeviceServiceImpl implements StolenDeviceService {
 
-    @Column(nullable = false, unique = true)
-    private String serialNumber;
+    private final StolenDeviceReportRepository stolenRepo;
+    private final DeviceOwnershipRecordRepository deviceRepo;
 
-    @Column(nullable = false)
-    private String reportedBy;
-
-    @Column(nullable = false)
-    private LocalDateTime reportDate;
-
-    private String details;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "device_id")
-    private DeviceOwnershipRecord device;
-
-    public StolenDeviceReport() {
+    public StolenDeviceServiceImpl(StolenDeviceReportRepository stolenRepo,
+                                   DeviceOwnershipRecordRepository deviceRepo) {
+        this.stolenRepo = stolenRepo;
+        this.deviceRepo = deviceRepo;
     }
 
-    public StolenDeviceReport(String serialNumber, String reportedBy, String details) {
-        this.serialNumber = serialNumber;
-        this.reportedBy = reportedBy;
-        this.details = details;
+    @Override
+    public StolenDeviceReport reportStolen(StolenDeviceReport report) {
+        DeviceOwnershipRecord device = deviceRepo
+                .findBySerialNumber(report.getSerialNumber())
+                .orElseThrow(() ->
+                        new NoSuchElementException("Device not found"));
+
+        report.setDevice(device);
+        return stolenRepo.save(report);
     }
 
-    @PrePersist
-    protected void onCreate() {
-        this.reportDate = LocalDateTime.now();
+    @Override
+    public List<StolenDeviceReport> getReportsBySerial(String serialNumber) {
+        return stolenRepo.findBySerialNumber(serialNumber);
     }
 
-    // Getters and Setters
-    public Long getId() { return id; }
-    public String getSerialNumber() { return serialNumber; }
-    public void setSerialNumber(String serialNumber) { this.serialNumber = serialNumber; }
-    public String getReportedBy() { return reportedBy; }
-    public void setReportedBy(String reportedBy) { this.reportedBy = reportedBy; }
-    public LocalDateTime getReportDate() { return reportDate; }
-    public String getDetails() { return details; }
-    public void setDetails(String details) { this.details = details; }
-    public DeviceOwnershipRecord getDevice() { return device; }
-    public void setDevice(DeviceOwnershipRecord device) { this.device = device; }
+    @Override
+    public Optional<StolenDeviceReport> getReportById(Long id) {
+        return stolenRepo.findById(id);
+    }
+
+    @Override
+    public List<StolenDeviceReport> getAllReports() {
+        return stolenRepo.findAll();
+    }
 }
