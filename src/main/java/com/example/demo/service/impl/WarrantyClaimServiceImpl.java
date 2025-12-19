@@ -2,8 +2,8 @@ package com.example.demo.service.impl;
 
 import com.example.demo.entity.DeviceOwnershipRecord;
 import com.example.demo.entity.WarrantyClaimRecord;
-import com.example.demo.repository.DeviceOwnershipRepository;
-import com.example.demo.repository.StolenDeviceRepository;
+import com.example.demo.repository.DeviceOwnershipRecordRepository;
+import com.example.demo.repository.StolenDeviceReportRepository;
 import com.example.demo.repository.WarrantyClaimRecordRepository;
 import com.example.demo.service.WarrantyClaimService;
 import org.springframework.stereotype.Service;
@@ -17,12 +17,12 @@ import java.util.Optional;
 public class WarrantyClaimServiceImpl implements WarrantyClaimService {
 
     private final WarrantyClaimRecordRepository claimRepo;
-    private final DeviceOwnershipRepository deviceRepo;
-    private final StolenDeviceRepository stolenRepo;
+    private final DeviceOwnershipRecordRepository deviceRepo;
+    private final StolenDeviceReportRepository stolenRepo;
 
     public WarrantyClaimServiceImpl(WarrantyClaimRecordRepository claimRepo,
-                                    DeviceOwnershipRepository deviceRepo,
-                                    StolenDeviceRepository stolenRepo) {
+                                    DeviceOwnershipRecordRepository deviceRepo,
+                                    StolenDeviceReportRepository stolenRepo) {
         this.claimRepo = claimRepo;
         this.deviceRepo = deviceRepo;
         this.stolenRepo = stolenRepo;
