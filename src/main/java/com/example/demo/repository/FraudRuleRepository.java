@@ -1,6 +1,6 @@
-package com.example.fraud.repository;
+package com.example.demo.repository;
 
-import com.example.fraud.entity.FraudRule;
+import com.example.demo.entity.FraudRule;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

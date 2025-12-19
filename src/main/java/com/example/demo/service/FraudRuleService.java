@@ -1,6 +1,6 @@
-package com.example.fraud.service;
+package com.example.demo.service;
 
-import com.example.fraud.entity.FraudRule;
+import com.example.demo.entity.FraudRule;
 
 import java.util.List;
 import java.util.Optional;

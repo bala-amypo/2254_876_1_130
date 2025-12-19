@@ -1,12 +1,13 @@
-package com.example.fraud.service.impl;
+package com.example.demo.service.impl;
 
-import com.example.fraud.entity.FraudRule;
-import com.example.fraud.repository.FraudRuleRepository;
-import com.example.fraud.service.FraudRuleService;
+import com.example.demo.entity.FraudRule;
+import com.example.demo.repository.FraudRuleRepository;
+import com.example.demo.service.FraudRuleService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Service
 public class FraudRuleServiceImpl implements FraudRuleService {
@@ -27,15 +28,15 @@ public class FraudRuleServiceImpl implements FraudRuleService {
 
     @Override
     public FraudRule updateRule(Long id, FraudRule updatedRule) {
-        FraudRule existingRule = repository.findById(id)
+        FraudRule existing = repository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Fraud rule not found"));
 
-        existingRule.setRuleCode(updatedRule.getRuleCode());
-        existingRule.setRuleType(updatedRule.getRuleType());
-        existingRule.setDescription(updatedRule.getDescription());
-        existingRule.setActive(updatedRule.getActive());
+        existing.setRuleCode(updatedRule.getRuleCode());
+        existing.setRuleType(updatedRule.getRuleType());
+        existing.setDescription(updatedRule.getDescription());
+        existing.setActive(updatedRule.getActive());
 
-        return repository.save(existingRule);
+        return repository.save(existing);
     }
 
     @Override
@@ -53,46 +54,3 @@ public class FraudRuleServiceImpl implements FraudRuleService {
         return repository.findAll();
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
