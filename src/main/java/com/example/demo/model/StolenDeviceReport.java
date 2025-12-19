@@ -38,9 +38,6 @@ public class StolenDeviceReport {
     public void onCreate() {
         this.reportDate = LocalDateTime.now();
     }
-
-    // getters & setters
-
     public Long getId() {
         return id;
     }
