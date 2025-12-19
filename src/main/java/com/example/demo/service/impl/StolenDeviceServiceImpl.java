@@ -1,35 +1,21 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.model.DeviceOwnershipRecord;
-import com.example.demo.model.StolenDeviceReport;
-import com.example.demo.repository.DeviceOwnershipRecordRepository;
-import com.example.demo.repository.StolenDeviceReportRepository;
-import com.example.demo.service.StolenDeviceService;
+import com.example.demo.repository.DeviceOwnershipRepository;
 import org.springframework.stereotype.Service;
 
 @Service
-public class StolenDeviceServiceImpl implements StolenDeviceService {
+public class StolenDeviceServiceImpl {
 
-    private final DeviceOwnershipRecordRepository deviceRepo;
-    private final StolenDeviceReportRepository reportRepo;
+    private final DeviceOwnershipRepository deviceOwnershipRepository;
 
-    public StolenDeviceServiceImpl(DeviceOwnershipRecordRepository deviceRepo,
-                                   StolenDeviceReportRepository reportRepo) {
-        this.deviceRepo = deviceRepo;
-        this.reportRepo = reportRepo;
+    public StolenDeviceServiceImpl(DeviceOwnershipRepository deviceOwnershipRepository) {
+        this.deviceOwnershipRepository = deviceOwnershipRepository;
     }
 
-    @Override
-    public StolenDeviceReport reportStolenDevice(String serialNumber, String reportedBy, String details) {
-
-        DeviceOwnershipRecord device = deviceRepo.findAll()
-                .stream()
-                .filter(d -> d.getSerialNumber().equals(serialNumber))
-                .findFirst()
-                .orElseThrow(() -> new RuntimeException("Device not found"));
-
-        StolenDeviceReport report = new StolenDeviceReport(serialNumber, reportedBy, details, device);
-
-        return reportRepo.save(report);
+    public void deactivateDevice(String serialNumber) {
+        deviceOwnershipRepository.findBySerialNumber(serialNumber).ifPresent(device -> {
+            device.setActive(false);
+            deviceOwnershipRepository.save(device);
+        });
     }
 }
