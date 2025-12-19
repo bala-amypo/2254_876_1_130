@@ -1,4 +1,4 @@
-package com.example.fraud.entity;
+package com.example.demo.entity;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
@@ -28,7 +28,6 @@ public class FraudRule {
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    // Constructors
     public FraudRule() {}
 
     public FraudRule(String ruleCode, String ruleType, String description) {
@@ -41,8 +40,6 @@ public class FraudRule {
     protected void onCreate() {
         this.createdAt = LocalDateTime.now();
     }
-
-    // Getters and Setters
 
     public Long getId() {
         return id;
