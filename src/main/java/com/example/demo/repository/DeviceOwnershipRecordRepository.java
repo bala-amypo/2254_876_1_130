@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface DeviceOwnershipRepository extends JpaRepository<DeviceOwnershipRecord, Long> {
-
+    DeviceOwnershipRecord findBySerialNumber(String serialNumber);
 }
