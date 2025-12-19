@@ -4,40 +4,32 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "stolen_device_reports")
 public class StolenDeviceReport {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String serialNumber;
 
-    @Column(nullable = false)
-    private String reportedBy;
+    private String reason;
 
-    private String details;
-
-    @Column(nullable = false, updatable = false)
-    private LocalDateTime reportDate;
-
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "device_id")
+    @ManyToOne
+    @JoinColumn(name = "device_id", nullable = false)
     private DeviceOwnershipRecord device;
 
-    public StolenDeviceReport() {
-    }
+    private LocalDateTime reportedAt;
 
-    public StolenDeviceReport(String serialNumber, String reportedBy) {
-        this.serialNumber = serialNumber;
-        this.reportedBy = reportedBy;
-    }
+    public StolenDeviceReport() {}
 
     @PrePersist
-    public void onCreate() {
-        this.reportDate = LocalDateTime.now();
+    protected void onCreate() {
+        this.reportedAt = LocalDateTime.now();
     }
+
+    // ✅ GETTERS & SETTERS
+
     public Long getId() {
         return id;
     }
@@ -50,24 +42,12 @@ public class StolenDeviceReport {
         this.serialNumber = serialNumber;
     }
 
-    public String getReportedBy() {
-        return reportedBy;
+    public String getReason() {
+        return reason;
     }
 
-    public void setReportedBy(String reportedBy) {
-        this.reportedBy = reportedBy;
-    }
-
-    public String getDetails() {
-        return details;
-    }
-
-    public void setDetails(String details) {
-        this.details = details;
-    }
-
-    public LocalDateTime getReportDate() {
-        return reportDate;
+    public void setReason(String reason) {
+        this.reason = reason;
     }
 
     public DeviceOwnershipRecord getDevice() {
@@ -76,5 +56,9 @@ public class StolenDeviceReport {
 
     public void setDevice(DeviceOwnershipRecord device) {
         this.device = device;
+    }
+
+    public LocalDateTime getReportedAt() {
+        return reportedAt;
     }
 }
