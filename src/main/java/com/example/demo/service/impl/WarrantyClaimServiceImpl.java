@@ -1,47 +1,47 @@
-package com.example.demo.service.impl;
+// package com.example.demo.service.impl;
 
-import java.time.LocalDate;
-import java.util.List;
+// import java.time.LocalDate;
+// import java.util.List;
 
-import org.springframework.stereotype.Service;
+// import org.springframework.stereotype.Service;
 
-import com.example.demo.model.DeviceOwnershipRecord;
-import com.example.demo.model.WarrantyClaimRecord;
-import com.example.demo.repository.DeviceOwnershipRecordRepository;
-import com.example.demo.repository.WarrantyClaimRecordRepository;
-import com.example.demo.service.WarrantyClaimService;
+// import com.example.demo.model.DeviceOwnershipRecord;
+// import com.example.demo.model.WarrantyClaimRecord;
+// import com.example.demo.repository.DeviceOwnershipRecordRepository;
+// import com.example.demo.repository.WarrantyClaimRecordRepository;
+// import com.example.demo.service.WarrantyClaimService;
 
-@Service
-public class WarrantyClaimServiceImpl implements WarrantyClaimService {
+// @Service
+// public class WarrantyClaimServiceImpl implements WarrantyClaimService {
 
-    private final DeviceOwnershipRecordRepository deviceRepository;
-    private final WarrantyClaimRecordRepository claimRepository;
+//     private final DeviceOwnershipRecordRepository deviceRepository;
+//     private final WarrantyClaimRecordRepository claimRepository;
 
-    public WarrantyClaimServiceImpl(
-            DeviceOwnershipRecordRepository deviceRepository,
-            WarrantyClaimRecordRepository claimRepository) {
+//     public WarrantyClaimServiceImpl(
+//             DeviceOwnershipRecordRepository deviceRepository,
+//             WarrantyClaimRecordRepository claimRepository) {
 
-        this.deviceRepository = deviceRepository;
-        this.claimRepository = claimRepository;
-    }
+//         this.deviceRepository = deviceRepository;
+//         this.claimRepository = claimRepository;
+//     }
 
-    @Override
-    public boolean isWarrantyValid(String serialNumber) {
+//     @Override
+//     public boolean isWarrantyValid(String serialNumber) {
 
-        DeviceOwnershipRecord device =
-                deviceRepository.findBySerialNumber(serialNumber)
-                        .orElse(null);
+//         DeviceOwnershipRecord device =
+//                 deviceRepository.findBySerialNumber(serialNumber)
+//                         .orElse(null);
 
-        if (device == null) {
-            return false;
-        }
+//         if (device == null) {
+//             return false;
+//         }
 
-        return device.getWarrantyExpiration()
-                .isAfter(LocalDate.now());
-    }
+//         return device.getWarrantyExpiration()
+//                 .isAfter(LocalDate.now());
+//     }
 
-    @Override
-    public List<WarrantyClaimRecord> getAllClaims() {
-        return claimRepository.findAll();
-    }
-}
+//     @Override
+//     public List<WarrantyClaimRecord> getAllClaims() {
+//         return claimRepository.findAll();
+//     }
+// }
