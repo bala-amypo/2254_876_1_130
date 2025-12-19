@@ -1,76 +1,61 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
-import java.time.LocalDateTime;
-import java.util.List;
+import java.time.LocalDate;
 
 @Entity
-@Table(name = "warranty_claim_records")
 public class WarrantyClaimRecord {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
     private String serialNumber;
 
-    @Column(nullable = false)
-    private String claimantName;
-
-    private String claimantEmail;
-
-    @Column(nullable = false)
     private String claimReason;
 
-    @Column(nullable = false)
-    private String status = "PENDING";
+    private String status; // PENDING, FLAGGED, APPROVED, REJECTED
 
-    @Column(nullable = false, updatable = false)
-    private LocalDateTime submittedAt;
-
-    @Column(nullable = false, updatable = false)
-    private LocalDateTime createdAt;
-
-    // Relationships
     @ManyToOne
-    @JoinColumn(name = "device_id", nullable = false)
     private DeviceOwnershipRecord deviceOwnershipRecord;
 
-    @OneToMany(mappedBy = "warrantyClaimRecord")
-    private List<FraudAlertRecord> fraudAlerts;
+    // Getters and Setters
 
-    public WarrantyClaimRecord() {}
+    public Long getId() {
+        return id;
+    }
 
-    public WarrantyClaimRecord(
-            String serialNumber,
-            String claimantName,
-            String claimantEmail,
-            String claimReason
-    ) {
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getSerialNumber() {
+        return serialNumber;
+    }
+
+    public void setSerialNumber(String serialNumber) {
         this.serialNumber = serialNumber;
-        this.claimantName = claimantName;
-        this.claimantEmail = claimantEmail;
+    }
+
+    public String getClaimReason() {
+        return claimReason;
+    }
+
+    public void setClaimReason(String claimReason) {
         this.claimReason = claimReason;
     }
 
-    @PrePersist
-    protected void onCreate() {
-        this.submittedAt = LocalDateTime.now();
-        this.createdAt = LocalDateTime.now();
+    public String getStatus() {
+        return status;
     }
 
-    // Getters & Setters (only key ones shown)
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
-    public Long getId() { return id; }
-
-    public String getSerialNumber() { return serialNumber; }
-
-    public String getClaimReason() { return claimReason; }
-
-    public String getStatus() { return status; }
-
-    public void setStatus(String status) { this.status = status; }
+    public DeviceOwnershipRecord getDeviceOwnershipRecord() {
+        return deviceOwnershipRecord;
+    }
 
     public void setDeviceOwnershipRecord(DeviceOwnershipRecord deviceOwnershipRecord) {
         this.deviceOwnershipRecord = deviceOwnershipRecord;

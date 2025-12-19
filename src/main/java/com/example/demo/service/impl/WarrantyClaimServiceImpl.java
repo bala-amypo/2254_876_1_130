@@ -20,11 +20,9 @@ public class WarrantyClaimServiceImpl implements WarrantyClaimService {
     private final DeviceOwnershipRepository deviceRepo;
     private final StolenDeviceRepository stolenRepo;
 
-    public WarrantyClaimServiceImpl(
-            WarrantyClaimRecordRepository claimRepo,
-            DeviceOwnershipRepository deviceRepo,
-            StolenDeviceRepository stolenRepo
-    ) {
+    public WarrantyClaimServiceImpl(WarrantyClaimRecordRepository claimRepo,
+                                    DeviceOwnershipRepository deviceRepo,
+                                    StolenDeviceRepository stolenRepo) {
         this.claimRepo = claimRepo;
         this.deviceRepo = deviceRepo;
         this.stolenRepo = stolenRepo;
@@ -32,26 +30,19 @@ public class WarrantyClaimServiceImpl implements WarrantyClaimService {
 
     @Override
     public WarrantyClaimRecord submitClaim(WarrantyClaimRecord claim) {
-
-        DeviceOwnershipRecord device = deviceRepo
-                .findBySerialNumber(claim.getSerialNumber())
-                .orElseThrow(() ->
-                        new NoSuchElementException("Device not found"));
+        DeviceOwnershipRecord device = deviceRepo.findBySerialNumber(claim.getSerialNumber())
+                .orElseThrow(() -> new NoSuchElementException("Device not found"));
 
         boolean flagged = false;
 
-        // Duplicate claim check
-        if (claimRepo.existsBySerialNumberAndClaimReason(
-                claim.getSerialNumber(), claim.getClaimReason())) {
+        if (claimRepo.existsBySerialNumberAndClaimReason(claim.getSerialNumber(), claim.getClaimReason())) {
             flagged = true;
         }
 
-        // Warranty expired
         if (device.getWarrantyExpiration().isBefore(LocalDate.now())) {
             flagged = true;
         }
 
-        // Stolen device
         if (stolenRepo.existsBySerialNumber(claim.getSerialNumber())) {
             flagged = true;
         }
