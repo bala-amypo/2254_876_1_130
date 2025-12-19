@@ -1,10 +1,10 @@
 package com.example.demo.service.impl;
-import com.example.demo.model.DeviceOwnershipRecord;
-import com.example.demo.model.StolenDeviceReport;
+
+import com.example.demo.entity.DeviceOwnershipRecord;
+import com.example.demo.entity.StolenDeviceReport;
 import com.example.demo.repository.DeviceOwnershipRecordRepository;
 import com.example.demo.repository.StolenDeviceReportRepository;
-import com.example.demo.service.StolenDeviceService;
-import org.springframework.stereotype.Service;
+
 
 import java.util.List;
 import java.util.NoSuchElementException;
