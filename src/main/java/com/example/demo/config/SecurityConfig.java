@@ -1,33 +1,20 @@
-package com.example.demo.config;
+package com.example.demo.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 
 @Configuration
+@EnableWebSecurity
 public class SecurityConfig {
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            .csrf(csrf -> csrf.disable()) // Disable CSRF for POST testing
-            .authorizeHttpRequests(auth -> auth
-                .requestMatchers(
-                    "/auth/**", 
-                    "/v3/api-docs/**", 
-                    "/swagger-ui/**", 
-                    "/swagger-ui.html"
-                ).permitAll() // Allow public access
-                .anyRequest().authenticated() // Other endpoints require auth
-            );
+            .authorizeHttpRequests(auth -> auth.anyRequest().permitAll()) // Allow all requests
+            .csrf(csrf -> csrf.disable()); // Disable CSRF for testing
 
         return http.build();
     }
