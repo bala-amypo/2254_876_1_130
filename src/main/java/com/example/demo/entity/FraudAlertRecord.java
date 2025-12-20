@@ -1,7 +1,7 @@
 package com.example.demo.entity;
 
-import java.time.LocalDateTime;
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "fraud_alert_records")
@@ -31,27 +31,36 @@ public class FraudAlertRecord {
     @Column(nullable = false, updatable = false)
     private LocalDateTime alertDate;
 
-    // No-args constructor
-    public FraudAlertRecord() {
-    }
+    // Many-to-one relationship with User
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
-    // Core fields constructor
+    // =====================
+    // Constructors
+    // =====================
+    public FraudAlertRecord() {}
+
     public FraudAlertRecord(
-            Long claimId,
-            String serialNumber,
-            String alertType,
-            String severity,
-            String message) {
-
+        Long claimId,
+        String serialNumber,
+        String alertType,
+        String severity,
+        String message,
+        User user
+    ) {
         this.claimId = claimId;
         this.serialNumber = serialNumber;
         this.alertType = alertType;
         this.severity = severity;
         this.message = message;
+        this.user = user;
         this.resolved = false;
     }
 
-    // Auto-generate alertDate
+    // =====================
+    // PrePersist
+    // =====================
     @PrePersist
     protected void onCreate() {
         this.alertDate = LocalDateTime.now();
@@ -60,10 +69,9 @@ public class FraudAlertRecord {
         }
     }
 
-    // =======================
+    // =====================
     // Getters and Setters
-    // =======================
-
+    // =====================
     public Long getId() {
         return id;
     }
@@ -118,5 +126,13 @@ public class FraudAlertRecord {
 
     public LocalDateTime getAlertDate() {
         return alertDate;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

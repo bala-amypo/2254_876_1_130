@@ -2,14 +2,10 @@ package com.example.demo.entity;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Entity
-@Table(
-    name = "users",
-    uniqueConstraints = @UniqueConstraint(columnNames = "email")
-)
+@Table(name = "users")
 public class User {
 
     @Id
@@ -22,55 +18,51 @@ public class User {
     @Column(nullable = false, unique = true)
     private String email;
 
-    // Stored ONLY in hashed form
     @Column(nullable = false)
-    private String password;
+    private String password; // store hashed only
 
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(
-        name = "user_roles",
+        name = "user_roles", 
         joinColumns = @JoinColumn(name = "user_id")
     )
-    @Column(name = "role", nullable = false)
-    private Set<String> roles = new HashSet<>();
+    @Column(name = "role")
+    private Set<String> roles = new HashSet<>(Collections.singleton("USER"));
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private Set<FraudAlertRecord> fraudAlertRecords = new HashSet<>();
+    // One-to-many with FraudAlertRecord
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<FraudAlertRecord> fraudAlertRecords = new ArrayList<>();
 
-    // ---------- Constructors ----------
-
-    public User() {
-    }
+    // =====================
+    // Constructors
+    // =====================
+    public User() {}
 
     public User(String name, String email, String password, Set<String> roles) {
         this.name = name;
         this.email = email;
         this.password = password;
-        this.roles = roles;
-    }
-
-    // ---------- Auto Populate ----------
-
-    @PrePersist
-    protected void onCreate() {
-        this.createdAt = LocalDateTime.now();
-        if (this.roles == null || this.roles.isEmpty()) {
-            this.roles = new HashSet<>();
-            this.roles.add("USER");
+        if (roles != null && !roles.isEmpty()) {
+            this.roles = roles;
         }
     }
 
-    // ---------- Getters & Setters ----------
-
-    public Long getId() {
-        return id;
+    // =====================
+    // PrePersist
+    // =====================
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    // =====================
+    // Getters and Setters
+    // =====================
+    public Long getId() {
+        return id;
     }
 
     public String getName() {
@@ -89,7 +81,6 @@ public class User {
         this.email = email;
     }
 
-    // Password must already be BCrypt-encoded
     public String getPassword() {
         return password;
     }
@@ -110,11 +101,11 @@ public class User {
         return createdAt;
     }
 
-    public Set<FraudAlertRecord> getFraudAlertRecords() {
+    public List<FraudAlertRecord> getFraudAlertRecords() {
         return fraudAlertRecords;
     }
 
-    public void setFraudAlertRecords(Set<FraudAlertRecord> fraudAlertRecords) {
+    public void setFraudAlertRecords(List<FraudAlertRecord> fraudAlertRecords) {
         this.fraudAlertRecords = fraudAlertRecords;
     }
 }
