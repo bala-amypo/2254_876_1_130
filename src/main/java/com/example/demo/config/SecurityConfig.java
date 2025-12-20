@@ -18,15 +18,15 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            .csrf(csrf -> csrf.disable()) // disable CSRF for POST testing
+            .csrf(csrf -> csrf.disable()) // Disable CSRF for POST testing
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(
                     "/auth/**", 
                     "/v3/api-docs/**", 
                     "/swagger-ui/**", 
                     "/swagger-ui.html"
-                ).permitAll()
-                .anyRequest().authenticated()
+                ).permitAll() // Allow public access
+                .anyRequest().authenticated() // Other endpoints require auth
             );
 
         return http.build();
