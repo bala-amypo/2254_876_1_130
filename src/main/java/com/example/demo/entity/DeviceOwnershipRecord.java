@@ -1,4 +1,4 @@
-package com.example.demo.entity;
+package com.example.entity;
 
 import jakarta.persistence.*;
 import java.time.LocalDate;
@@ -10,14 +10,11 @@ public class DeviceOwnershipRecord {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true, nullable = false)
     private String serialNumber;
-
     private boolean active;
-
     private LocalDate warrantyExpiration;
 
-    // Getters and Setters
+    // ===== GETTERS & SETTERS =====
 
     public Long getId() {
         return id;

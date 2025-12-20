@@ -1,25 +1,23 @@
-package com.example.demo.entity;
+package com.example.entity;
 
 import jakarta.persistence.*;
-import java.time.LocalDate;
 
 @Entity
-public class WarrantyClaimRecord {
+public class WarrantyClaim {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String serialNumber;
-
     private String claimReason;
+    private String status;
 
-    private String status; // PENDING, FLAGGED, APPROVED, REJECTED
-
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "device_ownership_id")
     private DeviceOwnershipRecord deviceOwnershipRecord;
 
-    // Getters and Setters
+    // ===== GETTERS & SETTERS =====
 
     public Long getId() {
         return id;
