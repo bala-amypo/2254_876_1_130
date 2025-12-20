@@ -1,14 +1,7 @@
 package com.example.demo.entity;
 
 import java.time.LocalDateTime;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "fraud_alert_records")
@@ -38,11 +31,11 @@ public class FraudAlertRecord {
     @Column(nullable = false, updatable = false)
     private LocalDateTime alertDate;
 
-    // ✅ No-args constructor
+    // No-args constructor
     public FraudAlertRecord() {
     }
 
-    // ✅ Core fields constructor
+    // Core fields constructor
     public FraudAlertRecord(
             Long claimId,
             String serialNumber,
@@ -58,7 +51,7 @@ public class FraudAlertRecord {
         this.resolved = false;
     }
 
-    // ✅ Auto-generate alertDate
+    // Auto-generate alertDate
     @PrePersist
     protected void onCreate() {
         this.alertDate = LocalDateTime.now();
@@ -87,23 +80,38 @@ public class FraudAlertRecord {
         return serialNumber;
     }
 
+    public void setSerialNumber(String serialNumber) {
+        this.serialNumber = serialNumber;
+    }
+
     public String getAlertType() {
         return alertType;
+    }
+
+    public void setAlertType(String alertType) {
+        this.alertType = alertType;
     }
 
     public String getSeverity() {
         return severity;
     }
 
+    public void setSeverity(String severity) {
+        this.severity = severity;
+    }
+
     public String getMessage() {
         return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 
     public Boolean getResolved() {
         return resolved;
     }
 
-    // ✅ THIS IS THE FIX YOU ASKED FOR
     public void setResolved(Boolean resolved) {
         this.resolved = resolved;
     }
