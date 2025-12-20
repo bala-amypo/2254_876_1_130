@@ -1,23 +1,16 @@
 package com.example.demo.entity;
 
+import jakarta.persistence.*;
+
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
-import jakarta.persistence.CollectionTable;
-import jakarta.persistence.Column;
-import jakarta.persistence.ElementCollection;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.Table;
-
 @Entity
-@Table(name = "users")
+@Table(
+        name = "users",
+        uniqueConstraints = @UniqueConstraint(columnNames = "email")
+)
 public class User {
 
     @Id
@@ -38,18 +31,24 @@ public class User {
             name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id")
     )
-    @Column(name = "role")
+    @Column(name = "role", nullable = false)
     private Set<String> roles = new HashSet<>();
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    // 🔹 No-args constructor
+    // Relationship
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private Set<FraudAlertRecord> fraudAlertRecords = new HashSet<>();
+
+    // Constructors
     public User() {
     }
 
-    // 🔹 Core fields constructor
-    public User(String name, String email, String password, Set<String> roles) {
+    public User(String name,
+                String email,
+                String password,
+                Set<String> roles) {
         this.name = name;
         this.email = email;
         this.password = password;
@@ -59,14 +58,13 @@ public class User {
     @PrePersist
     protected void onCreate() {
         this.createdAt = LocalDateTime.now();
-        if (this.roles == null || this.roles.isEmpty()) {
-            this.roles = new HashSet<>();
-            this.roles.add("USER");
+        if (roles == null || roles.isEmpty()) {
+            roles = new HashSet<>();
+            roles.add("USER");
         }
     }
 
-    // ================= Getters =================
-
+    // Getters
     public Long getId() {
         return id;
     }
