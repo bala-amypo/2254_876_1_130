@@ -26,40 +26,36 @@ public class AuthController {
         this.jwtTokenProvider = jwtTokenProvider;
     }
 
-    // Register new user
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
         User user = userService.registerUser(request);
-        Map<String, Object> response = new HashMap<>();
-        response.put("userId", user.getId());
-        response.put("name", user.getName());
-        response.put("email", user.getEmail());
-        response.put("roles", user.getRoles());
-        response.put("createdAt", user.getCreatedAt());
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(user);
     }
 
-    // Login and get real JWT token
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
-        User user = userService.loginUser(request); // Authenticate user
-        if (user == null) {
-            return ResponseEntity.status(401).body("Invalid email or password");
-        }
+        try {  // <-- START try/catch here
+            User user = userService.loginUser(request);
+            if (user == null) {
+                return ResponseEntity.status(401).body("Invalid email or password");
+            }
 
-        // Generate real JWT token
-        String token = jwtTokenProvider.createToken(
-                user.getId(),
-                user.getEmail(),
-                user.getRoles()
-        );
+            String token = jwtTokenProvider.createToken(
+                    user.getId(),
+                    user.getEmail(),
+                    user.getRoles()
+            );
 
-        Map<String, Object> response = new HashMap<>();
-        response.put("token", token);
-        response.put("userId", user.getId());
-        response.put("email", user.getEmail());
-        response.put("roles", user.getRoles());
+            Map<String, Object> response = new HashMap<>();
+            response.put("token", token);
+            response.put("userId", user.getId());
+            response.put("email", user.getEmail());
+            response.put("roles", user.getRoles());
 
-        return ResponseEntity.ok(response);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {  // <-- CATCH block
+            e.printStackTrace(); // prints full error in console/logs
+            return ResponseEntity.status(500).body(e.getMessage());
+        }  // <-- END try/catch
     }
 }
