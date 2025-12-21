@@ -1,8 +1,13 @@
 package com.example.demo.model;
 
+import lombok.*;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "fraud_rules")
 public class FraudRule {
@@ -19,28 +24,15 @@ public class FraudRule {
 
     private String description;
 
+    @Column(nullable = false)
     private Boolean active = true;
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    public FraudRule() {
-    }
-
-    public FraudRule(String ruleCode, String ruleType) {
-        this.ruleCode = ruleCode;
-        this.ruleType = ruleType;
-    }
-
     @PrePersist
-    protected void onCreate() {
-        this.createdAt = LocalDateTime.now();
-        if (this.active == null) {
-            this.active = true;
-        }
+    public void prePersist() {
+        createdAt = LocalDateTime.now();
+        if (active == null) active = true;
     }
-
-    // Getters
-    public Long getId() { return id; }
-    public String getRuleCode() { return ruleCode; }
 }

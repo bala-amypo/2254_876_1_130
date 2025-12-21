@@ -42,4 +42,10 @@ public class User {
             roles.add("USER");
         }
     }
+    public User(String name, String email, String password, Set<String> roles) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.roles = roles;
+    }
 }

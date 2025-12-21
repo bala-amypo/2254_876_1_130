@@ -1,8 +1,13 @@
 package com.example.demo.model;
 
+import lombok.*;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "fraud_alert_records")
 public class FraudAlertRecord {
@@ -21,42 +26,27 @@ public class FraudAlertRecord {
     private String alertType;
 
     @Column(nullable = false)
-    private String severity;
+    private String severity; // LOW/MEDIUM/HIGH/CRITICAL
 
     private String message;
-
-    private Boolean resolved = false;
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime alertDate;
 
+    @Column(nullable = false)
+    private Boolean resolved = false;
+
     @ManyToOne
-    @JoinColumn(name = "claim_id_fk")
+    @JoinColumn(name = "claim_id", insertable = false, updatable = false)
     private WarrantyClaimRecord claim;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
-    public FraudAlertRecord() {
-    }
-
-    public FraudAlertRecord(Long claimId, String serialNumber, String alertType, String severity) {
-        this.claimId = claimId;
-        this.serialNumber = serialNumber;
-        this.alertType = alertType;
-        this.severity = severity;
-    }
-
     @PrePersist
-    protected void onCreate() {
-        this.alertDate = LocalDateTime.now();
-        if (this.resolved == null) {
-            this.resolved = false;
-        }
+    public void prePersist() {
+        alertDate = LocalDateTime.now();
+        if (resolved == null) resolved = false;
     }
-
-    // Getters
-    public Long getId() { return id; }
-    public Boolean getResolved() { return resolved; }
 }
