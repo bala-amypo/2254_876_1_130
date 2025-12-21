@@ -5,7 +5,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 import java.util.Optional;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface FraudAlertRecordRepository extends JpaRepository<FraudAlertRecord, Long> {
 
     Optional<FraudAlertRecord> findById(Long id);
