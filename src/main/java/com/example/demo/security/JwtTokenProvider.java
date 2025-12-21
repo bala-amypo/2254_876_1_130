@@ -1,38 +1,31 @@
 package com.example.demo.security;
 
-import java.util.HashSet;
-import java.util.Set;
+import io.jsonwebtoken.*;
 import org.springframework.stereotype.Component;
 
-@Component
+import java.util.Date;
+import java.util.Set;
 
+@Component
 public class JwtTokenProvider {
 
-    public JwtTokenProvider() {
-    }
+    private final String SECRET_KEY = "my-secret-key";
+    private final long EXPIRATION = 86400000; // 1 day
 
     public String createToken(Long userId, String email, Set<String> roles) {
-        // Dummy token for testing
-        return "dummy-jwt-token-for-" + email;
-    }
 
-    public boolean validateToken(String token) {
-        // Always valid for dummy security
-        return token != null && token.startsWith("dummy-jwt-token");
-    }
+        Claims claims = Jwts.claims().setSubject(email);
+        claims.put("userId", userId);
+        claims.put("roles", roles);
 
-    public String getEmail(String token) {
-        if (token == null) return null;
-        return token.replace("dummy-jwt-token-for-", "");
-    }
+        Date now = new Date();
+        Date expiry = new Date(now.getTime() + EXPIRATION);
 
-    public Set<String> getRoles(String token) {
-        Set<String> roles = new HashSet<>();
-        roles.add("USER");
-        return roles;
-    }
-
-    public Long getUserId(String token) {
-        return 1L;
+        return Jwts.builder()
+                .setClaims(claims)
+                .setIssuedAt(now)
+                .setExpiration(expiry)
+                .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
+                .compact();
     }
 }
