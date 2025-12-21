@@ -1,26 +1,35 @@
-package com.example.demo.util;
+package com.example.demo.security;
 
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import org.springframework.stereotype.Component;
+import java.util.HashSet;
+import java.util.Set;
 
-import java.util.Date;
-
-@Component
 public class JwtTokenProvider {
 
-    private final String JWT_SECRET = "secretKey123"; // use env variable in prod
-    private final long JWT_EXPIRATION = 86400000; // 1 day in ms
+    public JwtTokenProvider() {
+    }
 
-    public String generateToken(String email) {
-        Date now = new Date();
-        Date expiryDate = new Date(now.getTime() + JWT_EXPIRATION);
+    public String createToken(Long userId, String email, Set<String> roles) {
+        // Dummy token for testing
+        return "dummy-jwt-token-for-" + email;
+    }
 
-        return Jwts.builder()
-                .setSubject(email)
-                .setIssuedAt(now)
-                .setExpiration(expiryDate)
-                .signWith(SignatureAlgorithm.HS512, JWT_SECRET)
-                .compact();
+    public boolean validateToken(String token) {
+        // Always valid for dummy security
+        return token != null && token.startsWith("dummy-jwt-token");
+    }
+
+    public String getEmail(String token) {
+        if (token == null) return null;
+        return token.replace("dummy-jwt-token-for-", "");
+    }
+
+    public Set<String> getRoles(String token) {
+        Set<String> roles = new HashSet<>();
+        roles.add("USER");
+        return roles;
+    }
+
+    public Long getUserId(String token) {
+        return 1L;
     }
 }
