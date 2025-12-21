@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import java.util.List;
 
 @Configuration
-public class SwaggerConfig {
+public class OpenApiConfig {
 
     @Bean
     public OpenAPI customOpenAPI() {
@@ -21,8 +21,9 @@ public class SwaggerConfig {
                         .bearerFormat("JWT")))
             .addSecurityItem(new SecurityRequirement().addList("bearerAuth"));
 
-                .servers(List.of(
+            .servers(List.of(
                         new Server().url("https://9027.pro604cr.amypo.ai")
                 ));
     }
 }
+
