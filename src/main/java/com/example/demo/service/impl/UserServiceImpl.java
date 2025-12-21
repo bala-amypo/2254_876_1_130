@@ -17,7 +17,7 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
 
-    // RULE: Constructor order must be exactly this or the app crashes
+    // Requirement: Strict Constructor Order
     public UserServiceImpl(UserRepository userRepository, 
                           PasswordEncoder passwordEncoder, 
                           JwtTokenProvider jwtTokenProvider) {
@@ -28,28 +28,37 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User registerUser(RegisterRequest request) {
-        // RULE: Throwing this specific message prevents a DB 500 error
         if (userRepository.existsByEmail(request.getEmail())) {
             throw new IllegalArgumentException("Email already in use");
         }
-
         User user = new User();
         user.setName(request.getName());
         user.setEmail(request.getEmail());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setRoles(request.getRoles());
-
         return userRepository.save(user);
     }
 
     @Override
     public User loginUser(LoginRequest request) {
-        User user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new NoSuchElementException("User not found"));
-        
+        User user = findByEmail(request.getEmail());
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             throw new IllegalArgumentException("Invalid input");
         }
         return user;
+    }
+
+    // --- MUST INCLUDE THESE TO MATCH YOUR INTERFACE ---
+
+    @Override
+    public User getById(Long id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("User not found"));
+    }
+
+    @Override
+    public User findByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new NoSuchElementException("User not found"));
     }
 }
