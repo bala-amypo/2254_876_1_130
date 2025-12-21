@@ -34,28 +34,20 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
-        try {  // <-- START try/catch here
-            User user = userService.loginUser(request);
-            if (user == null) {
-                return ResponseEntity.status(401).body("Invalid email or password");
-            }
+        User user = userService.loginUser(request);
 
-            String token = jwtTokenProvider.createToken(
-                    user.getId(),
-                    user.getEmail(),
-                    user.getRoles()
-            );
+        String token = jwtTokenProvider.createToken(
+                user.getId(),
+                user.getEmail(),
+                user.getRoles()
+        );
 
-            Map<String, Object> response = new HashMap<>();
-            response.put("token", token);
-            response.put("userId", user.getId());
-            response.put("email", user.getEmail());
-            response.put("roles", user.getRoles());
+        Map<String, Object> response = new HashMap<>();
+        response.put("token", token);
+        response.put("userId", user.getId());
+        response.put("email", user.getEmail());
+        response.put("roles", user.getRoles());
 
-            return ResponseEntity.ok(response);
-        } catch (Exception e) {  // <-- CATCH block
-            e.printStackTrace(); // prints full error in console/logs
-            return ResponseEntity.status(500).body(e.getMessage());
-        }  // <-- END try/catch
+        return ResponseEntity.ok(response);
     }
 }
