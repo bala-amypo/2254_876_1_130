@@ -1,8 +1,13 @@
 package com.example.demo.model;
 
+import lombok.*;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "stolen_device_reports")
 public class StolenDeviceReport {
@@ -11,7 +16,7 @@ public class StolenDeviceReport {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String serialNumber;
 
     @Column(nullable = false)
@@ -26,20 +31,8 @@ public class StolenDeviceReport {
     @JoinColumn(name = "device_id")
     private DeviceOwnershipRecord device;
 
-    public StolenDeviceReport() {
-    }
-
-    public StolenDeviceReport(String serialNumber, String reportedBy) {
-        this.serialNumber = serialNumber;
-        this.reportedBy = reportedBy;
-    }
-
     @PrePersist
-    protected void onCreate() {
-        this.reportDate = LocalDateTime.now();
+    public void prePersist() {
+        reportDate = LocalDateTime.now();
     }
-
-    // Getters
-    public Long getId() { return id; }
-    public String getSerialNumber() { return serialNumber; }
 }

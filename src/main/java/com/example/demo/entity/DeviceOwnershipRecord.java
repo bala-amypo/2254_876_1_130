@@ -1,10 +1,16 @@
 package com.example.demo.model;
 
+import lombok.*;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "device_ownership_records")
 public class DeviceOwnershipRecord {
@@ -26,37 +32,21 @@ public class DeviceOwnershipRecord {
     @Column(nullable = false)
     private LocalDate warrantyExpiration;
 
+    @Column(nullable = false)
     private Boolean active = true;
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
     @OneToMany(mappedBy = "device", cascade = CascadeType.ALL)
-    private List<WarrantyClaimRecord> warrantyClaims;
+    private List<WarrantyClaimRecord> claims = new ArrayList<>();
 
     @OneToMany(mappedBy = "device", cascade = CascadeType.ALL)
-    private List<StolenDeviceReport> stolenReports;
-
-    public DeviceOwnershipRecord() {
-    }
-
-    public DeviceOwnershipRecord(String serialNumber, String ownerName, LocalDate warrantyExpiration) {
-        this.serialNumber = serialNumber;
-        this.ownerName = ownerName;
-        this.warrantyExpiration = warrantyExpiration;
-    }
+    private List<StolenDeviceReport> stolenReports = new ArrayList<>();
 
     @PrePersist
-    protected void onCreate() {
-        this.createdAt = LocalDateTime.now();
-        if (this.active == null) {
-            this.active = true;
-        }
+    public void prePersist() {
+        createdAt = LocalDateTime.now();
+        if (active == null) active = true;
     }
-
-    // Getters and Setters
-    public Long getId() { return id; }
-    public String getSerialNumber() { return serialNumber; }
-    public Boolean getActive() { return active; }
-    public LocalDate getWarrantyExpiration() { return warrantyExpiration; }
 }

@@ -1,9 +1,15 @@
 package com.example.demo.model;
 
+import lombok.*;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "warranty_claim_records")
 public class WarrantyClaimRecord {
@@ -23,11 +29,11 @@ public class WarrantyClaimRecord {
     @Column(nullable = false)
     private String claimReason;
 
-    @Column(nullable = false)
-    private String status = "PENDING";
-
     @Column(nullable = false, updatable = false)
     private LocalDateTime submittedAt;
+
+    @Column(nullable = false)
+    private String status = "PENDING";
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
@@ -37,25 +43,13 @@ public class WarrantyClaimRecord {
     private DeviceOwnershipRecord device;
 
     @OneToMany(mappedBy = "claim", cascade = CascadeType.ALL)
-    private List<FraudAlertRecord> fraudAlerts;
-
-    public WarrantyClaimRecord() {
-    }
-
-    public WarrantyClaimRecord(String serialNumber, String claimantName, String claimReason) {
-        this.serialNumber = serialNumber;
-        this.claimantName = claimantName;
-        this.claimReason = claimReason;
-    }
+    private List<FraudAlertRecord> alerts = new ArrayList<>();
 
     @PrePersist
-    protected void onCreate() {
-        this.submittedAt = LocalDateTime.now();
-        this.createdAt = LocalDateTime.now();
+    public void prePersist() {
+        LocalDateTime now = LocalDateTime.now();
+        createdAt = now;
+        submittedAt = now;
+        if (status == null) status = "PENDING";
     }
-
-    // Getters
-    public Long getId() { return id; }
-    public String getStatus() { return status; }
-    public String getSerialNumber() { return serialNumber; }
 }
