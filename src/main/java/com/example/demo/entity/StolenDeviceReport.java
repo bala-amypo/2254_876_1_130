@@ -1,5 +1,5 @@
 package com.example.demo.model;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
@@ -29,6 +29,7 @@ public class StolenDeviceReport {
 
     @ManyToOne
     @JoinColumn(name = "device_id")
+    @JsonIgnore
     private DeviceOwnershipRecord device;
 
     @PrePersist

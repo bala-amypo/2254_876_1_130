@@ -1,5 +1,5 @@
 package com.example.demo.model;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
@@ -38,6 +38,7 @@ public class FraudAlertRecord {
 
     @ManyToOne
     @JoinColumn(name = "claim_id", insertable = false, updatable = false)
+    @JsonIgnore
     private WarrantyClaimRecord claim;
 
     @ManyToOne
