@@ -1,42 +1,45 @@
-package com.example.demo.entity;
+package com.example.demo.model;
 
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "stolen_device_reports")
 public class StolenDeviceReport {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true, nullable = false)
+    @Column(nullable = false, unique = true)
     private String serialNumber;
 
-    private Long deviceId; // Optional link to DeviceOwnershipRecord
+    @Column(nullable = false)
+    private String reportedBy;
 
-    // Getters and Setters
+    private String details;
 
-    public Long getId() {
-        return id;
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime reportDate;
+
+    @ManyToOne
+    @JoinColumn(name = "device_id")
+    private DeviceOwnershipRecord device;
+
+    public StolenDeviceReport() {
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getSerialNumber() {
-        return serialNumber;
-    }
-
-    public void setSerialNumber(String serialNumber) {
+    public StolenDeviceReport(String serialNumber, String reportedBy) {
         this.serialNumber = serialNumber;
+        this.reportedBy = reportedBy;
     }
 
-    public Long getDeviceId() {
-        return deviceId;
+    @PrePersist
+    protected void onCreate() {
+        this.reportDate = LocalDateTime.now();
     }
 
-    public void setDeviceId(Long deviceId) {
-        this.deviceId = deviceId;
-    }
+    // Getters
+    public Long getId() { return id; }
+    public String getSerialNumber() { return serialNumber; }
 }

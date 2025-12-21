@@ -1,63 +1,61 @@
-package com.example.demo.entity;
+package com.example.demo.model;
 
 import jakarta.persistence.*;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
+@Table(name = "warranty_claim_records")
 public class WarrantyClaimRecord {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String serialNumber;
 
+    @Column(nullable = false)
+    private String claimantName;
+
+    private String claimantEmail;
+
+    @Column(nullable = false)
     private String claimReason;
 
-    private String status; // PENDING, FLAGGED, APPROVED, REJECTED
+    @Column(nullable = false)
+    private String status = "PENDING";
+
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime submittedAt;
+
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime createdAt;
 
     @ManyToOne
-    private DeviceOwnershipRecord deviceOwnershipRecord;
+    @JoinColumn(name = "device_id")
+    private DeviceOwnershipRecord device;
 
-    // Getters and Setters
+    @OneToMany(mappedBy = "claim", cascade = CascadeType.ALL)
+    private List<FraudAlertRecord> fraudAlerts;
 
-    public Long getId() {
-        return id;
+    public WarrantyClaimRecord() {
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getSerialNumber() {
-        return serialNumber;
-    }
-
-    public void setSerialNumber(String serialNumber) {
+    public WarrantyClaimRecord(String serialNumber, String claimantName, String claimReason) {
         this.serialNumber = serialNumber;
-    }
-
-    public String getClaimReason() {
-        return claimReason;
-    }
-
-    public void setClaimReason(String claimReason) {
+        this.claimantName = claimantName;
         this.claimReason = claimReason;
     }
 
-    public String getStatus() {
-        return status;
+    @PrePersist
+    protected void onCreate() {
+        this.submittedAt = LocalDateTime.now();
+        this.createdAt = LocalDateTime.now();
     }
 
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public DeviceOwnershipRecord getDeviceOwnershipRecord() {
-        return deviceOwnershipRecord;
-    }
-
-    public void setDeviceOwnershipRecord(DeviceOwnershipRecord deviceOwnershipRecord) {
-        this.deviceOwnershipRecord = deviceOwnershipRecord;
-    }
+    // Getters
+    public Long getId() { return id; }
+    public String getStatus() { return status; }
+    public String getSerialNumber() { return serialNumber; }
 }

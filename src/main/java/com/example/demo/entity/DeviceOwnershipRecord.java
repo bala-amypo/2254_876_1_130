@@ -1,53 +1,62 @@
-package com.example.demo.entity;
+package com.example.demo.model;
 
 import jakarta.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
+@Table(name = "device_ownership_records")
 public class DeviceOwnershipRecord {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true, nullable = false)
+    @Column(nullable = false, unique = true)
     private String serialNumber;
 
-    private boolean active;
+    @Column(nullable = false)
+    private String ownerName;
 
+    private String ownerEmail;
+
+    private LocalDate purchaseDate;
+
+    @Column(nullable = false)
     private LocalDate warrantyExpiration;
 
-    // Getters and Setters
+    private Boolean active = true;
 
-    public Long getId() {
-        return id;
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
+    @OneToMany(mappedBy = "device", cascade = CascadeType.ALL)
+    private List<WarrantyClaimRecord> warrantyClaims;
+
+    @OneToMany(mappedBy = "device", cascade = CascadeType.ALL)
+    private List<StolenDeviceReport> stolenReports;
+
+    public DeviceOwnershipRecord() {
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getSerialNumber() {
-        return serialNumber;
-    }
-
-    public void setSerialNumber(String serialNumber) {
+    public DeviceOwnershipRecord(String serialNumber, String ownerName, LocalDate warrantyExpiration) {
         this.serialNumber = serialNumber;
-    }
-
-    public boolean isActive() {
-        return active;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
-    }
-
-    public LocalDate getWarrantyExpiration() {
-        return warrantyExpiration;
-    }
-
-    public void setWarrantyExpiration(LocalDate warrantyExpiration) {
+        this.ownerName = ownerName;
         this.warrantyExpiration = warrantyExpiration;
     }
+
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+        if (this.active == null) {
+            this.active = true;
+        }
+    }
+
+    // Getters and Setters
+    public Long getId() { return id; }
+    public String getSerialNumber() { return serialNumber; }
+    public Boolean getActive() { return active; }
+    public LocalDate getWarrantyExpiration() { return warrantyExpiration; }
 }
