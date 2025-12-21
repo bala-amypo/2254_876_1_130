@@ -17,16 +17,18 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+
         http
-            .csrf(csrf -> csrf.disable()) // Disable CSRF for POST testing
+            .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(
-                    "/auth/**", 
-                    "/v3/api-docs/**", 
-                    "/swagger-ui/**", 
-                    "/swagger-ui.html"
-                ).permitAll() // Allow public access
-                .anyRequest().authenticated() // Other endpoints require auth
+                    "/auth/**",
+                    "/v3/api-docs/**",
+                    "/swagger-ui/**",
+                    "/swagger-ui.html",
+                    "/error"          // ⭐ REQUIRED for Whitelabel
+                ).permitAll()
+                .anyRequest().authenticated()
             );
 
         return http.build();
