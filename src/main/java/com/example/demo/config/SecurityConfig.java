@@ -10,7 +10,7 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 public class SecurityConfig {
 
-    // Password encoder bean
+    // Password encoder
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -20,19 +20,17 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            // Disable CSRF for testing POST requests
-            .csrf(csrf -> csrf.disable())
-            // Configure which endpoints are public or secured
+            .csrf(csrf -> csrf.disable()) // Disable CSRF for testing POST
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(
-                    "/auth/**",                  // Login/register public
-                    "/stolen-devices/**",        // Stolen device endpoints public
-                    "/v3/api-docs/**",            // Swagger
-                    "/swagger-ui/**",             // Swagger UI
-                    "/swagger-ui.html",           // Swagger HTML
-                    "/error"                      // Whitelabel/error page
+                    "/auth/**",                // Login/register
+                    "/stolen-devices/**",      // All stolen-device endpoints
+                    "/v3/api-docs/**",         // Swagger docs
+                    "/swagger-ui/**",
+                    "/swagger-ui.html",
+                    "/error"                   // Whitelabel page
                 ).permitAll()
-                .anyRequest().authenticated()    // All other endpoints require auth
+                .anyRequest().authenticated() // All other endpoints require auth
             );
 
         return http.build();
