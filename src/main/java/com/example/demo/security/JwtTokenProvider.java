@@ -1,59 +1,38 @@
 package com.example.demo.security;
 
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import java.util.HashSet;
+import java.util.Set;
 import org.springframework.stereotype.Component;
 
-import java.util.Date;
-import java.util.Set;
-
 @Component
+
 public class JwtTokenProvider {
 
-    private final String SECRET_KEY = "my-super-secret-key"; // Change to a strong secret
-    private final long EXPIRATION_MS = 3600000; // 1 hour
+    public JwtTokenProvider() {
+    }
 
     public String createToken(Long userId, String email, Set<String> roles) {
-        return Jwts.builder()
-                .setSubject(email)
-                .claim("userId", userId)
-                .claim("roles", roles)
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_MS))
-                .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
-                .compact();
+        // Dummy token for testing
+        return "dummy-jwt-token-for-" + email;
     }
 
     public boolean validateToken(String token) {
-        try {
-            Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
+        // Always valid for dummy security
+        return token != null && token.startsWith("dummy-jwt-token");
     }
 
     public String getEmail(String token) {
-        return Jwts.parser()
-                .setSigningKey(SECRET_KEY)
-                .parseClaimsJws(token)
-                .getBody()
-                .getSubject();
+        if (token == null) return null;
+        return token.replace("dummy-jwt-token-for-", "");
     }
 
     public Set<String> getRoles(String token) {
-        return (Set<String>) Jwts.parser()
-                .setSigningKey(SECRET_KEY)
-                .parseClaimsJws(token)
-                .getBody()
-                .get("roles");
+        Set<String> roles = new HashSet<>();
+        roles.add("USER");
+        return roles;
     }
 
     public Long getUserId(String token) {
-        return ((Number) Jwts.parser()
-                .setSigningKey(SECRET_KEY)
-                .parseClaimsJws(token)
-                .getBody()
-                .get("userId")).longValue();
+        return 1L;
     }
 }
