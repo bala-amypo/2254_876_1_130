@@ -41,7 +41,7 @@ public class WarrantyClaimRecord {
     @ManyToOne
     @JoinColumn(name = "device_id")
     private DeviceOwnershipRecord device;
-
+     
     @OneToMany(mappedBy = "claim", cascade = CascadeType.ALL)
     private List<FraudAlertRecord> alerts = new ArrayList<>();
 
