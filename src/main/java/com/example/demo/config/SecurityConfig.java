@@ -10,21 +10,31 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 public class SecurityConfig {
 
-   @Bean
-public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-    http
-        .csrf(csrf -> csrf.disable())  // Disable CSRF for testing POST requests
-        .authorizeHttpRequests(auth -> auth
-            .requestMatchers(
-                "/auth/**",                  // Allow login/register
-                "/stolen-devices/**",         // ⭐ Allow all stolen device endpoints
-                "/v3/api-docs/**", 
-                "/swagger-ui/**", 
-                "/swagger-ui.html", 
-                "/error"                      // Allow Whitelabel page
-            ).permitAll()
-            .anyRequest().authenticated()     // Everything else requires auth
-        );
+    // Password encoder bean
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
-    return http.build();
+    // Security filter chain
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http
+            // Disable CSRF for testing POST requests
+            .csrf(csrf -> csrf.disable())
+            // Configure which endpoints are public or secured
+            .authorizeHttpRequests(auth -> auth
+                .requestMatchers(
+                    "/auth/**",                  // Login/register public
+                    "/stolen-devices/**",        // Stolen device endpoints public
+                    "/v3/api-docs/**",            // Swagger
+                    "/swagger-ui/**",             // Swagger UI
+                    "/swagger-ui.html",           // Swagger HTML
+                    "/error"                      // Whitelabel/error page
+                ).permitAll()
+                .anyRequest().authenticated()    // All other endpoints require auth
+            );
+
+        return http.build();
+    }
 }
