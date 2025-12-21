@@ -1,15 +1,12 @@
 package com.example.demo.service.impl;
 
-import java.util.List;
-import java.util.NoSuchElementException;
-
-import org.springframework.stereotype.Service;
-
-import com.example.demo.entity.FraudAlertRecord;
+import com.example.demo.model.FraudAlertRecord;
 import com.example.demo.repository.FraudAlertRecordRepository;
 import com.example.demo.service.FraudAlertService;
 
-@Service
+import java.util.List;
+import java.util.NoSuchElementException;
+
 public class FraudAlertServiceImpl implements FraudAlertService {
 
     private final FraudAlertRecordRepository repository;
@@ -26,8 +23,7 @@ public class FraudAlertServiceImpl implements FraudAlertService {
     @Override
     public FraudAlertRecord resolveAlert(Long id) {
         FraudAlertRecord alert = repository.findById(id)
-                .orElseThrow(() ->
-                        new NoSuchElementException("Fraud alert not found"));
+                .orElseThrow(() -> new NoSuchElementException("Request not found"));
 
         alert.setResolved(true);
         return repository.save(alert);

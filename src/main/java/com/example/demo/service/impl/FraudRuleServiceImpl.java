@@ -1,15 +1,13 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.entity.FraudRule;
+import com.example.demo.model.FraudRule;
 import com.example.demo.repository.FraudRuleRepository;
 import com.example.demo.service.FraudRuleService;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
-@Service
 public class FraudRuleServiceImpl implements FraudRuleService {
 
     private final FraudRuleRepository repository;
@@ -29,9 +27,8 @@ public class FraudRuleServiceImpl implements FraudRuleService {
     @Override
     public FraudRule updateRule(Long id, FraudRule updatedRule) {
         FraudRule existing = repository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("Fraud rule not found"));
+                .orElseThrow(() -> new NoSuchElementException("Match not found"));
 
-        existing.setRuleCode(updatedRule.getRuleCode());
         existing.setRuleType(updatedRule.getRuleType());
         existing.setDescription(updatedRule.getDescription());
         existing.setActive(updatedRule.getActive());

@@ -2,23 +2,27 @@ package com.example.demo.service.impl;
 
 import com.example.demo.dto.LoginRequest;
 import com.example.demo.dto.RegisterRequest;
-import com.example.demo.entity.User;
+import com.example.demo.model.User;
 import com.example.demo.repository.UserRepository;
+import com.example.demo.security.JwtTokenProvider;
 import com.example.demo.service.UserService;
-import com.example.demo.util.JwtTokenProvider;
-import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
 
 import java.util.NoSuchElementException;
 
-@Service
-@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
+
+    public UserServiceImpl(UserRepository userRepository,
+                           PasswordEncoder passwordEncoder,
+                           JwtTokenProvider jwtTokenProvider) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.jwtTokenProvider = jwtTokenProvider;
+    }
 
     @Override
     public User registerUser(RegisterRequest request) {
@@ -26,11 +30,12 @@ public class UserServiceImpl implements UserService {
             throw new IllegalArgumentException("Email already in use");
         }
 
-        User user = User.builder()
-                .name(request.getName())
-                .email(request.getEmail())
-                .password(passwordEncoder.encode(request.getPassword()))
-                .build();
+        User user = new User(
+                request.getName(),
+                request.getEmail(),
+                passwordEncoder.encode(request.getPassword()),
+                request.getRoles()
+        );
 
         return userRepository.save(user);
     }
@@ -41,7 +46,7 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new NoSuchElementException("User not found"));
 
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-            throw new IllegalArgumentException("Invalid credentials");
+            throw new IllegalArgumentException("Invalid input");
         }
 
         return user;
