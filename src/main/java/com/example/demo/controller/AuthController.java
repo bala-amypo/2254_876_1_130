@@ -26,16 +26,28 @@ public class AuthController {
         this.jwtTokenProvider = jwtTokenProvider;
     }
 
+    // Register new user
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
         User user = userService.registerUser(request);
-        return ResponseEntity.ok(user);
+        Map<String, Object> response = new HashMap<>();
+        response.put("userId", user.getId());
+        response.put("name", user.getName());
+        response.put("email", user.getEmail());
+        response.put("roles", user.getRoles());
+        response.put("createdAt", user.getCreatedAt());
+        return ResponseEntity.ok(response);
     }
 
+    // Login and get real JWT token
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
-        User user = userService.loginUser(request);
+        User user = userService.loginUser(request); // Authenticate user
+        if (user == null) {
+            return ResponseEntity.status(401).body("Invalid email or password");
+        }
 
+        // Generate real JWT token
         String token = jwtTokenProvider.createToken(
                 user.getId(),
                 user.getEmail(),
