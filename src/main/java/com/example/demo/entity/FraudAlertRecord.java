@@ -16,7 +16,7 @@ public class FraudAlertRecord {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(name = "claim_id", nullable = false)
     private Long claimId;
 
     @Column(nullable = false)
