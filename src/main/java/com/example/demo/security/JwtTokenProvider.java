@@ -2,6 +2,9 @@ package com.example.demo.security;
 
 import java.util.HashSet;
 import java.util.Set;
+import org.springframework.stereotype.Component;
+
+@Component
 
 public class JwtTokenProvider {
 
