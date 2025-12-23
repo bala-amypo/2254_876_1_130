@@ -58,3 +58,4 @@ public class FraudRule {
     public void setActive(Boolean active) { this.active = active; }
 
     public LocalDateTime getCreatedAt() { return createdAt; }
+}
