@@ -16,7 +16,6 @@ public class DeviceOwnershipRecord {
     private String ownerName;
     private boolean active;
 
-    // Default constructor
     public DeviceOwnershipRecord() {}
 
     public DeviceOwnershipRecord(String deviceSerialNumber, String ownerName, boolean active) {
@@ -25,7 +24,6 @@ public class DeviceOwnershipRecord {
         this.active = active;
     }
 
-    // Getters and Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
