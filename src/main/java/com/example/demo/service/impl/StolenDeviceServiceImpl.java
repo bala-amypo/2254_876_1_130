@@ -1,30 +1,50 @@
 package com.example.demo.service.impl;
 
+import com.example.demo.model.DeviceOwnershipRecord;
 import com.example.demo.model.StolenDeviceReport;
+import com.example.demo.repository.DeviceOwnershipRecordRepository;
 import com.example.demo.repository.StolenDeviceReportRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import com.example.demo.service.StolenDeviceService;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
+import org.springframework.stereotype.Service;
 
 @Service
-public class StolenDeviceServiceImpl {
+public class StolenDeviceServiceImpl implements StolenDeviceService {
 
-    @Autowired
-    private StolenDeviceReportRepository reportRepo;
+    private final StolenDeviceReportRepository reportRepo;
+    private final DeviceOwnershipRecordRepository deviceRepo;
 
-    public List<StolenDeviceReport> getReportsBySerialNumber(String serialNumber) {
-        // Assuming one-to-many, change repository to return List
-        return reportRepo.findByDeviceSerialNumber(serialNumber);
+    public StolenDeviceServiceImpl(StolenDeviceReportRepository reportRepo,
+                                   DeviceOwnershipRecordRepository deviceRepo) {
+        this.reportRepo = reportRepo;
+        this.deviceRepo = deviceRepo;
     }
 
-    public void processReport(Long reportId) {
-        Optional<StolenDeviceReport> reportOpt = reportRepo.findById(reportId);
-        reportOpt.ifPresent(report -> {
-            String serial = report.getDevice().getSerialNumber();
-            // process using serial
-            System.out.println("Processing stolen device with serial: " + serial);
-        });
+    @Override
+    public StolenDeviceReport reportStolen(StolenDeviceReport report) {
+
+        DeviceOwnershipRecord device = deviceRepo.findBySerialNumber(report.getSerialNumber())
+                .orElseThrow(() -> new NoSuchElementException("Device not found"));
+
+        report.setDevice(device);
+        return reportRepo.save(report);
+    }
+
+    @Override
+    public List<StolenDeviceReport> getReportsBySerial(String serialNumber) {
+        return reportRepo.findBySerialNumber(serialNumber);
+    }
+
+    @Override
+    public Optional<StolenDeviceReport> getReportById(Long id) {
+        return reportRepo.findById(id);
+    }
+
+    @Override
+    public List<StolenDeviceReport> getAllReports() {
+        return reportRepo.findAll();
     }
 }

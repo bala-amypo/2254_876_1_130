@@ -1,35 +1,91 @@
 package com.example.demo.service.impl;
 
+import com.example.demo.model.DeviceOwnershipRecord;
 import com.example.demo.model.WarrantyClaimRecord;
-import com.example.demo.repository.WarrantyClaimRecordRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.demo.repository.*;
+import com.example.demo.service.WarrantyClaimService;
+
+import java.time.LocalDate;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
-
 @Service
-public class WarrantyClaimServiceImpl {
+public class WarrantyClaimServiceImpl implements WarrantyClaimService {
 
-    @Autowired
-    private WarrantyClaimRecordRepository claimRepo;
+    private final WarrantyClaimRecordRepository claimRepo;
+    private final DeviceOwnershipRecordRepository deviceRepo;
+    private final StolenDeviceReportRepository stolenRepo;
+    private final FraudAlertRecordRepository alertRepo;
+    private final FraudRuleRepository ruleRepo;
 
-    public List<WarrantyClaimRecord> getClaimsBySerialNumber(String serialNumber) {
-        // Use repository method returning List
-        return claimRepo.findByDeviceSerialNumber(serialNumber);
+    public WarrantyClaimServiceImpl(WarrantyClaimRecordRepository claimRepo,
+                                    DeviceOwnershipRecordRepository deviceRepo,
+                                    StolenDeviceReportRepository stolenRepo,
+                                    FraudAlertRecordRepository alertRepo,
+                                    FraudRuleRepository ruleRepo) {
+        this.claimRepo = claimRepo;
+        this.deviceRepo = deviceRepo;
+        this.stolenRepo = stolenRepo;
+        this.alertRepo = alertRepo;
+        this.ruleRepo = ruleRepo;
     }
 
-    public void processClaim(Long claimId) {
-        Optional<WarrantyClaimRecord> claimOpt = claimRepo.findById(claimId);
-        claimOpt.ifPresent(claim -> {
-            String serial = claim.getDevice().getSerialNumber();
-            // Example: check warranty expiration
-            if (claim.getDevice().getWarrantyExpiration().isBefore(java.time.LocalDate.now())) {
-                claim.setStatus("Expired");
-            } else {
-                claim.setStatus("Active");
-            }
-            System.out.println("Processed claim for device: " + serial);
-        });
+    @Override
+    public WarrantyClaimRecord submitClaim(WarrantyClaimRecord claim) {
+
+        DeviceOwnershipRecord device = deviceRepo.findBySerialNumber(claim.getSerialNumber())
+                .orElseThrow(() -> new NoSuchElementException("Offer not found"));
+
+        boolean flagged = false;
+
+        if (!device.getActive()) {
+            flagged = true;
+        }
+
+        if (stolenRepo.existsBySerialNumber(claim.getSerialNumber())) {
+            flagged = true;
+        }
+
+        if (device.getWarrantyExpiration().isBefore(LocalDate.now())) {
+            flagged = true;
+        }
+
+        if (claimRepo.existsBySerialNumberAndClaimReason(
+                claim.getSerialNumber(), claim.getClaimReason())) {
+            flagged = true;
+        }
+
+        if (flagged) {
+            claim.setStatus("FLAGGED");
+        }
+
+        claim.setDevice(device);
+        return claimRepo.save(claim);
+    }
+
+    @Override
+    public WarrantyClaimRecord updateClaimStatus(Long claimId, String status) {
+        WarrantyClaimRecord claim = claimRepo.findById(claimId)
+                .orElseThrow(() -> new NoSuchElementException("Request not found"));
+
+        claim.setStatus(status);
+        return claimRepo.save(claim);
+    }
+
+    @Override
+    public Optional<WarrantyClaimRecord> getClaimById(Long id) {
+        return claimRepo.findById(id);
+    }
+
+    @Override
+    public List<WarrantyClaimRecord> getClaimsBySerial(String serialNumber) {
+        return claimRepo.findBySerialNumber(serialNumber);
+    }
+
+    @Override
+    public List<WarrantyClaimRecord> getAllClaims() {
+        return claimRepo.findAll();
     }
 }
