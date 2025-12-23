@@ -8,4 +8,5 @@ public interface StolenDeviceService {
     List<StolenDeviceReport> getAllReports();
     StolenDeviceReport getReportById(Long id);
     void deleteReport(Long id);
+    List<StolenDeviceReport> getReportsBySerial(String serialNumber);
 }
