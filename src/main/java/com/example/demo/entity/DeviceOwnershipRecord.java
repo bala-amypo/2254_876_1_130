@@ -13,6 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Table(name = "device_ownership_records")
+@Builder
 public class DeviceOwnershipRecord {
 
     @Id

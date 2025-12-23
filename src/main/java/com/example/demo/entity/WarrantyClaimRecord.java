@@ -12,6 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Table(name = "warranty_claim_records")
+@Builder
 public class WarrantyClaimRecord {
 
     @Id
