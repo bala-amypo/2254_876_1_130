@@ -4,6 +4,7 @@ import com.example.demo.model.DeviceOwnershipRecord;
 import com.example.demo.model.WarrantyClaimRecord;
 import com.example.demo.repository.WarrantyClaimRepository;
 import com.example.demo.service.WarrantyClaimService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -12,29 +13,21 @@ import java.util.List;
 @Service
 public class WarrantyClaimServiceImpl implements WarrantyClaimService {
 
-    private final WarrantyClaimRepository warrantyClaimRepository;
-
-    public WarrantyClaimServiceImpl(WarrantyClaimRepository warrantyClaimRepository) {
-        this.warrantyClaimRepository = warrantyClaimRepository;
-    }
+    @Autowired
+    private WarrantyClaimRepository claimRepository;
 
     @Override
-    public WarrantyClaimRecord submitClaim(WarrantyClaimRecord claim, DeviceOwnershipRecord device) {
-        // Use LocalDateTime instead of LocalDate
+    public WarrantyClaimRecord submitClaim(String description, DeviceOwnershipRecord device) {
+        WarrantyClaimRecord claim = new WarrantyClaimRecord();
+        claim.setDescription(description);
+        claim.setDevice(device);
         claim.setSubmittedAt(LocalDateTime.now());
         claim.setCreatedAt(LocalDateTime.now());
-
-        // Example: get device serial number or warranty expiration
-        String serial = device.getSerialNumber();
-        LocalDateTime warrantyExpiry = device.getWarrantyExpiration();
-
-        // Add other logic as needed
-
-        return warrantyClaimRepository.save(claim);
+        return claimRepository.save(claim);
     }
 
     @Override
-    public List<WarrantyClaimRecord> getAllClaims() {
-        return warrantyClaimRepository.findAll();
+    public List<WarrantyClaimRecord> getClaimsBySerial(String serialNumber) {
+        return claimRepository.findByDeviceSerialNumber(serialNumber);
     }
 }
