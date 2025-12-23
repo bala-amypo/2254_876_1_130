@@ -1,16 +1,12 @@
 package com.example.demo.model;
 
-import lombok.*;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
 @Entity
-@Table(name = "fraud_rules")
-@Builder
+@Table(name = "fraud_rules", uniqueConstraints = {
+        @UniqueConstraint(columnNames = "ruleCode")
+})
 public class FraudRule {
 
     @Id
@@ -31,9 +27,64 @@ public class FraudRule {
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
+    public FraudRule() {
+    }
+
+    public FraudRule(String ruleCode, String ruleType) {
+        this.ruleCode = ruleCode;
+        this.ruleType = ruleType;
+        this.active = true;
+    }
+
     @PrePersist
-    public void prePersist() {
-        createdAt = LocalDateTime.now();
-        if (active == null) active = true;
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+        if (this.active == null) {
+            this.active = true;
+        }
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getRuleCode() {
+        return ruleCode;
+    }
+
+    public String getRuleType() {
+        return ruleType;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setRuleCode(String ruleCode) {
+        this.ruleCode = ruleCode;
+    }
+
+    public void setRuleType(String ruleType) {
+        this.ruleType = ruleType;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 }

@@ -1,19 +1,15 @@
 package com.example.demo.model;
 
-import lombok.*;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
 @Entity
-@Table(name = "device_ownership_records")
-@Builder
+@Table(name = "device_ownership_records", uniqueConstraints = {
+        @UniqueConstraint(columnNames = "serialNumber")
+})
 public class DeviceOwnershipRecord {
 
     @Id
@@ -45,9 +41,81 @@ public class DeviceOwnershipRecord {
     @OneToMany(mappedBy = "device", cascade = CascadeType.ALL)
     private List<StolenDeviceReport> stolenReports = new ArrayList<>();
 
+    public DeviceOwnershipRecord() {
+    }
+
+    public DeviceOwnershipRecord(String serialNumber, String ownerName, LocalDate warrantyExpiration) {
+        this.serialNumber = serialNumber;
+        this.ownerName = ownerName;
+        this.warrantyExpiration = warrantyExpiration;
+        this.active = true;
+    }
+
     @PrePersist
-    public void prePersist() {
-        createdAt = LocalDateTime.now();
-        if (active == null) active = true;
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+        if (this.active == null) {
+            this.active = true;
+        }
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getSerialNumber() {
+        return serialNumber;
+    }
+
+    public String getOwnerName() {
+        return ownerName;
+    }
+
+    public String getOwnerEmail() {
+        return ownerEmail;
+    }
+
+    public LocalDate getPurchaseDate() {
+        return purchaseDate;
+    }
+
+    public LocalDate getWarrantyExpiration() {
+        return warrantyExpiration;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setSerialNumber(String serialNumber) {
+        this.serialNumber = serialNumber;
+    }
+
+    public void setOwnerName(String ownerName) {
+        this.ownerName = ownerName;
+    }
+
+    public void setOwnerEmail(String ownerEmail) {
+        this.ownerEmail = ownerEmail;
+    }
+
+    public void setPurchaseDate(LocalDate purchaseDate) {
+        this.purchaseDate = purchaseDate;
+    }
+
+    public void setWarrantyExpiration(LocalDate warrantyExpiration) {
+        this.warrantyExpiration = warrantyExpiration;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 }
