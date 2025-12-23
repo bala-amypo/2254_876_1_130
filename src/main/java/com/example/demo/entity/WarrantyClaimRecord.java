@@ -64,41 +64,95 @@ public class FraudAlertRecord {
 
     // --- Getters and Setters ---
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public Long getId() {
+        return id;
+    }
 
-    public Long getClaimId() { return claimId; }
-    public void setClaimId(Long claimId) { this.claimId = claimId; }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    public String getSerialNumber() { return serialNumber; }
-    public void setSerialNumber(String serialNumber) { this.serialNumber = serialNumber; }
+    public Long getClaimId() {
+        return claimId;
+    }
 
-    public String getAlertType() { return alertType; }
-    public void setAlertType(String alertType) { this.alertType = alertType; }
+    public void setClaimId(Long claimId) {
+        this.claimId = claimId;
+    }
 
-    public String getSeverity() { return severity; }
-    public void setSeverity(String severity) { this.severity = severity; }
+    public String getSerialNumber() {
+        return serialNumber;
+    }
 
-    public String getMessage() { return message; }
-    public void setMessage(String message) { this.message = message; }
+    public void setSerialNumber(String serialNumber) {
+        this.serialNumber = serialNumber;
+    }
 
-    public LocalDateTime getAlertDate() { return alertDate; }
-    public void setAlertDate(LocalDateTime alertDate) { this.alertDate = alertDate; }
+    public String getAlertType() {
+        return alertType;
+    }
 
-    public Boolean getResolved() { return resolved; }
-    public void setResolved(Boolean resolved) { this.resolved = resolved; }
+    public void setAlertType(String alertType) {
+        this.alertType = alertType;
+    }
 
-    public WarrantyClaimRecord getClaim() { return claim; }
-    public void setClaim(WarrantyClaimRecord claim) { this.claim = claim; }
+    public String getSeverity() {
+        return severity;
+    }
 
-    public User getUser() { return user; }
-    public void setUser(User user) { this.user = user; }
+    public void setSeverity(String severity) {
+        this.severity = severity;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public LocalDateTime getAlertDate() {
+        return alertDate;
+    }
+
+    public void setAlertDate(LocalDateTime alertDate) {
+        this.alertDate = alertDate;
+    }
+
+    public Boolean getResolved() {
+        return resolved;
+    }
+
+    public void setResolved(Boolean resolved) {
+        this.resolved = resolved;
+    }
+
+    public WarrantyClaimRecord getClaim() {
+        return claim;
+    }
+
+    public void setClaim(WarrantyClaimRecord claim) {
+        this.claim = claim;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 
     // --- JPA PrePersist ---
 
     @PrePersist
     public void prePersist() {
-        if (alertDate == null) alertDate = LocalDateTime.now();
-        if (resolved == null) resolved = false;
+        if (alertDate == null) {
+            alertDate = LocalDateTime.now();
+        }
+        if (resolved == null) {
+            resolved = false;
+        }
     }
 }
