@@ -6,42 +6,43 @@ import com.example.demo.service.DeviceOwnershipService;
 
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
-import org.springframework.stereotype.Service;
 
-@Service
 public class DeviceOwnershipServiceImpl implements DeviceOwnershipService {
 
-    private final DeviceOwnershipRecordRepository repository;
+    private final DeviceOwnershipRecordRepository deviceRepository;
 
-    public DeviceOwnershipServiceImpl(DeviceOwnershipRecordRepository repository) {
-        this.repository = repository;
+    public DeviceOwnershipServiceImpl(DeviceOwnershipRecordRepository deviceRepository) {
+        this.deviceRepository = deviceRepository;
     }
 
     @Override
     public DeviceOwnershipRecord registerDevice(DeviceOwnershipRecord device) {
-        if (repository.existsBySerialNumber(device.getSerialNumber())) {
+
+        if (deviceRepository.existsBySerialNumber(device.getSerialNumber())) {
             throw new IllegalArgumentException("Serial number already exists");
         }
-        return repository.save(device);
+
+        return deviceRepository.save(device);
     }
 
     @Override
-    public Optional<DeviceOwnershipRecord> getBySerial(String serialNumber) {
-        return repository.findBySerialNumber(serialNumber);
+    public DeviceOwnershipRecord getBySerial(String serialNumber) {
+        return deviceRepository.findBySerialNumber(serialNumber)
+                .orElseThrow(() -> new NoSuchElementException("Device not found"));
     }
 
     @Override
     public List<DeviceOwnershipRecord> getAllDevices() {
-        return repository.findAll();
+        return deviceRepository.findAll();
     }
 
     @Override
     public DeviceOwnershipRecord updateDeviceStatus(Long id, boolean active) {
-        DeviceOwnershipRecord device = repository.findById(id)
+
+        DeviceOwnershipRecord device = deviceRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Device not found"));
 
         device.setActive(active);
-        return repository.save(device);
+        return deviceRepository.save(device);
     }
 }

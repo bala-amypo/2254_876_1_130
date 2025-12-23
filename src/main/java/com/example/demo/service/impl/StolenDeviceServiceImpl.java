@@ -9,42 +9,41 @@ import com.example.demo.service.StolenDeviceService;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
-import org.springframework.stereotype.Service;
 
-@Service
 public class StolenDeviceServiceImpl implements StolenDeviceService {
 
-    private final StolenDeviceReportRepository reportRepo;
-    private final DeviceOwnershipRecordRepository deviceRepo;
+    private final StolenDeviceReportRepository stolenRepository;
+    private final DeviceOwnershipRecordRepository deviceRepository;
 
-    public StolenDeviceServiceImpl(StolenDeviceReportRepository reportRepo,
-                                   DeviceOwnershipRecordRepository deviceRepo) {
-        this.reportRepo = reportRepo;
-        this.deviceRepo = deviceRepo;
+    public StolenDeviceServiceImpl(StolenDeviceReportRepository stolenRepository,
+                                   DeviceOwnershipRecordRepository deviceRepository) {
+        this.stolenRepository = stolenRepository;
+        this.deviceRepository = deviceRepository;
     }
 
     @Override
     public StolenDeviceReport reportStolen(StolenDeviceReport report) {
 
-        DeviceOwnershipRecord device = deviceRepo.findBySerialNumber(report.getSerialNumber())
+        DeviceOwnershipRecord device = deviceRepository
+                .findBySerialNumber(report.getSerialNumber())
                 .orElseThrow(() -> new NoSuchElementException("Device not found"));
 
         report.setDevice(device);
-        return reportRepo.save(report);
+        return stolenRepository.save(report);
     }
 
     @Override
     public List<StolenDeviceReport> getReportsBySerial(String serialNumber) {
-        return reportRepo.findBySerialNumber(serialNumber);
+        return stolenRepository.findBySerialNumber(serialNumber);
     }
 
     @Override
     public Optional<StolenDeviceReport> getReportById(Long id) {
-        return reportRepo.findById(id);
+        return stolenRepository.findById(id);
     }
 
     @Override
     public List<StolenDeviceReport> getAllReports() {
-        return reportRepo.findAll();
+        return stolenRepository.findAll();
     }
 }
