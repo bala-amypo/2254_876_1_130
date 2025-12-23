@@ -1,18 +1,13 @@
 package com.example.demo.model;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.*;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
 @Entity
 @Table(name = "warranty_claim_records")
-@Builder
 public class WarrantyClaimRecord {
 
     @Id
@@ -42,15 +37,22 @@ public class WarrantyClaimRecord {
     @ManyToOne
     @JoinColumn(name = "device_id")
     private DeviceOwnershipRecord device;
-     @JsonIgnore
+
+    @JsonIgnore
     @OneToMany(mappedBy = "claim", cascade = CascadeType.ALL)
     private List<FraudAlertRecord> alerts = new ArrayList<>();
 
-    @PrePersist
-    public void prePersist() {
-        LocalDateTime now = LocalDateTime.now();
-        createdAt = now;
-        submittedAt = now;
-        if (status == null) status = "PENDING";
+    // --- Constructors ---
+
+    public WarrantyClaimRecord() {
+        // Default constructor required by JPA
     }
-}
+
+    public WarrantyClaimRecord(Long id, String serialNumber, String claimantName, String claimantEmail,
+                               String claimReason, LocalDateTime submittedAt, String status,
+                               LocalDateTime createdAt, DeviceOwnershipRecord device, List<FraudAlertRecord> alerts) {
+        this.id = id;
+        this.serialNumber = serialNumber;
+        this.claimantName = claimantName;
+        this.claimantEmail = claimantEmail;
+        this.claimReaso
