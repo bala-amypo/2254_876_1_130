@@ -1,13 +1,10 @@
-package com.example.demo.repository;
+package com.example.demo.service;
 
-import com.example.demo.model.DeviceOwnership;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
-
+import com.example.demo.model.DeviceOwnershipRecord;
 import java.util.Optional;
 
-@Repository
-public interface DeviceOwnershipRecordRepository extends JpaRepository<DeviceOwnership, Long> {
-
-    Optional<DeviceOwnership> findByDeviceSerialNumber(String serialNumber);
+public interface DeviceOwnershipService {
+    DeviceOwnershipRecord registerDevice(DeviceOwnershipRecord deviceOwnershipRecord);
+    Optional<DeviceOwnershipRecord> getBySerial(String serialNumber);
+    DeviceOwnershipRecord updateDeviceStatus(Long id, boolean active);
 }
