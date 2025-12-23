@@ -2,7 +2,6 @@ package com.example.demo.controller;
 
 import com.example.demo.model.DeviceOwnershipRecord;
 import com.example.demo.service.DeviceOwnershipService;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,38 +9,50 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/devices")
-@Tag(name = "Device")
 public class DeviceOwnershipController {
 
-    private final DeviceOwnershipService service;
+    private final DeviceOwnershipService deviceOwnershipService;
 
-    public DeviceOwnershipController(DeviceOwnershipService service) {
-        this.service = service;
+    public DeviceOwnershipController(DeviceOwnershipService deviceOwnershipService) {
+        this.deviceOwnershipService = deviceOwnershipService;
     }
 
+    // Register a new device
     @PostMapping
-    public ResponseEntity<?> register(@RequestBody DeviceOwnershipRecord device) {
-        return ResponseEntity.ok(service.registerDevice(device));
+    public ResponseEntity<DeviceOwnershipRecord> registerDevice(
+            @RequestBody DeviceOwnershipRecord deviceOwnershipRecord) {
+
+        DeviceOwnershipRecord savedDevice =
+                deviceOwnershipService.registerDevice(deviceOwnershipRecord);
+
+        return ResponseEntity.ok(savedDevice);
     }
 
+    // Get all devices
     @GetMapping
-    public ResponseEntity<List<DeviceOwnershipRecord>> getAll() {
-        return ResponseEntity.ok(service.getAllDevices());
+    public ResponseEntity<List<DeviceOwnershipRecord>> getAllDevices() {
+        return ResponseEntity.ok(deviceOwnershipService.getAllDevices());
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<?> getById(@PathVariable Long id) {
-        return ResponseEntity.ok(service.updateDeviceStatus(id, true));
+    // Get device by serial number
+    @GetMapping("/{serialNumber}")
+    public ResponseEntity<DeviceOwnershipRecord> getDeviceBySerial(
+            @PathVariable String serialNumber) {
+
+        return ResponseEntity.ok(
+                deviceOwnershipService.getBySerial(serialNumber)
+        );
     }
 
-    @GetMapping("/serial/{serialNumber}")
-    public ResponseEntity<?> getBySerial(@PathVariable String serialNumber) {
-        return ResponseEntity.ok(service.getBySerial(serialNumber));
-    }
-
+    // Update device active status
     @PutMapping("/{id}/status")
-    public ResponseEntity<?> updateStatus(@PathVariable Long id,
-                                          @RequestParam boolean active) {
-        return ResponseEntity.ok(service.updateDeviceStatus(id, active));
+    public ResponseEntity<DeviceOwnershipRecord> updateDeviceStatus(
+            @PathVariable Long id,
+            @RequestParam boolean active) {
+
+        DeviceOwnershipRecord updatedDevice =
+                deviceOwnershipService.updateDeviceStatus(id, active);
+
+        return ResponseEntity.ok(updatedDevice);
     }
 }
