@@ -1,8 +1,9 @@
 package com.example.demo.controller;
 
+import com.example.demo.model.DeviceOwnershipRecord;
 import com.example.demo.model.WarrantyClaimRecord;
 import com.example.demo.service.WarrantyClaimService;
-import org.springframework.http.ResponseEntity;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,50 +12,31 @@ import java.util.List;
 @RequestMapping("/api/claims")
 public class WarrantyClaimController {
 
-    private final WarrantyClaimService claimService;
+    @Autowired
+    private WarrantyClaimService claimService;
 
-    public WarrantyClaimController(WarrantyClaimService claimService) {
-        this.claimService = claimService;
+    @PostMapping("/submit")
+    public WarrantyClaimRecord submitClaim(@RequestParam String description, @RequestBody DeviceOwnershipRecord device) {
+        return claimService.submitClaim(description, device);
     }
 
-    // Submit a warranty claim
-    @PostMapping
-    public ResponseEntity<WarrantyClaimRecord> submitClaim(
-            @RequestBody WarrantyClaimRecord claim) {
-
-        WarrantyClaimRecord savedClaim = claimService.submitClaim(claim);
-        return ResponseEntity.ok(savedClaim);
+    @GetMapping("/all")
+    public List<WarrantyClaimRecord> getAllClaims() {
+        return claimService.getAllClaims();
     }
 
-    // List all claims
-    @GetMapping
-    public ResponseEntity<List<WarrantyClaimRecord>> getAllClaims() {
-        return ResponseEntity.ok(claimService.getAllClaims());
-    }
-
-    // Get claim by ID
     @GetMapping("/{id}")
-    public ResponseEntity<WarrantyClaimRecord> getClaimById(@PathVariable Long id) {
-        return claimService.getClaimById(id)
-                .map(ResponseEntity::ok)
-                .orElseThrow(() -> new RuntimeException("Request not found"));
+    public WarrantyClaimRecord getClaimById(@PathVariable Long id) {
+        return claimService.getClaimById(id);
     }
 
-    // Get claims by device serial number
-    @GetMapping("/serial/{serialNumber}")
-    public ResponseEntity<List<WarrantyClaimRecord>> getClaimsBySerial(
-            @PathVariable String serialNumber) {
-
-        return ResponseEntity.ok(claimService.getClaimsBySerial(serialNumber));
+    @PutMapping("/update-status/{id}")
+    public WarrantyClaimRecord updateClaimStatus(@PathVariable Long id, @RequestParam String status) {
+        return claimService.updateClaimStatus(id, status);
     }
 
-    // Update claim status (ADMIN only)
-    @PutMapping("/{id}/status")
-    public ResponseEntity<WarrantyClaimRecord> updateClaimStatus(
-            @PathVariable Long id,
-            @RequestParam String status) {
-
-        WarrantyClaimRecord updatedClaim = claimService.updateClaimStatus(id, status);
-        return ResponseEntity.ok(updatedClaim);
+    @GetMapping("/device/{serialNumber}")
+    public List<WarrantyClaimRecord> getClaimsBySerial(@PathVariable String serialNumber) {
+        return claimService.getClaimsBySerial(serialNumber);
     }
 }

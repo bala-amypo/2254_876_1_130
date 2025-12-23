@@ -7,6 +7,8 @@ import java.util.List;
 
 public interface WarrantyClaimService {
     WarrantyClaimRecord submitClaim(String description, DeviceOwnershipRecord device);
-
     List<WarrantyClaimRecord> getClaimsBySerial(String serialNumber);
+    List<WarrantyClaimRecord> getAllClaims();
+    WarrantyClaimRecord getClaimById(Long id);
+    WarrantyClaimRecord updateClaimStatus(Long id, String status);
 }

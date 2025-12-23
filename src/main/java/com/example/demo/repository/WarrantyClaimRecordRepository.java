@@ -8,6 +8,5 @@ import java.util.List;
 
 @Repository
 public interface WarrantyClaimRepository extends JpaRepository<WarrantyClaimRecord, Long> {
-    // This method matches the service interface requirement
     List<WarrantyClaimRecord> findByDeviceSerialNumber(String serialNumber);
 }
