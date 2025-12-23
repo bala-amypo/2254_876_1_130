@@ -1,32 +1,44 @@
 package com.example.demo.entity;
 
-import com.example.demo.model.DeviceOwnership;
+import com.example.demo.model.DeviceOwnershipRecord;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "warranty_claims")
 public class WarrantyClaimRecord {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String claimNumber;
+
     @ManyToOne
     @JoinColumn(name = "device_id")
-    private DeviceOwnership device;
+    private DeviceOwnershipRecord deviceOwnershipRecord;
 
-    private String claimReason;
+    private String description;
     private boolean approved;
 
-    // Getters and Setters
+    public WarrantyClaimRecord() {}
+
+    public WarrantyClaimRecord(String claimNumber, DeviceOwnershipRecord deviceOwnershipRecord, String description, boolean approved) {
+        this.claimNumber = claimNumber;
+        this.deviceOwnershipRecord = deviceOwnershipRecord;
+        this.description = description;
+        this.approved = approved;
+    }
+
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
-    public DeviceOwnership getDevice() { return device; }
-    public void setDevice(DeviceOwnership device) { this.device = device; }
+    public String getClaimNumber() { return claimNumber; }
+    public void setClaimNumber(String claimNumber) { this.claimNumber = claimNumber; }
 
-    public String getClaimReason() { return claimReason; }
-    public void setClaimReason(String claimReason) { this.claimReason = claimReason; }
+    public DeviceOwnershipRecord getDeviceOwnershipRecord() { return deviceOwnershipRecord; }
+    public void setDeviceOwnershipRecord(DeviceOwnershipRecord deviceOwnershipRecord) { this.deviceOwnershipRecord = deviceOwnershipRecord; }
+
+    public String getDescription() { return description; }
+    public void setDescription(String description) { this.description = description; }
 
     public boolean isApproved() { return approved; }
     public void setApproved(boolean approved) { this.approved = approved; }

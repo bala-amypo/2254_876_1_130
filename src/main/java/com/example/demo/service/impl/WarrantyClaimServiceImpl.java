@@ -1,29 +1,24 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.entity.WarrantyClaimRecord;
-import com.example.demo.model.DeviceOwnership;
+import com.example.demo.model.DeviceOwnershipRecord;
 import com.example.demo.repository.WarrantyClaimRepository;
 import com.example.demo.service.WarrantyClaimService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class WarrantyClaimServiceImpl implements WarrantyClaimService {
 
-    private final WarrantyClaimRepository repository;
-
-    public WarrantyClaimServiceImpl(WarrantyClaimRepository repository) {
-        this.repository = repository;
-    }
+    @Autowired
+    private WarrantyClaimRepository repository;
 
     @Override
-    public WarrantyClaimRecord createClaim(DeviceOwnership device, String reason) {
-        WarrantyClaimRecord claim = new WarrantyClaimRecord();
-        claim.setDevice(device);
-        claim.setClaimReason(reason);
-        claim.setApproved(false);
-        return repository.save(claim);
+    public WarrantyClaimRecord fileClaim(WarrantyClaimRecord claimRecord) {
+        return repository.save(claimRecord);
     }
 
     @Override
@@ -32,15 +27,12 @@ public class WarrantyClaimServiceImpl implements WarrantyClaimService {
     }
 
     @Override
-    public WarrantyClaimRecord getClaimById(Long id) {
-        return repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Claim not found"));
+    public Optional<WarrantyClaimRecord> getClaimById(Long id) {
+        return repository.findById(id);
     }
 
     @Override
-    public WarrantyClaimRecord approveClaim(Long id) {
-        WarrantyClaimRecord claim = getClaimById(id);
-        claim.setApproved(true);
-        return repository.save(claim);
+    public List<WarrantyClaimRecord> getClaimsByDevice(DeviceOwnershipRecord deviceOwnershipRecord) {
+        return repository.findByDeviceOwnershipRecord(deviceOwnershipRecord);
     }
 }

@@ -1,39 +1,35 @@
 package com.example.demo.controller;
 
 import com.example.demo.entity.WarrantyClaimRecord;
-import com.example.demo.model.DeviceOwnership;
+import com.example.demo.model.DeviceOwnershipRecord;
 import com.example.demo.service.WarrantyClaimService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/warranty")
+@RequestMapping("/api/warranty")
 public class WarrantyClaimController {
 
-    private final WarrantyClaimService warrantyClaimService;
+    @Autowired
+    private WarrantyClaimService warrantyClaimService;
 
-    public WarrantyClaimController(WarrantyClaimService warrantyClaimService) {
-        this.warrantyClaimService = warrantyClaimService;
-    }
-
-    @PostMapping("/claim")
-    public WarrantyClaimRecord createClaim(@RequestBody DeviceOwnership device, @RequestParam String reason) {
-        return warrantyClaimService.createClaim(device, reason);
+    @PostMapping("/file")
+    public ResponseEntity<WarrantyClaimRecord> fileClaim(@RequestBody WarrantyClaimRecord claimRecord) {
+        WarrantyClaimRecord saved = warrantyClaimService.fileClaim(claimRecord);
+        return ResponseEntity.ok(saved);
     }
 
     @GetMapping("/all")
-    public List<WarrantyClaimRecord> getAllClaims() {
-        return warrantyClaimService.getAllClaims();
+    public ResponseEntity<List<WarrantyClaimRecord>> getAllClaims() {
+        return ResponseEntity.ok(warrantyClaimService.getAllClaims());
     }
 
-    @GetMapping("/{id}")
-    public WarrantyClaimRecord getClaimById(@PathVariable Long id) {
-        return warrantyClaimService.getClaimById(id);
-    }
-
-    @PatchMapping("/{id}/approve")
-    public WarrantyClaimRecord approveClaim(@PathVariable Long id) {
-        return warrantyClaimService.approveClaim(id);
+    @GetMapping("/device")
+    public ResponseEntity<List<WarrantyClaimRecord>> getClaimsByDevice(@RequestBody DeviceOwnershipRecord deviceOwnershipRecord) {
+        List<WarrantyClaimRecord> claims = warrantyClaimService.getClaimsByDevice(deviceOwnershipRecord);
+        return ResponseEntity.ok(claims);
     }
 }
