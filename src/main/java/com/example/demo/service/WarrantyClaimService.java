@@ -1,8 +1,13 @@
 package com.example.demo.service;
 
-import java.util.List;
 import com.example.demo.entity.WarrantyClaimRecord;
+import java.util.List;
 
 public interface WarrantyClaimService {
-    List<WarrantyClaimRecord> getAllClaims();
+
+    WarrantyClaimRecord create(WarrantyClaimRecord claim);
+
+    List<WarrantyClaimRecord> getAll();
+
+    WarrantyClaimRecord getById(Long id);
 }

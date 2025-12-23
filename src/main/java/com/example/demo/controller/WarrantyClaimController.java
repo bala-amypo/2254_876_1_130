@@ -17,8 +17,8 @@ public class WarrantyClaimController {
     }
 
     @PostMapping
-    public WarrantyClaimRecord create(@RequestBody WarrantyClaimRecord record) {
-        return service.create(record);
+    public WarrantyClaimRecord create(@RequestBody WarrantyClaimRecord claim) {
+        return service.create(claim);
     }
 
     @GetMapping
