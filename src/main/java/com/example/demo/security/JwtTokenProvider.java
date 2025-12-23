@@ -1,56 +1,38 @@
 package com.example.demo.security;
 
-import org.springframework.stereotype.Component;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 
-import java.util.Base64;
-import java.util.HashSet;
+import java.util.Date;
 import java.util.Set;
 
-@Component
 public class JwtTokenProvider {
 
-    public JwtTokenProvider() {
-    }
+    private final String secretKey = "secret"; // use env in prod
+    private final long validityInMs = 3600000; // 1 hour
 
-    // CREATE TOKEN
     public String createToken(Long userId, String email, Set<String> roles) {
-
-        // Simple JWT-like structure (header.payload.signature)
-        String header = Base64.getEncoder().encodeToString("header".getBytes());
-        String payload = Base64.getEncoder().encodeToString(
-                (userId + ":" + email + ":" + String.join(",", roles)).getBytes()
-        );
-        String signature = "signature";
-
-        return header + "." + payload + "." + signature;
+        return Jwts.builder()
+                .claim("userId", userId)
+                .claim("roles", roles)
+                .setSubject(email)
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + validityInMs))
+                .signWith(SignatureAlgorithm.HS256, secretKey)
+                .compact();
     }
 
-    // VALIDATE TOKEN
     public boolean validateToken(String token) {
-        return token != null && token.split("\\.").length == 3;
-    }
-
-    // EXTRACT EMAIL
-    public String getEmail(String token) {
-        String payload = new String(Base64.getDecoder().decode(token.split("\\.")[1]));
-        return payload.split(":")[1];
-    }
-
-    // EXTRACT ROLES
-    public Set<String> getRoles(String token) {
-        String payload = new String(Base64.getDecoder().decode(token.split("\\.")[1]));
-        String rolesStr = payload.split(":")[2];
-
-        Set<String> roles = new HashSet<>();
-        for (String role : rolesStr.split(",")) {
-            roles.add(role);
+        try {
+            Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
+            return true;
+        } catch (Exception e) {
+            return false;
         }
-        return roles;
     }
 
-    // EXTRACT USER ID
-    public Long getUserId(String token) {
-        String payload = new String(Base64.getDecoder().decode(token.split("\\.")[1]));
-        return Long.parseLong(payload.split(":")[0]);
+    public String getEmail(String token) {
+        return Jwts.parser().setSigningKey(secretKey)
+                .parseClaimsJws(token).getBody().getSubject();
     }
 }
