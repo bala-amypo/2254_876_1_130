@@ -1,22 +1,31 @@
-package com.example.demo.repository;
+package com.example.demo.model;
 
-import com.example.demo.model.WarrantyClaimRecord;
-import org.springframework.data.jpa.repository.JpaRepository;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import java.util.List;
-import java.util.Optional;
-import org.springframework.stereotype.Repository;
+import java.time.LocalDate;
 
-@Repository
-public interface WarrantyClaimRecordRepository extends JpaRepository<WarrantyClaimRecord, Long> {
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class WarrantyClaimRecord {
 
-    Optional<WarrantyClaimRecord> findById(Long id);
+    private Long id;
+    private String claimNumber;
+    private String productName;
+    private String productSerialNumber;
 
-    List<WarrantyClaimRecord> findAll();
+    private LocalDate purchaseDate;
+    private LocalDate claimDate;
 
-    List<WarrantyClaimRecord> findBySerialNumber(String serialNumber);
+    private String issueDescription;
+    private String status;   // APPROVED / REJECTED / PENDING
+    private Double claimAmount;
 
-    boolean existsBySerialNumberAndClaimReason(String serialNumber, String claimReason);
-
-    List<WarrantyClaimRecord> findByStatus(String status);
+    private String customerName;
+    private String customerEmail;
+    private String customerPhone;
 }
