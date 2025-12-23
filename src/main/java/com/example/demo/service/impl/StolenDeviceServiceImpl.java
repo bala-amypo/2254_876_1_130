@@ -1,7 +1,7 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.model.StolenDeviceReport;
-import com.example.demo.repository.StolenDeviceRepository;
+import com.example.demo.repository.StolenDeviceReportRepository; // updated
 import com.example.demo.service.StolenDeviceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,7 +12,7 @@ import java.util.List;
 public class StolenDeviceServiceImpl implements StolenDeviceService {
 
     @Autowired
-    private StolenDeviceRepository repository;
+    private StolenDeviceReportRepository repository; // updated
 
     @Override
     public StolenDeviceReport addReport(StolenDeviceReport report) {
