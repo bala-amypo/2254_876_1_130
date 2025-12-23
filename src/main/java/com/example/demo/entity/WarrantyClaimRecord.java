@@ -1,57 +1,24 @@
-package com.example.demo.model;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+package com.example.demo.entity;
+
+import lombok.Getter;
+import lombok.Setter;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
-import jakarta.persistence.*;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-@Table(name = "warranty_claim_records")
 @Builder
 public class WarrantyClaimRecord {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String claimNumber;
+    private String description;
 
-    @Column(nullable = false)
-    private String serialNumber;
+    @Builder.Default
+    private boolean active = true;
 
-    @Column(nullable = false)
-    private String claimantName;
-
-    private String claimantEmail;
-
-    @Column(nullable = false)
-    private String claimReason;
-
-    @Column(nullable = false, updatable = false)
-    private LocalDateTime submittedAt;
-
-    @Column(nullable = false)
-    private String status = "PENDING";
-
-    @Column(nullable = false, updatable = false)
-    private LocalDateTime createdAt;
-
-    @ManyToOne
-    @JoinColumn(name = "device_id")
-    private DeviceOwnershipRecord device;
-     @JsonIgnore
-    @OneToMany(mappedBy = "claim", cascade = CascadeType.ALL)
-    private List<FraudAlertRecord> alerts = new ArrayList<>();
-
-    @PrePersist
-    public void prePersist() {
-        LocalDateTime now = LocalDateTime.now();
-        createdAt = now;
-        submittedAt = now;
-        if (status == null) status = "PENDING";
-    }
+    @Builder.Default
+    private int priority = 1;
 }

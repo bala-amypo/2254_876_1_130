@@ -1,53 +1,24 @@
-package com.example.demo.model;
+package com.example.demo.entity;
 
-import lombok.*;
-import jakarta.persistence.*;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-@Table(name = "device_ownership_records")
 @Builder
 public class DeviceOwnershipRecord {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String deviceId;
+    private String owner;
 
-    @Column(nullable = false, unique = true)
-    private String serialNumber;
+    @Builder.Default
+    private boolean verified = false;
 
-    @Column(nullable = false)
-    private String ownerName;
-
-    private String ownerEmail;
-
-    private LocalDate purchaseDate;
-
-    @Column(nullable = false)
-    private LocalDate warrantyExpiration;
-
-    @Column(nullable = false)
-    private Boolean active = true;
-
-    @Column(nullable = false, updatable = false)
-    private LocalDateTime createdAt;
-
-    @OneToMany(mappedBy = "device", cascade = CascadeType.ALL)
-    private List<WarrantyClaimRecord> claims = new ArrayList<>();
-
-    @OneToMany(mappedBy = "device", cascade = CascadeType.ALL)
-    private List<StolenDeviceReport> stolenReports = new ArrayList<>();
-
-    @PrePersist
-    public void prePersist() {
-        createdAt = LocalDateTime.now();
-        if (active == null) active = true;
-    }
+    @Builder.Default
+    private int warrantyMonths = 12;
 }
