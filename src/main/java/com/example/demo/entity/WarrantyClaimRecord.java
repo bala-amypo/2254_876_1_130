@@ -21,6 +21,9 @@ public class WarrantyClaimRecord {
     @Column(nullable = false)
     private String claimStatus;
 
+    @Column(nullable = false)
+    private String claimReason; // NEW
+
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
@@ -38,5 +41,7 @@ public class WarrantyClaimRecord {
     public void setDevice(DeviceOwnershipRecord device) { this.device = device; }
     public String getClaimStatus() { return claimStatus; }
     public void setClaimStatus(String claimStatus) { this.claimStatus = claimStatus; }
+    public String getClaimReason() { return claimReason; }
+    public void setClaimReason(String claimReason) { this.claimReason = claimReason; }
     public LocalDateTime getCreatedAt() { return createdAt; }
 }
