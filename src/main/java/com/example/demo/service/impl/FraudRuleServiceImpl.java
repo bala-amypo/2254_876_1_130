@@ -1,6 +1,6 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.model.FraudRuleRecord;
+import com.example.demo.entity.FraudRuleRecord;
 import com.example.demo.repository.FraudRuleRecordRepository;
 import com.example.demo.service.FraudRuleService;
 import org.springframework.stereotype.Service;
@@ -17,17 +17,12 @@ public class FraudRuleServiceImpl implements FraudRuleService {
     }
 
     @Override
-    public FraudRuleRecord create(FraudRuleRecord record) {
-        return repository.save(record);
+    public FraudRuleRecord createRule(FraudRuleRecord rule) {
+        return repository.save(rule);
     }
 
     @Override
-    public List<FraudRuleRecord> getAll() {
+    public List<FraudRuleRecord> getAllRules() {
         return repository.findAll();
-    }
-
-    @Override
-    public FraudRuleRecord getById(Long id) {
-        return repository.findById(id).orElse(null);
     }
 }
