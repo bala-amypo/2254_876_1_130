@@ -1,12 +1,10 @@
 package com.example.demo.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
-public class FraudRule {
+@Table(name = "fraud_rules")
+public class FraudRuleRecord {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,8 +14,7 @@ public class FraudRule {
     private String description;
     private boolean active;
 
-    public FraudRule() {
-    }
+    public FraudRuleRecord() {}
 
     public Long getId() {
         return id;

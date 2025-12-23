@@ -3,6 +3,7 @@ package com.example.demo.entity;
 import jakarta.persistence.*;
 
 @Entity
+@Table(name = "fraud_alerts")
 public class FraudAlertRecord {
 
     @Id
@@ -11,6 +12,9 @@ public class FraudAlertRecord {
 
     private String alertType;
     private String message;
+
+    // 🔴 REQUIRED BY YOUR SERVICE
+    private boolean resolved;
 
     public FraudAlertRecord() {}
 
@@ -36,5 +40,14 @@ public class FraudAlertRecord {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    // 🔴 THIS FIXES: setResolved(boolean) ERROR
+    public boolean isResolved() {
+        return resolved;
+    }
+
+    public void setResolved(boolean resolved) {
+        this.resolved = resolved;
     }
 }
