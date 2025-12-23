@@ -1,6 +1,6 @@
 package com.example.demo.controller;
 
-import com.example.demo.model.FraudAlert;
+import com.example.demo.model.FraudAlertRecord;
 import com.example.demo.service.FraudAlertService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,43 +17,40 @@ public class FraudAlertController {
         this.fraudAlertService = fraudAlertService;
     }
 
-    // Create a fraud alert (ADMIN only)
     @PostMapping
-    public ResponseEntity<FraudAlert> createAlert(@RequestBody FraudAlert alert) {
-        FraudAlert savedAlert = fraudAlertService.createAlert(alert);
-        return ResponseEntity.ok(savedAlert);
+    public ResponseEntity<FraudAlertRecord> createAlert(@RequestBody FraudAlertRecord alert) {
+        FraudAlertRecord created = fraudAlertService.createAlert(alert);
+        return ResponseEntity.ok(created);
     }
 
-    // Get all alerts
+    @PutMapping("/{id}/resolve")
+    public ResponseEntity<FraudAlertRecord> resolveAlert(@PathVariable Long id) {
+        FraudAlertRecord resolved = fraudAlertService.resolveAlert(id);
+        return ResponseEntity.ok(resolved);
+    }
+
     @GetMapping
-    public ResponseEntity<List<FraudAlert>> getAllAlerts() {
-        return ResponseEntity.ok(fraudAlertService.getAllAlerts());
+    public ResponseEntity<List<FraudAlertRecord>> getAllAlerts() {
+        List<FraudAlertRecord> alerts = fraudAlertService.getAllAlerts();
+        return ResponseEntity.ok(alerts);
     }
 
-    // Get alert by ID
+    @GetMapping("/serial/{serialNumber}")
+    public ResponseEntity<List<FraudAlertRecord>> getAlertsBySerial(@PathVariable String serialNumber) {
+        List<FraudAlertRecord> alerts = fraudAlertService.getAlertsBySerial(serialNumber);
+        return ResponseEntity.ok(alerts);
+    }
+
+    @GetMapping("/claim/{claimId}")
+    public ResponseEntity<List<FraudAlertRecord>> getAlertsByClaim(@PathVariable Long claimId) {
+        List<FraudAlertRecord> alerts = fraudAlertService.getAlertsByClaim(claimId);
+        return ResponseEntity.ok(alerts);
+    }
+
     @GetMapping("/{id}")
-    public ResponseEntity<FraudAlert> getAlertById(@PathVariable Long id) {
+    public ResponseEntity<FraudAlertRecord> getAlertById(@PathVariable Long id) {
         return fraudAlertService.getAlertById(id)
                 .map(ResponseEntity::ok)
-                .orElseThrow(() -> new RuntimeException("Alert not found"));
-    }
-
-    // Get alerts by device serial number
-    @GetMapping("/serial/{serialNumber}")
-    public ResponseEntity<List<FraudAlert>> getAlertsBySerial(@PathVariable String serialNumber) {
-        return ResponseEntity.ok(fraudAlertService.getAlertsBySerial(serialNumber));
-    }
-
-    // Get alerts by claim ID
-    @GetMapping("/claim/{claimId}")
-    public ResponseEntity<List<FraudAlert>> getAlertsByClaim(@PathVariable Long claimId) {
-        return ResponseEntity.ok(fraudAlertService.getAlertsByClaim(claimId));
-    }
-
-    // Resolve alert (ADMIN only)
-    @PutMapping("/{id}/resolve")
-    public ResponseEntity<FraudAlert> resolveAlert(@PathVariable Long id) {
-        FraudAlert resolved = fraudAlertService.resolveAlert(id);
-        return ResponseEntity.ok(resolved);
+                .orElse(ResponseEntity.notFound().build());
     }
 }
