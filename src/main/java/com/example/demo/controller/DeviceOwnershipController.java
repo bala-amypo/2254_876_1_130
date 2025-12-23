@@ -1,14 +1,13 @@
 package com.example.demo.controller;
 
-import com.example.demo.model.DeviceOwnershipRecord;
+import com.example.demo.model.DeviceOwnership;
 import com.example.demo.service.DeviceOwnershipService;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/devices")
+@RequestMapping("/deviceOwnership")
 public class DeviceOwnershipController {
 
     private final DeviceOwnershipService deviceOwnershipService;
@@ -17,42 +16,23 @@ public class DeviceOwnershipController {
         this.deviceOwnershipService = deviceOwnershipService;
     }
 
-    // Register a new device
-    @PostMapping
-    public ResponseEntity<DeviceOwnershipRecord> registerDevice(
-            @RequestBody DeviceOwnershipRecord deviceOwnershipRecord) {
-
-        DeviceOwnershipRecord savedDevice =
-                deviceOwnershipService.registerDevice(deviceOwnershipRecord);
-
-        return ResponseEntity.ok(savedDevice);
+    @PostMapping("/register")
+    public DeviceOwnership registerDevice(@RequestBody DeviceOwnership device) {
+        return deviceOwnershipService.registerDevice(device);
     }
 
-    // Get all devices
-    @GetMapping
-    public ResponseEntity<List<DeviceOwnershipRecord>> getAllDevices() {
-        return ResponseEntity.ok(deviceOwnershipService.getAllDevices());
+    @GetMapping("/all")
+    public List<DeviceOwnership> getAllDevices() {
+        return deviceOwnershipService.getAllDevices();
     }
 
-    // Get device by serial number
     @GetMapping("/{serialNumber}")
-    public ResponseEntity<DeviceOwnershipRecord> getDeviceBySerial(
-            @PathVariable String serialNumber) {
-
-        return ResponseEntity.ok(
-                deviceOwnershipService.getBySerial(serialNumber)
-        );
+    public DeviceOwnership getBySerial(@PathVariable String serialNumber) {
+        return deviceOwnershipService.getBySerial(serialNumber);
     }
 
-    // Update device active status
-    @PutMapping("/{id}/status")
-    public ResponseEntity<DeviceOwnershipRecord> updateDeviceStatus(
-            @PathVariable Long id,
-            @RequestParam boolean active) {
-
-        DeviceOwnershipRecord updatedDevice =
-                deviceOwnershipService.updateDeviceStatus(id, active);
-
-        return ResponseEntity.ok(updatedDevice);
+    @PatchMapping("/{id}/status")
+    public DeviceOwnership updateDeviceStatus(@PathVariable Long id, @RequestParam boolean stolen) {
+        return deviceOwnershipService.updateDeviceStatus(id, stolen);
     }
 }

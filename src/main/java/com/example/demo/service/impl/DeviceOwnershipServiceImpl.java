@@ -1,37 +1,42 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.model.DeviceOwnership;
-import com.example.demo.repository.DeviceOwnershipRepository;
+import com.example.demo.repository.DeviceOwnershipRecordRepository;
 import com.example.demo.service.DeviceOwnershipService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @Service
 public class DeviceOwnershipServiceImpl implements DeviceOwnershipService {
 
-    private final DeviceOwnershipRepository repository;
+    private final DeviceOwnershipRecordRepository repository;
 
-    @Autowired
-    public DeviceOwnershipServiceImpl(DeviceOwnershipRepository repository) {
+    public DeviceOwnershipServiceImpl(DeviceOwnershipRecordRepository repository) {
         this.repository = repository;
     }
 
     @Override
-    public DeviceOwnership create(DeviceOwnership ownership) {
-        return repository.save(ownership);
+    public DeviceOwnership registerDevice(DeviceOwnership device) {
+        return repository.save(device);
     }
 
     @Override
-    public List<DeviceOwnership> getAll() {
+    public List<DeviceOwnership> getAllDevices() {
         return repository.findAll();
     }
 
     @Override
-    public DeviceOwnership getById(Long id) {
-        return repository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("DeviceOwnership not found"));
+    public DeviceOwnership getBySerial(String serialNumber) {
+        return repository.findByDeviceSerialNumber(serialNumber)
+                .orElseThrow(() -> new RuntimeException("Device not found"));
+    }
+
+    @Override
+    public DeviceOwnership updateDeviceStatus(Long id, boolean stolen) {
+        DeviceOwnership device = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Device not found"));
+        device.setStolen(stolen);
+        return repository.save(device);
     }
 }

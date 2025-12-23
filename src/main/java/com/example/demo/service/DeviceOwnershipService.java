@@ -4,7 +4,8 @@ import com.example.demo.model.DeviceOwnership;
 import java.util.List;
 
 public interface DeviceOwnershipService {
-    DeviceOwnership create(DeviceOwnership ownership);
-    List<DeviceOwnership> getAll();
-    DeviceOwnership getById(Long id);
+    DeviceOwnership registerDevice(DeviceOwnership device);
+    List<DeviceOwnership> getAllDevices();
+    DeviceOwnership getBySerial(String serialNumber);
+    DeviceOwnership updateDeviceStatus(Long id, boolean stolen);
 }
