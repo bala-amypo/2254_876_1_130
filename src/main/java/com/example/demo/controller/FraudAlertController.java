@@ -12,37 +12,31 @@ import java.util.List;
 @RequestMapping("/api/fraud-alerts")
 public class FraudAlertController {
 
-    private final FraudAlertService fraudAlertService;
+    private final FraudAlertService service;
 
     @Autowired
-    public FraudAlertController(FraudAlertService fraudAlertService) {
-        this.fraudAlertService = fraudAlertService;
+    public FraudAlertController(FraudAlertService service) {
+        this.service = service;
     }
 
     @PostMapping
     public ResponseEntity<FraudAlertRecord> createAlert(@RequestBody FraudAlertRecord alert) {
-        FraudAlertRecord savedAlert = fraudAlertService.createAlert(alert);
-        return ResponseEntity.ok(savedAlert);
+        return ResponseEntity.ok(service.createAlert(alert));
     }
 
     @GetMapping
     public ResponseEntity<List<FraudAlertRecord>> getAllAlerts() {
-        List<FraudAlertRecord> alerts = fraudAlertService.getAllAlerts();
-        return ResponseEntity.ok(alerts);
+        return ResponseEntity.ok(service.getAllAlerts());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<FraudAlertRecord> getAlertById(@PathVariable Long id) {
-        FraudAlertRecord alert = fraudAlertService.getAlertById(id);
-        if (alert == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(alert);
+    public ResponseEntity<FraudAlertRecord> getAlert(@PathVariable Long id) {
+        return ResponseEntity.ok(service.getAlertById(id));
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteAlert(@PathVariable Long id) {
-        fraudAlertService.deleteAlert(id);
-        return ResponseEntity.noContent().build();
+    @PutMapping("/resolve/{id}")
+    public ResponseEntity<Void> resolveAlert(@PathVariable Long id) {
+        service.resolveAlert(id);
+        return ResponseEntity.ok().build();
     }
 }

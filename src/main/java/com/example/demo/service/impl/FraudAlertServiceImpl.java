@@ -1,7 +1,7 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.model.FraudAlertRecord;
-import com.example.demo.repository.FraudAlertRecordRepository;
+import com.example.demo.repository.FraudAlertRepository;
 import com.example.demo.service.FraudAlertService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,8 +11,12 @@ import java.util.List;
 @Service
 public class FraudAlertServiceImpl implements FraudAlertService {
 
+    private final FraudAlertRepository repository;
+
     @Autowired
-    private FraudAlertRecordRepository repository;
+    public FraudAlertServiceImpl(FraudAlertRepository repository) {
+        this.repository = repository;
+    }
 
     @Override
     public FraudAlertRecord createAlert(FraudAlertRecord alert) {
@@ -30,7 +34,10 @@ public class FraudAlertServiceImpl implements FraudAlertService {
     }
 
     @Override
-    public void deleteAlert(Long id) {
-        repository.deleteById(id);
+    public void resolveAlert(Long id) {
+        repository.findById(id).ifPresent(alert -> {
+            alert.setResolved(true);
+            repository.save(alert);
+        });
     }
 }

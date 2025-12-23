@@ -7,5 +7,5 @@ public interface FraudAlertService {
     FraudAlertRecord createAlert(FraudAlertRecord alert);
     List<FraudAlertRecord> getAllAlerts();
     FraudAlertRecord getAlertById(Long id);
-    void deleteAlert(Long id);
+    void resolveAlert(Long id);
 }

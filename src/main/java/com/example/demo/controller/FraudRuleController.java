@@ -1,7 +1,8 @@
 package com.example.demo.controller;
 
-import com.example.demo.model.FraudRule;
+import com.example.demo.model.FraudRuleRecord;
 import com.example.demo.service.FraudRuleService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,48 +12,31 @@ import java.util.List;
 @RequestMapping("/api/fraud-rules")
 public class FraudRuleController {
 
-    private final FraudRuleService fraudRuleService;
+    private final FraudRuleService service;
 
-    public FraudRuleController(FraudRuleService fraudRuleService) {
-        this.fraudRuleService = fraudRuleService;
+    @Autowired
+    public FraudRuleController(FraudRuleService service) {
+        this.service = service;
     }
 
-    // Create new fraud rule (ADMIN only)
     @PostMapping
-    public ResponseEntity<FraudRule> createRule(@RequestBody FraudRule rule) {
-        FraudRule savedRule = fraudRuleService.createRule(rule);
-        return ResponseEntity.ok(savedRule);
+    public ResponseEntity<FraudRuleRecord> createRule(@RequestBody FraudRuleRecord rule) {
+        return ResponseEntity.ok(service.createRule(rule));
     }
 
-    // List all rules
     @GetMapping
-    public ResponseEntity<List<FraudRule>> getAllRules() {
-        return ResponseEntity.ok(fraudRuleService.getAllRules());
+    public ResponseEntity<List<FraudRuleRecord>> getAllRules() {
+        return ResponseEntity.ok(service.getAllRules());
     }
 
-    // Get rule by ID
     @GetMapping("/{id}")
-    public ResponseEntity<FraudRule> getRuleById(@PathVariable Long id) {
-        return fraudRuleService.getAllRules().stream()
-                .filter(r -> r.getId().equals(id))
-                .findFirst()
-                .map(ResponseEntity::ok)
-                .orElseThrow(() -> new RuntimeException("Rule not found"));
+    public ResponseEntity<FraudRuleRecord> getRule(@PathVariable Long id) {
+        return ResponseEntity.ok(service.getRuleById(id));
     }
 
-    // Get active rules
-    @GetMapping("/active")
-    public ResponseEntity<List<FraudRule>> getActiveRules() {
-        return ResponseEntity.ok(fraudRuleService.getActiveRules());
-    }
-
-    // Update rule (ADMIN only)
-    @PutMapping("/{id}")
-    public ResponseEntity<FraudRule> updateRule(
-            @PathVariable Long id,
-            @RequestBody FraudRule rule) {
-
-        FraudRule updated = fraudRuleService.updateRule(id, rule);
-        return ResponseEntity.ok(updated);
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteRule(@PathVariable Long id) {
+        service.deleteRule(id);
+        return ResponseEntity.ok().build();
     }
 }
