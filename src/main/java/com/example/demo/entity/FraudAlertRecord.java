@@ -1,16 +1,11 @@
 package com.example.demo.model;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.*;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
 @Entity
 @Table(name = "fraud_alert_records")
-@Builder
 public class FraudAlertRecord {
 
     @Id
@@ -46,9 +41,64 @@ public class FraudAlertRecord {
     @JoinColumn(name = "user_id")
     private User user;
 
+    // --- Constructors ---
+
+    public FraudAlertRecord() {
+        // Default constructor required by JPA
+    }
+
+    public FraudAlertRecord(Long id, Long claimId, String serialNumber, String alertType,
+                            String severity, String message, LocalDateTime alertDate,
+                            Boolean resolved, WarrantyClaimRecord claim, User user) {
+        this.id = id;
+        this.claimId = claimId;
+        this.serialNumber = serialNumber;
+        this.alertType = alertType;
+        this.severity = severity;
+        this.message = message;
+        this.alertDate = alertDate;
+        this.resolved = resolved != null ? resolved : false;
+        this.claim = claim;
+        this.user = user;
+    }
+
+    // --- Getters and Setters ---
+
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+
+    public Long getClaimId() { return claimId; }
+    public void setClaimId(Long claimId) { this.claimId = claimId; }
+
+    public String getSerialNumber() { return serialNumber; }
+    public void setSerialNumber(String serialNumber) { this.serialNumber = serialNumber; }
+
+    public String getAlertType() { return alertType; }
+    public void setAlertType(String alertType) { this.alertType = alertType; }
+
+    public String getSeverity() { return severity; }
+    public void setSeverity(String severity) { this.severity = severity; }
+
+    public String getMessage() { return message; }
+    public void setMessage(String message) { this.message = message; }
+
+    public LocalDateTime getAlertDate() { return alertDate; }
+    public void setAlertDate(LocalDateTime alertDate) { this.alertDate = alertDate; }
+
+    public Boolean getResolved() { return resolved; }
+    public void setResolved(Boolean resolved) { this.resolved = resolved; }
+
+    public WarrantyClaimRecord getClaim() { return claim; }
+    public void setClaim(WarrantyClaimRecord claim) { this.claim = claim; }
+
+    public User getUser() { return user; }
+    public void setUser(User user) { this.user = user; }
+
+    // --- JPA PrePersist ---
+
     @PrePersist
     public void prePersist() {
-        alertDate = LocalDateTime.now();
+        if (alertDate == null) alertDate = LocalDateTime.now();
         if (resolved == null) resolved = false;
     }
 }
