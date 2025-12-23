@@ -8,39 +8,34 @@ public class TestResultListener implements ITestListener {
 
     @Override
     public void onTestStart(ITestResult result) {
-        System.out.println("[TEST START] " + result.getName());
+        System.out.println("Starting Test: " + result.getName());
     }
 
     @Override
     public void onTestSuccess(ITestResult result) {
-        System.out.println("[TEST PASS] " + result.getName());
+        System.out.println("Test Passed: " + result.getName());
     }
 
     @Override
     public void onTestFailure(ITestResult result) {
-        System.out.println("[TEST FAIL] " + result.getName());
-        if (result.getThrowable() != null) {
-            result.getThrowable().printStackTrace();
-        }
+        System.out.println("Test Failed: " + result.getName());
     }
 
     @Override
     public void onTestSkipped(ITestResult result) {
-        System.out.println("[TEST SKIPPED] " + result.getName());
+        System.out.println("Test Skipped: " + result.getName());
     }
 
     @Override
-    public void onTestFailedButWithinSuccessPercentage(ITestResult result) {
-        System.out.println("[TEST FAIL PARTIAL] " + result.getName());
-    }
+    public void onTestFailedButWithinSuccessPercentage(ITestResult result) {}
 
     @Override
     public void onStart(ITestContext context) {
-        System.out.println("[TEST SUITE START] " + context.getName());
+        System.out.println("Test Suite Started: " + context.getName());
     }
 
     @Override
     public void onFinish(ITestContext context) {
-        System.out.println("[TEST SUITE FINISH] " + context.getName());
+        System.out.println("Test Suite Finished: " + context.getName());
     }
 }
