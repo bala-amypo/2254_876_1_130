@@ -1,4 +1,4 @@
-package com.example.demo.entity;
+package com.example.demo.model;
 
 import jakarta.persistence.*;
 
@@ -16,12 +16,14 @@ public class FraudRuleRecord {
 
     public FraudRuleRecord() {}
 
-    public Long getId() {
-        return id;
+    public FraudRuleRecord(String ruleName, String description, boolean active) {
+        this.ruleName = ruleName;
+        this.description = description;
+        this.active = active;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public Long getId() {
+        return id;
     }
 
     public String getRuleName() {

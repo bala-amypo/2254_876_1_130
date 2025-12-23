@@ -1,4 +1,4 @@
-package com.example.demo.entity;
+package com.example.demo.model;
 
 import jakarta.persistence.*;
 
@@ -10,44 +10,33 @@ public class FraudAlertRecord {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String alertType;
-    private String message;
-
-    // 🔴 REQUIRED BY YOUR SERVICE
-    private boolean resolved;
+    private String deviceSerialNumber;
+    private String alertMessage;
 
     public FraudAlertRecord() {}
+
+    public FraudAlertRecord(String deviceSerialNumber, String alertMessage) {
+        this.deviceSerialNumber = deviceSerialNumber;
+        this.alertMessage = alertMessage;
+    }
 
     public Long getId() {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public String getDeviceSerialNumber() {
+        return deviceSerialNumber;
     }
 
-    public String getAlertType() {
-        return alertType;
+    public void setDeviceSerialNumber(String deviceSerialNumber) {
+        this.deviceSerialNumber = deviceSerialNumber;
     }
 
-    public void setAlertType(String alertType) {
-        this.alertType = alertType;
+    public String getAlertMessage() {
+        return alertMessage;
     }
 
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    // 🔴 THIS FIXES: setResolved(boolean) ERROR
-    public boolean isResolved() {
-        return resolved;
-    }
-
-    public void setResolved(boolean resolved) {
-        this.resolved = resolved;
+    public void setAlertMessage(String alertMessage) {
+        this.alertMessage = alertMessage;
     }
 }
