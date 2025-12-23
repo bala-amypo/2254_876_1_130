@@ -1,11 +1,11 @@
 package com.example.demo.entity;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
+import jakarta.persistence.*;
+import lombok.*;
+import java.time.LocalDateTime;
 
+@Entity
+@Table(name = "warranty_claims")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -13,12 +13,17 @@ import lombok.Builder;
 @Builder
 public class WarrantyClaimRecord {
 
-    private String claimNumber;
-    private String description;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String deviceSerial;
+
+    private String issueDescription;
 
     @Builder.Default
-    private boolean active = true;
+    private boolean approved = false;
 
     @Builder.Default
-    private int priority = 1;
+    private LocalDateTime createdAt = LocalDateTime.now();
 }

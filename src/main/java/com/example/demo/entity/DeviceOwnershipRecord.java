@@ -1,11 +1,11 @@
 package com.example.demo.entity;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
+import jakarta.persistence.*;
+import lombok.*;
+import java.time.LocalDateTime;
 
+@Entity
+@Table(name = "device_ownerships")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -13,12 +13,17 @@ import lombok.Builder;
 @Builder
 public class DeviceOwnershipRecord {
 
-    private String deviceId;
-    private String owner;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String deviceSerial;
+
+    private String ownerName;
+
+    @Builder.Default
+    private LocalDateTime purchaseDate = LocalDateTime.now();
 
     @Builder.Default
     private boolean verified = false;
-
-    @Builder.Default
-    private int warrantyMonths = 12;
 }

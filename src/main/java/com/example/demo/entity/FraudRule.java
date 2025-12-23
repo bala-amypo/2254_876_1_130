@@ -1,11 +1,10 @@
 package com.example.demo.entity;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
+import jakarta.persistence.*;
+import lombok.*;
 
+@Entity
+@Table(name = "fraud_rules")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -13,8 +12,13 @@ import lombok.Builder;
 @Builder
 public class FraudRule {
 
-    private String ruleId;
-    private String condition;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String ruleName;
+
+    private String description;
 
     @Builder.Default
     private boolean active = true;

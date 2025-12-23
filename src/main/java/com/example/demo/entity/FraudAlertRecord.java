@@ -1,11 +1,11 @@
 package com.example.demo.entity;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
+import jakarta.persistence.*;
+import lombok.*;
+import java.time.LocalDateTime;
 
+@Entity
+@Table(name = "fraud_alerts")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -13,8 +13,14 @@ import lombok.Builder;
 @Builder
 public class FraudAlertRecord {
 
-    private String alertId;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     private String description;
+
+    @Builder.Default
+    private LocalDateTime alertTime = LocalDateTime.now();
 
     @Builder.Default
     private boolean resolved = false;
