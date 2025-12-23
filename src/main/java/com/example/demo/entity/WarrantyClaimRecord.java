@@ -1,8 +1,15 @@
 package com.example.demo.model;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "warranty_claim_records")
 public class WarrantyClaimRecord {
@@ -14,34 +21,35 @@ public class WarrantyClaimRecord {
     @Column(nullable = false)
     private String serialNumber;
 
-    @ManyToOne
-    @JoinColumn(name = "device_id")
-    private DeviceOwnershipRecord device;
+    @Column(nullable = false)
+    private String claimantName;
+
+    private String claimantEmail;
 
     @Column(nullable = false)
-    private String claimStatus;
+    private String claimReason;
+
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime submittedAt;
 
     @Column(nullable = false)
-    private String claimReason; // NEW
+    private String status = "PENDING";
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
+    @ManyToOne
+    @JoinColumn(name = "device_id")
+    private DeviceOwnershipRecord device;
+     @JsonIgnore
+    @OneToMany(mappedBy = "claim", cascade = CascadeType.ALL)
+    private List<FraudAlertRecord> alerts = new ArrayList<>();
+
     @PrePersist
     public void prePersist() {
-        if (createdAt == null) createdAt = LocalDateTime.now();
+        LocalDateTime now = LocalDateTime.now();
+        createdAt = now;
+        submittedAt = now;
+        if (status == null) status = "PENDING";
     }
-
-    // Getters and Setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-    public String getSerialNumber() { return serialNumber; }
-    public void setSerialNumber(String serialNumber) { this.serialNumber = serialNumber; }
-    public DeviceOwnershipRecord getDevice() { return device; }
-    public void setDevice(DeviceOwnershipRecord device) { this.device = device; }
-    public String getClaimStatus() { return claimStatus; }
-    public void setClaimStatus(String claimStatus) { this.claimStatus = claimStatus; }
-    public String getClaimReason() { return claimReason; }
-    public void setClaimReason(String claimReason) { this.claimReason = claimReason; }
-    public LocalDateTime getCreatedAt() { return createdAt; }
 }

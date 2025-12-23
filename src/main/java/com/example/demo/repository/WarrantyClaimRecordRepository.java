@@ -4,7 +4,19 @@ import com.example.demo.model.WarrantyClaimRecord;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Optional;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface WarrantyClaimRecordRepository extends JpaRepository<WarrantyClaimRecord, Long> {
+
+    Optional<WarrantyClaimRecord> findById(Long id);
+
+    List<WarrantyClaimRecord> findAll();
+
     List<WarrantyClaimRecord> findBySerialNumber(String serialNumber);
+
+    boolean existsBySerialNumberAndClaimReason(String serialNumber, String claimReason);
+
+    List<WarrantyClaimRecord> findByStatus(String status);
 }
