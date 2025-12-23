@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.NoSuchElementException;
+import java.util.Set;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -19,7 +20,6 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
 
-    // Requirement: Strict Constructor Order
     public UserServiceImpl(UserRepository userRepository,
                            PasswordEncoder passwordEncoder,
                            JwtTokenProvider jwtTokenProvider) {
@@ -30,16 +30,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User registerUser(RegisterRequest request) {
+
         if (userRepository.existsByEmail(request.getEmail())) {
             throw new IllegalArgumentException("Email already in use");
         }
 
-        // ✅ FIX: Use Builder instead of new User()
         User user = User.builder()
-                .username(request.getName())   // or .name(...) if your field is name
+                .name(request.getName())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .roles(request.getRoles())
+                .roles(Set.of("ROLE_USER"))
                 .createdAt(LocalDateTime.now())
                 .build();
 
@@ -50,7 +50,7 @@ public class UserServiceImpl implements UserService {
     public User loginUser(LoginRequest request) {
         User user = findByEmail(request.getEmail());
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-            throw new IllegalArgumentException("Invalid input");
+            throw new IllegalArgumentException("Invalid credentials");
         }
         return user;
     }
