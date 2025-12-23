@@ -31,11 +31,13 @@ public class UserServiceImpl implements UserService {
         if (userRepository.existsByEmail(request.getEmail())) {
             throw new IllegalArgumentException("Email already in use");
         }
-        User user = new User();
-        user.setName(request.getName());
-        user.setEmail(request.getEmail());
-        user.setPassword(passwordEncoder.encode(request.getPassword()));
-        user.setRoles(request.getRoles());
+        User user = User.builder()
+        .name(request.getName())
+        .email(request.getEmail())
+        .password(passwordEncoder.encode(request.getPassword()))
+        .roles(request.getRoles())
+        .createdAt(java.time.LocalDateTime.now())
+        .build()
         return userRepository.save(user);
     }
 
