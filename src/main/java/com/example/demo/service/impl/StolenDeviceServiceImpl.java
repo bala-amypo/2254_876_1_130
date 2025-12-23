@@ -6,6 +6,7 @@ import com.example.demo.repository.DeviceOwnershipRecordRepository;
 import com.example.demo.repository.StolenDeviceReportRepository;
 import com.example.demo.service.StolenDeviceService;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -23,12 +24,11 @@ public class StolenDeviceServiceImpl implements StolenDeviceService {
 
     @Override
     public StolenDeviceReport reportStolen(StolenDeviceReport report) {
-
-        DeviceOwnershipRecord device = deviceRepository
-                .findBySerialNumber(report.getSerialNumber())
+        // Validate device exists
+        DeviceOwnershipRecord device = deviceRepository.findBySerialNumber(report.getSerialNumber())
                 .orElseThrow(() -> new NoSuchElementException("Device not found"));
 
-        report.setDevice(device);
+        report.setReportDate(LocalDateTime.now());
         return stolenRepository.save(report);
     }
 

@@ -1,7 +1,7 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.model.FraudAlert;
-import com.example.demo.repository.FraudAlertRepository;
+import com.example.demo.model.FraudAlertRecord;
+import com.example.demo.repository.FraudAlertRecordRepository;
 import com.example.demo.service.FraudAlertService;
 
 import java.time.LocalDateTime;
@@ -11,36 +11,44 @@ import java.util.Optional;
 
 public class FraudAlertServiceImpl implements FraudAlertService {
 
-    private final FraudAlertRepository fraudAlertRepository;
+    private final FraudAlertRecordRepository alertRepository;
 
-    public FraudAlertServiceImpl(FraudAlertRepository fraudAlertRepository) {
-        this.fraudAlertRepository = fraudAlertRepository;
+    public FraudAlertServiceImpl(FraudAlertRecordRepository alertRepository) {
+        this.alertRepository = alertRepository;
     }
 
     @Override
-    public FraudAlert createAlert(FraudAlert alert) {
-        return fraudAlertRepository.save(alert);
+    public FraudAlertRecord createAlert(FraudAlertRecord alert) {
+        alert.setAlertDate(LocalDateTime.now());
+        alert.setResolved(false);
+        return alertRepository.save(alert);
     }
 
     @Override
-    public FraudAlert resolveAlert(Long id) {
-
-        FraudAlert alert = fraudAlertRepository.findById(id)
+    public FraudAlertRecord resolveAlert(Long id) {
+        FraudAlertRecord alert = alertRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Alert not found"));
-
         alert.setResolved(true);
-        alert.setResolvedAt(LocalDateTime.now());
-
-        return fraudAlertRepository.save(alert);
+        return alertRepository.save(alert);
     }
 
     @Override
-    public Optional<FraudAlert> getAlertById(Long id) {
-        return fraudAlertRepository.findById(id);
+    public List<FraudAlertRecord> getAlertsBySerial(String serialNumber) {
+        return alertRepository.findBySerialNumber(serialNumber);
     }
 
     @Override
-    public List<FraudAlert> getAllAlerts() {
-        return fraudAlertRepository.findAll();
+    public List<FraudAlertRecord> getAlertsByClaim(Long claimId) {
+        return alertRepository.findByClaimId(claimId);
+    }
+
+    @Override
+    public List<FraudAlertRecord> getAllAlerts() {
+        return alertRepository.findAll();
+    }
+
+    @Override
+    public Optional<FraudAlertRecord> getAlertById(Long id) {
+        return alertRepository.findById(id);
     }
 }
