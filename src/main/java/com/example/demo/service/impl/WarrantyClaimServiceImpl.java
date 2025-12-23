@@ -1,33 +1,23 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.entity.WarrantyClaimRecord;
-import com.example.demo.repository.WarrantyClaimRepository;
-import com.example.demo.service.WarrantyClaimService;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
+
+import com.example.demo.entity.WarrantyClaimRecord;
+import com.example.demo.repository.WarrantyClaimRecordRepository;
+import com.example.demo.service.WarrantyClaimService;
 
 @Service
 public class WarrantyClaimServiceImpl implements WarrantyClaimService {
 
-    private final WarrantyClaimRepository repository;
+    private final WarrantyClaimRecordRepository repository;
 
-    public WarrantyClaimServiceImpl(WarrantyClaimRepository repository) {
+    public WarrantyClaimServiceImpl(WarrantyClaimRecordRepository repository) {
         this.repository = repository;
     }
 
     @Override
-    public WarrantyClaimRecord create(WarrantyClaimRecord record) {
-        return repository.save(record);
-    }
-
-    @Override
-    public List<WarrantyClaimRecord> getAll() {
+    public List<WarrantyClaimRecord> getAllClaims() {
         return repository.findAll();
-    }
-
-    @Override
-    public WarrantyClaimRecord getById(Long id) {
-        return repository.findById(id).orElse(null);
     }
 }
