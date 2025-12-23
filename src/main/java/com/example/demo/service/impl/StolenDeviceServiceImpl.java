@@ -1,8 +1,9 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.model.DeviceOwnership;
-import com.example.demo.repository.DeviceOwnershipRecordRepository;
+import com.example.demo.model.StolenDeviceReport;
+import com.example.demo.repository.StolenDeviceRepository;
 import com.example.demo.service.StolenDeviceService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -10,20 +11,26 @@ import java.util.List;
 @Service
 public class StolenDeviceServiceImpl implements StolenDeviceService {
 
-    private final DeviceOwnershipRecordRepository repository;
+    @Autowired
+    private StolenDeviceRepository repository;
 
-    public StolenDeviceServiceImpl(DeviceOwnershipRecordRepository repository) {
-        this.repository = repository;
+    @Override
+    public StolenDeviceReport addReport(StolenDeviceReport report) {
+        return repository.save(report);
     }
 
     @Override
-    public DeviceOwnership reportStolenDevice(DeviceOwnership device) {
-        device.setStolen(true); // assuming DeviceOwnership has a "stolen" field
-        return repository.save(device);
+    public List<StolenDeviceReport> getAllReports() {
+        return repository.findAll();
     }
 
     @Override
-    public List<DeviceOwnership> getAllStolenDevices() {
-        return repository.findByStolenTrue();
+    public StolenDeviceReport getReportById(Long id) {
+        return repository.findById(id).orElse(null);
+    }
+
+    @Override
+    public void deleteReport(Long id) {
+        repository.deleteById(id);
     }
 }
