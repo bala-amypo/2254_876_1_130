@@ -1,90 +1,29 @@
 package com.example.demo.model;
 
 import jakarta.persistence.*;
-import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "fraud_rules", uniqueConstraints = {
-        @UniqueConstraint(columnNames = "ruleCode")
-})
-public class FraudRule {
+@Table(name = "fraud_rule_records")
+public class FraudRuleRecord {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
-    private String ruleCode;
-
-    @Column(nullable = false)
-    private String ruleType;
-
+    private String ruleName;
     private String description;
+    private boolean active;
 
-    @Column(nullable = false)
-    private Boolean active = true;
+    // Getters and Setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    @Column(nullable = false, updatable = false)
-    private LocalDateTime createdAt;
+    public String getRuleName() { return ruleName; }
+    public void setRuleName(String ruleName) { this.ruleName = ruleName; }
 
-    public FraudRule() {
-    }
+    public String getDescription() { return description; }
+    public void setDescription(String description) { this.description = description; }
 
-    public FraudRule(String ruleCode, String ruleType) {
-        this.ruleCode = ruleCode;
-        this.ruleType = ruleType;
-        this.active = true;
-    }
-
-    @PrePersist
-    protected void onCreate() {
-        this.createdAt = LocalDateTime.now();
-        if (this.active == null) {
-            this.active = true;
-        }
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getRuleCode() {
-        return ruleCode;
-    }
-
-    public String getRuleType() {
-        return ruleType;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public Boolean getActive() {
-        return active;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setRuleCode(String ruleCode) {
-        this.ruleCode = ruleCode;
-    }
-
-    public void setRuleType(String ruleType) {
-        this.ruleType = ruleType;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public void setActive(Boolean active) {
-        this.active = active;
-    }
+    public boolean isActive() { return active; }
+    public void setActive(boolean active) { this.active = active; }
 }

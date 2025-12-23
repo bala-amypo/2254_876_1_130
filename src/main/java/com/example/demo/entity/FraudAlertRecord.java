@@ -10,25 +10,16 @@ public class FraudAlertRecord {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String deviceSerialNumber;
+    private String alertType;
     private String description;
     private boolean resolved;
 
-    // Constructors
-    public FraudAlertRecord() {}
-
-    public FraudAlertRecord(String deviceSerialNumber, String description, boolean resolved) {
-        this.deviceSerialNumber = deviceSerialNumber;
-        this.description = description;
-        this.resolved = resolved;
-    }
-
-    // Getters & Setters
+    // Getters and Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
-    public String getDeviceSerialNumber() { return deviceSerialNumber; }
-    public void setDeviceSerialNumber(String deviceSerialNumber) { this.deviceSerialNumber = deviceSerialNumber; }
+    public String getAlertType() { return alertType; }
+    public void setAlertType(String alertType) { this.alertType = alertType; }
 
     public String getDescription() { return description; }
     public void setDescription(String description) { this.description = description; }
