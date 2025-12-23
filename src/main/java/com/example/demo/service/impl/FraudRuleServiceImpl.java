@@ -1,11 +1,10 @@
 package com.example.demo.service.impl;
 
+import org.springframework.stereotype.Service;
+import java.util.List;
 import com.example.demo.entity.FraudRuleRecord;
 import com.example.demo.repository.FraudRuleRecordRepository;
 import com.example.demo.service.FraudRuleService;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class FraudRuleServiceImpl implements FraudRuleService {
@@ -17,12 +16,7 @@ public class FraudRuleServiceImpl implements FraudRuleService {
     }
 
     @Override
-    public List<FraudRuleRecord> getAll() {
+    public List<FraudRuleRecord> getAllFraudRules() {
         return repository.findAll();
-    }
-
-    @Override
-    public FraudRuleRecord save(FraudRuleRecord record) {
-        return repository.save(record);
     }
 }
