@@ -5,7 +5,9 @@ import java.util.List;
 
 public interface FraudRuleService {
 
-    FraudRuleRecord createRule(FraudRuleRecord rule);
+    FraudRuleRecord save(FraudRuleRecord rule);
 
-    List<FraudRuleRecord> getAllRules();
+    List<FraudRuleRecord> getAll();
+
+    FraudRuleRecord getById(Long id);
 }
