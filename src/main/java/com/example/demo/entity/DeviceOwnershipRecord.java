@@ -1,7 +1,16 @@
 package com.example.demo.model;
 
+import lombok.*;
 import jakarta.persistence.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "device_ownership_records")
 public class DeviceOwnershipRecord {
@@ -10,25 +19,34 @@ public class DeviceOwnershipRecord {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private String deviceName;
+    @Column(nullable = false, unique = true)
+    private String serialNumber;
 
     @Column(nullable = false)
     private String ownerName;
 
-    // Constructors
-    public DeviceOwnershipRecord() {}
+    private String ownerEmail;
 
-    public DeviceOwnershipRecord(String deviceName, String ownerName) {
-        this.deviceName = deviceName;
-        this.ownerName = ownerName;
+    private LocalDate purchaseDate;
+
+    @Column(nullable = false)
+    private LocalDate warrantyExpiration;
+
+    @Column(nullable = false)
+    private Boolean active = true;
+
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
+    @OneToMany(mappedBy = "device", cascade = CascadeType.ALL)
+    private List<WarrantyClaimRecord> claims = new ArrayList<>();
+
+    @OneToMany(mappedBy = "device", cascade = CascadeType.ALL)
+    private List<StolenDeviceReport> stolenReports = new ArrayList<>();
+
+    @PrePersist
+    public void prePersist() {
+        createdAt = LocalDateTime.now();
+        if (active == null) active = true;
     }
-
-    // Getters and Setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-    public String getDeviceName() { return deviceName; }
-    public void setDeviceName(String deviceName) { this.deviceName = deviceName; }
-    public String getOwnerName() { return ownerName; }
-    public void setOwnerName(String ownerName) { this.ownerName = ownerName; }
 }

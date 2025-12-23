@@ -1,8 +1,13 @@
 package com.example.demo.model;
 
+import lombok.*;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "fraud_rules")
 public class FraudRule {
@@ -20,85 +25,14 @@ public class FraudRule {
     private String description;
 
     @Column(nullable = false)
-    private Boolean active;
+    private Boolean active = true;
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    // --- Constructors ---
-
-    public FraudRule() {
-        this.active = true; // default value
-        this.createdAt = LocalDateTime.now();
-    }
-
-    public FraudRule(Long id, String ruleCode, String ruleType, String description, Boolean active, LocalDateTime createdAt) {
-        this.id = id;
-        this.ruleCode = ruleCode;
-        this.ruleType = ruleType;
-        this.description = description;
-        this.active = active != null ? active : true;
-        this.createdAt = createdAt != null ? createdAt : LocalDateTime.now();
-    }
-
-    // --- Getters and Setters ---
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getRuleCode() {
-        return ruleCode;
-    }
-
-    public void setRuleCode(String ruleCode) {
-        this.ruleCode = ruleCode;
-    }
-
-    public String getRuleType() {
-        return ruleType;
-    }
-
-    public void setRuleType(String ruleType) {
-        this.ruleType = ruleType;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public Boolean getActive() {
-        return active;
-    }
-
-    public void setActive(Boolean active) {
-        this.active = active;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    // --- JPA PrePersist ---
     @PrePersist
     public void prePersist() {
-        if (createdAt == null) {
-            createdAt = LocalDateTime.now();
-        }
-        if (active == null) {
-            active = true;
-        }
+        createdAt = LocalDateTime.now();
+        if (active == null) active = true;
     }
 }
