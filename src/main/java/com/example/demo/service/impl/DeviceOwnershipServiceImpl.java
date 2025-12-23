@@ -1,12 +1,12 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.model.DeviceOwnership;
+import com.example.demo.model.DeviceOwnershipRecord;
 import com.example.demo.repository.DeviceOwnershipRecordRepository;
 import com.example.demo.service.DeviceOwnershipService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.Optional;
 
 @Service
 public class DeviceOwnershipServiceImpl implements DeviceOwnershipService {
@@ -15,22 +15,23 @@ public class DeviceOwnershipServiceImpl implements DeviceOwnershipService {
     private DeviceOwnershipRecordRepository repository;
 
     @Override
-    public DeviceOwnership addDevice(DeviceOwnership deviceOwnership) {
-        return repository.save(deviceOwnership);
+    public DeviceOwnershipRecord registerDevice(DeviceOwnershipRecord deviceOwnershipRecord) {
+        return repository.save(deviceOwnershipRecord);
     }
 
     @Override
-    public List<DeviceOwnership> getAllDevices() {
-        return repository.findAll();
+    public Optional<DeviceOwnershipRecord> getBySerial(String serialNumber) {
+        return repository.findByDeviceSerialNumber(serialNumber);
     }
 
     @Override
-    public DeviceOwnership getDeviceBySerial(String serialNumber) {
-        return repository.findByDeviceSerialNumber(serialNumber).orElse(null);
-    }
-
-    @Override
-    public void deleteDevice(Long id) {
-        repository.deleteById(id);
+    public DeviceOwnershipRecord updateDeviceStatus(Long id, boolean active) {
+        Optional<DeviceOwnershipRecord> optional = repository.findById(id);
+        if (optional.isPresent()) {
+            DeviceOwnershipRecord device = optional.get();
+            device.setActive(active);
+            return repository.save(device);
+        }
+        return null;
     }
 }
