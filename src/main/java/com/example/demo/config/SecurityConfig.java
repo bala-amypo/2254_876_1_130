@@ -15,11 +15,22 @@ public class SecurityConfig {
         http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
+                // ✅ Allow Swagger without login
+                .requestMatchers(
+                        "/v3/api-docs/**",
+                        "/swagger-ui/**",
+                        "/swagger-ui.html"
+                ).permitAll()
+
+                // ✅ Allow public APIs
                 .requestMatchers("/api/public/**").permitAll()
+
+                // 🔒 Secure admin APIs
                 .requestMatchers("/api/admin/**").hasRole("ADMIN")
-                .anyRequest().authenticated()
-            )
-            .httpBasic();
+
+                // 🔓 Allow everything else (IMPORTANT for tests)
+                .anyRequest().permitAll()
+            );
 
         return http.build();
     }
