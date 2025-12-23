@@ -4,15 +4,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Entity
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class DeviceOwnership {
+public class DeviceOwnershipRecord {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,9 +14,27 @@ public class DeviceOwnership {
 
     private String deviceSerialNumber;
     private String ownerName;
-    private String purchaseDate;
+    private boolean active;
 
-    // Optional: warranty info
-    private String warrantyStartDate;
-    private String warrantyEndDate;
+    // Default constructor
+    public DeviceOwnershipRecord() {}
+
+    public DeviceOwnershipRecord(String deviceSerialNumber, String ownerName, boolean active) {
+        this.deviceSerialNumber = deviceSerialNumber;
+        this.ownerName = ownerName;
+        this.active = active;
+    }
+
+    // Getters and Setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+
+    public String getDeviceSerialNumber() { return deviceSerialNumber; }
+    public void setDeviceSerialNumber(String deviceSerialNumber) { this.deviceSerialNumber = deviceSerialNumber; }
+
+    public String getOwnerName() { return ownerName; }
+    public void setOwnerName(String ownerName) { this.ownerName = ownerName; }
+
+    public boolean isActive() { return active; }
+    public void setActive(boolean active) { this.active = active; }
 }
