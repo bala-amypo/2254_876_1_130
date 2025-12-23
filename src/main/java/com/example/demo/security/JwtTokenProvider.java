@@ -4,8 +4,8 @@ import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Component;
 
+import jakarta.servlet.http.HttpServletRequest; // <--- Changed from javax to jakarta
 import javax.crypto.SecretKey;
-import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 
@@ -36,7 +36,7 @@ public class JwtTokenProvider {
     }
 
     // Resolve token from header
-    public String resolveToken(javax.servlet.http.HttpServletRequest request) {
+    public String resolveToken(HttpServletRequest request) { // <--- use jakarta.servlet.http.HttpServletRequest
         String bearer = request.getHeader("Authorization");
         if (bearer != null && bearer.startsWith("Bearer ")) {
             return bearer.substring(7);
