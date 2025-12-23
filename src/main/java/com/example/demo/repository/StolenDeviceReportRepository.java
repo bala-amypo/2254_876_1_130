@@ -4,7 +4,9 @@ import com.example.demo.model.StolenDeviceReport;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface StolenDeviceRepository extends JpaRepository<StolenDeviceReport, Long> {
-    // Add custom query methods if needed
+    List<StolenDeviceReport> findByDeviceSerialNumber(String serialNumber);
 }
