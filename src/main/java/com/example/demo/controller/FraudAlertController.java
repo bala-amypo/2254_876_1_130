@@ -1,6 +1,6 @@
 package com.example.demo.controller;
 
-import com.example.demo.model.FraudAlert;
+import com.example.demo.model.FraudAlertRecord;
 import com.example.demo.service.FraudAlertService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -20,18 +20,24 @@ public class FraudAlertController {
     }
 
     @PostMapping
-    public ResponseEntity<FraudAlert> createAlert(@RequestBody FraudAlert alert) {
-        return ResponseEntity.ok(fraudAlertService.createAlert(alert));
+    public ResponseEntity<FraudAlertRecord> createAlert(@RequestBody FraudAlertRecord alert) {
+        FraudAlertRecord savedAlert = fraudAlertService.createAlert(alert);
+        return ResponseEntity.ok(savedAlert);
     }
 
     @GetMapping
-    public ResponseEntity<List<FraudAlert>> getAllAlerts() {
-        return ResponseEntity.ok(fraudAlertService.getAllAlerts());
+    public ResponseEntity<List<FraudAlertRecord>> getAllAlerts() {
+        List<FraudAlertRecord> alerts = fraudAlertService.getAllAlerts();
+        return ResponseEntity.ok(alerts);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<FraudAlert> getAlertById(@PathVariable Long id) {
-        return ResponseEntity.ok(fraudAlertService.getAlertById(id));
+    public ResponseEntity<FraudAlertRecord> getAlertById(@PathVariable Long id) {
+        FraudAlertRecord alert = fraudAlertService.getAlertById(id);
+        if (alert == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(alert);
     }
 
     @DeleteMapping("/{id}")
