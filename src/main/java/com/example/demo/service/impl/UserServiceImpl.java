@@ -6,25 +6,28 @@ import com.example.demo.model.User;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.security.JwtTokenProvider;
 import com.example.demo.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
+@Service
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider tokenProvider;
 
+    @Autowired
     public UserServiceImpl(UserRepository userRepository,
                            JwtTokenProvider tokenProvider) {
         this.userRepository = userRepository;
-        this.passwordEncoder = new BCryptPasswordEncoder();
         this.tokenProvider = tokenProvider;
+        this.passwordEncoder = new BCryptPasswordEncoder(); // You can also inject as a bean
     }
 
     @Override
@@ -59,9 +62,8 @@ public class UserServiceImpl implements UserService {
             throw new IllegalArgumentException("Invalid credentials");
         }
 
-        // Optionally generate JWT token here if needed
         String token = tokenProvider.createToken(user.getId(), user.getEmail(), user.getRoles());
-        user.setToken(token); // assuming User entity has transient token field
+        user.setToken(token); // make sure `token` is a transient field in User entity
         return user;
     }
 
