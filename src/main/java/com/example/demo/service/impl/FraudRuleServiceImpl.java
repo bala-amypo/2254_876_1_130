@@ -3,6 +3,7 @@ package com.example.demo.service.impl;
 import com.example.demo.entity.FraudRuleRecord;
 import com.example.demo.repository.FraudRuleRecordRepository;
 import com.example.demo.service.FraudRuleService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -10,10 +11,12 @@ import java.util.List;
 @Service
 public class FraudRuleServiceImpl implements FraudRuleService {
 
-    private final FraudRuleRecordRepository repository;
+    @Autowired
+    private FraudRuleRecordRepository repository;
 
-    public FraudRuleServiceImpl(FraudRuleRecordRepository repository) {
-        this.repository = repository;
+    @Override
+    public FraudRuleRecord create(FraudRuleRecord record) {
+        return repository.save(record);
     }
 
     @Override
@@ -22,7 +25,7 @@ public class FraudRuleServiceImpl implements FraudRuleService {
     }
 
     @Override
-    public FraudRuleRecord save(FraudRuleRecord record) {
-        return repository.save(record);
+    public FraudRuleRecord getById(Long id) {
+        return repository.findById(id).orElse(null);
     }
 }

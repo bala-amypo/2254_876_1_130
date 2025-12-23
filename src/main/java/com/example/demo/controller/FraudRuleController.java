@@ -2,18 +2,21 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.FraudRuleRecord;
 import com.example.demo.service.FraudRuleService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/admin/fraud-rules")
+@RequestMapping("/fraud-rules")
 public class FraudRuleController {
 
-    private final FraudRuleService service;
+    @Autowired
+    private FraudRuleService service;
 
-    public FraudRuleController(FraudRuleService service) {
-        this.service = service;
+    @PostMapping
+    public FraudRuleRecord create(@RequestBody FraudRuleRecord record) {
+        return service.create(record);
     }
 
     @GetMapping
@@ -21,8 +24,8 @@ public class FraudRuleController {
         return service.getAll();
     }
 
-    @PostMapping
-    public FraudRuleRecord create(@RequestBody FraudRuleRecord record) {
-        return service.save(record);
+    @GetMapping("/{id}")
+    public FraudRuleRecord getById(@PathVariable Long id) {
+        return service.getById(id);
     }
 }

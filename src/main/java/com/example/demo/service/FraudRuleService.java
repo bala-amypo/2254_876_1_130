@@ -4,6 +4,7 @@ import com.example.demo.entity.FraudRuleRecord;
 import java.util.List;
 
 public interface FraudRuleService {
+    FraudRuleRecord create(FraudRuleRecord record);
     List<FraudRuleRecord> getAll();
-    FraudRuleRecord save(FraudRuleRecord record);
+    FraudRuleRecord getById(Long id);
 }
