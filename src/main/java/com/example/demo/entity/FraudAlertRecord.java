@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Entity
 @Table(name = "fraud_alert_records")
+@Builder
 public class FraudAlertRecord {
 
     @Id
