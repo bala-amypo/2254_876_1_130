@@ -1,26 +1,40 @@
 package com.example.demo.model;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
-@Entity
-@Table(name = "stolen_device_reports")
-@Data
-@Builder
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity
+@Table(name = "stolen_device_reports")
+@Builder
 public class StolenDeviceReport {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String reportReason;
+    @Column(nullable = false)
+    private String serialNumber;
+
+    @Column(nullable = false)
+    private String reportedBy;
+
+    private String details;
+
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime reportDate;
 
     @ManyToOne
     @JoinColumn(name = "device_id")
+    @JsonIgnore
     private DeviceOwnershipRecord device;
 
-    private LocalDateTime reportDate;
+    @PrePersist
+    public void prePersist() {
+        reportDate = LocalDateTime.now();
+    }
 }
