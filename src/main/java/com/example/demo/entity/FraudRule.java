@@ -1,6 +1,7 @@
 package com.example.demo.model;
 
 import lombok.*;
+import lombok.Builder;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
