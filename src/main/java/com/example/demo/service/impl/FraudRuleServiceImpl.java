@@ -17,17 +17,12 @@ public class FraudRuleServiceImpl implements FraudRuleService {
     }
 
     @Override
-    public FraudRuleRecord save(FraudRuleRecord rule) {
-        return repository.save(rule);
-    }
-
-    @Override
     public List<FraudRuleRecord> getAll() {
         return repository.findAll();
     }
 
     @Override
-    public FraudRuleRecord getById(Long id) {
-        return repository.findById(id).orElse(null);
+    public FraudRuleRecord save(FraudRuleRecord record) {
+        return repository.save(record);
     }
 }

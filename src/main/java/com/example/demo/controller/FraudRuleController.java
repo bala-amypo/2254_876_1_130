@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/fraud-rules")
+@RequestMapping("/api/admin/fraud-rules")
 public class FraudRuleController {
 
     private final FraudRuleService service;
@@ -16,18 +16,13 @@ public class FraudRuleController {
         this.service = service;
     }
 
-    @PostMapping
-    public FraudRuleRecord create(@RequestBody FraudRuleRecord rule) {
-        return service.save(rule);
-    }
-
     @GetMapping
     public List<FraudRuleRecord> getAll() {
         return service.getAll();
     }
 
-    @GetMapping("/{id}")
-    public FraudRuleRecord getById(@PathVariable Long id) {
-        return service.getById(id);
+    @PostMapping
+    public FraudRuleRecord create(@RequestBody FraudRuleRecord record) {
+        return service.save(record);
     }
 }
