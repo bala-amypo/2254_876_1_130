@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface StolenDeviceRepository extends JpaRepository<StolenDeviceReport, Long> {
+public interface StolenDeviceReportRepository extends JpaRepository<StolenDeviceReport, Long> {
     List<StolenDeviceReport> findByDeviceSerialNumber(String serialNumber);
 }
