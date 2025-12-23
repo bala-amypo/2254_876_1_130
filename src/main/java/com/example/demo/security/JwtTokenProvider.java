@@ -4,7 +4,7 @@ import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Component;
 
-import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;  // <-- use Jakarta now
 import javax.crypto.SecretKey;
 import java.util.Date;
 import java.util.List;
@@ -15,7 +15,7 @@ public class JwtTokenProvider {
 
     private final SecretKey secretKey = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 
-    // Old method (can stay for backward compatibility)
+    // Existing generateToken method
     public String generateToken(String username, List<String> roles) {
         return Jwts.builder()
                 .setSubject(username)
@@ -26,11 +26,11 @@ public class JwtTokenProvider {
                 .compact();
     }
 
-    // New method expected by AuthController and UserServiceImpl
-    public String createToken(Long id, String email, Set<String> roles) {
+    // New createToken method (for your controller/service)
+    public String createToken(Long userId, String username, Set<String> roles) {
         return Jwts.builder()
-                .setSubject(email)
-                .claim("id", id)
+                .setSubject(username)
+                .claim("userId", userId)
                 .claim("roles", roles)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + 3600000)) // 1 hour
@@ -48,8 +48,8 @@ public class JwtTokenProvider {
         }
     }
 
-    // Resolve token from header
-    public String resolveToken(HttpServletRequest request) {
+    // Resolve token from request header
+    public String resolveToken(HttpServletRequest request) {  // <-- changed
         String bearer = request.getHeader("Authorization");
         if (bearer != null && bearer.startsWith("Bearer ")) {
             return bearer.substring(7);
@@ -64,18 +64,18 @@ public class JwtTokenProvider {
     }
 
     // Extract roles
-    public List<String> extractRoles(String token) {
+    public Set<String> extractRoles(String token) {
         return Jwts.parserBuilder().setSigningKey(secretKey).build()
                 .parseClaimsJws(token)
                 .getBody()
-                .get("roles", List.class);
+                .get("roles", Set.class);
     }
 
-    // Extract ID
-    public Long getId(String token) {
+    // Extract userId
+    public Long getUserId(String token) {
         return ((Number) Jwts.parserBuilder().setSigningKey(secretKey).build()
                 .parseClaimsJws(token)
                 .getBody()
-                .get("id")).longValue();
+                .get("userId")).longValue();
     }
 }
