@@ -1,13 +1,14 @@
 package com.example.demo.controller;
 
-import com.example.demo.entity.FraudRuleRecord;
-import com.example.demo.service.FraudRuleService;
-import org.springframework.web.bind.annotation.*;
-
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
+// Correct imports
+import com.example.demo.entity.FraudRuleRecord;
+import com.example.demo.service.FraudRuleService;
+
 @RestController
-@RequestMapping("/api/admin/fraud-rules")
 public class FraudRuleController {
 
     private final FraudRuleService service;
@@ -16,13 +17,9 @@ public class FraudRuleController {
         this.service = service;
     }
 
-    @GetMapping
-    public List<FraudRuleRecord> getAll() {
-        return service.getAll();
-    }
-
-    @PostMapping
-    public FraudRuleRecord create(@RequestBody FraudRuleRecord record) {
-        return service.save(record);
+    @GetMapping("/fraudRules")
+    public List<FraudRuleRecord> getAllFraudRules() {
+        // Correct method call
+        return service.getAllFraudRules();
     }
 }

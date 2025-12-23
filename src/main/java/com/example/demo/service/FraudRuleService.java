@@ -1,9 +1,11 @@
 package com.example.demo.service;
 
-import com.example.demo.entity.FraudRuleRecord;
 import java.util.List;
 
+// Correct import
+import com.example.demo.entity.FraudRuleRecord;
+
 public interface FraudRuleService {
-    List<FraudRuleRecord> getAll();
-    FraudRuleRecord save(FraudRuleRecord record);
+    // Ensure the method matches the controller
+    List<FraudRuleRecord> getAllFraudRules();
 }
