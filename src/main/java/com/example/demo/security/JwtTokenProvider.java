@@ -4,20 +4,33 @@ import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Component;
 
-import jakarta.servlet.http.HttpServletRequest; // <--- Changed from javax to jakarta
+import jakarta.servlet.http.HttpServletRequest;
 import javax.crypto.SecretKey;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 @Component
 public class JwtTokenProvider {
 
     private final SecretKey secretKey = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 
-    // Generate JWT token
+    // Old method (can stay for backward compatibility)
     public String generateToken(String username, List<String> roles) {
         return Jwts.builder()
                 .setSubject(username)
+                .claim("roles", roles)
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + 3600000)) // 1 hour
+                .signWith(secretKey)
+                .compact();
+    }
+
+    // New method expected by AuthController and UserServiceImpl
+    public String createToken(Long id, String email, Set<String> roles) {
+        return Jwts.builder()
+                .setSubject(email)
+                .claim("id", id)
                 .claim("roles", roles)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + 3600000)) // 1 hour
@@ -36,7 +49,7 @@ public class JwtTokenProvider {
     }
 
     // Resolve token from header
-    public String resolveToken(HttpServletRequest request) { // <--- use jakarta.servlet.http.HttpServletRequest
+    public String resolveToken(HttpServletRequest request) {
         String bearer = request.getHeader("Authorization");
         if (bearer != null && bearer.startsWith("Bearer ")) {
             return bearer.substring(7);
@@ -56,5 +69,13 @@ public class JwtTokenProvider {
                 .parseClaimsJws(token)
                 .getBody()
                 .get("roles", List.class);
+    }
+
+    // Extract ID
+    public Long getId(String token) {
+        return ((Number) Jwts.parserBuilder().setSigningKey(secretKey).build()
+                .parseClaimsJws(token)
+                .getBody()
+                .get("id")).longValue();
     }
 }
