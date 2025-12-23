@@ -1,7 +1,7 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.dto.LoginRequest;
 import com.example.demo.dto.RegisterRequest;
+import com.example.demo.dto.LoginRequest;
 import com.example.demo.model.User;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.security.JwtTokenProvider;
@@ -26,8 +26,8 @@ public class UserServiceImpl implements UserService {
     public UserServiceImpl(UserRepository userRepository,
                            JwtTokenProvider tokenProvider) {
         this.userRepository = userRepository;
+        this.passwordEncoder = new BCryptPasswordEncoder();
         this.tokenProvider = tokenProvider;
-        this.passwordEncoder = new BCryptPasswordEncoder(); // You can also inject as a bean
     }
 
     @Override
@@ -63,7 +63,7 @@ public class UserServiceImpl implements UserService {
         }
 
         String token = tokenProvider.createToken(user.getId(), user.getEmail(), user.getRoles());
-        user.setToken(token); // make sure `token` is a transient field in User entity
+        user.setToken(token); // transient field
         return user;
     }
 
