@@ -1,50 +1,28 @@
-package com.example.demo.entity;
+package com.example.demo.controller;
 
-import jakarta.persistence.*;
+import com.example.demo.entity.FraudRuleRecord;
+import com.example.demo.service.FraudRuleService;
+import org.springframework.web.bind.annotation.*;
 
-@Entity
-@Table(name = "fraud_rules")
-public class FraudRuleRecord {
+import java.util.List;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+@RestController
+@RequestMapping("/fraud-rules")
+public class FraudRuleController {
 
-    private String ruleName;
-    private String ruleDescription;
-    private boolean active;
+    private final FraudRuleService fraudRuleService;
 
-    public FraudRuleRecord() {}
-
-    public Long getId() {
-        return id;
+    public FraudRuleController(FraudRuleService fraudRuleService) {
+        this.fraudRuleService = fraudRuleService;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    @PostMapping
+    public FraudRuleRecord create(@RequestBody FraudRuleRecord rule) {
+        return fraudRuleService.createRule(rule);
     }
 
-    public String getRuleName() {
-        return ruleName;
-    }
-
-    public void setRuleName(String ruleName) {
-        this.ruleName = ruleName;
-    }
-
-    public String getRuleDescription() {
-        return ruleDescription;
-    }
-
-    public void setRuleDescription(String ruleDescription) {
-        this.ruleDescription = ruleDescription;
-    }
-
-    public boolean isActive() {
-        return active;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
+    @GetMapping
+    public List<FraudRuleRecord> getAll() {
+        return fraudRuleService.getAllRules();
     }
 }
