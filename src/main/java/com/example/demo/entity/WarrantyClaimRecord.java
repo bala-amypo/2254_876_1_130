@@ -13,26 +13,18 @@ public class WarrantyClaimRecord {
 
     private String description;
 
-    private LocalDateTime submittedAt;
+    private String status; // ✅ Add this field
 
-    private LocalDateTime createdAt;
-
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "device_id")
     private DeviceOwnershipRecord device;
 
-    // Constructors
-    public WarrantyClaimRecord() {
-    }
+    private LocalDateTime createdAt;
 
-    public WarrantyClaimRecord(String description, DeviceOwnershipRecord device) {
-        this.description = description;
-        this.device = device;
-        this.submittedAt = LocalDateTime.now();
-        this.createdAt = LocalDateTime.now();
-    }
+    private LocalDateTime submittedAt;
 
-    // Getters and setters
+    // Getters and Setters
+
     public Long getId() {
         return id;
     }
@@ -49,12 +41,20 @@ public class WarrantyClaimRecord {
         this.description = description;
     }
 
-    public LocalDateTime getSubmittedAt() {
-        return submittedAt;
+    public String getStatus() { // ✅ Getter for status
+        return status;
     }
 
-    public void setSubmittedAt(LocalDateTime submittedAt) {
-        this.submittedAt = submittedAt;
+    public void setStatus(String status) { // ✅ Setter for status
+        this.status = status;
+    }
+
+    public DeviceOwnershipRecord getDevice() {
+        return device;
+    }
+
+    public void setDevice(DeviceOwnershipRecord device) {
+        this.device = device;
     }
 
     public LocalDateTime getCreatedAt() {
@@ -65,11 +65,11 @@ public class WarrantyClaimRecord {
         this.createdAt = createdAt;
     }
 
-    public DeviceOwnershipRecord getDevice() {
-        return device;
+    public LocalDateTime getSubmittedAt() {
+        return submittedAt;
     }
 
-    public void setDevice(DeviceOwnershipRecord device) {
-        this.device = device;
+    public void setSubmittedAt(LocalDateTime submittedAt) {
+        this.submittedAt = submittedAt;
     }
 }
