@@ -6,14 +6,11 @@ import java.util.List;
 import java.util.Optional;
 
 public interface WarrantyClaimService {
-
-    WarrantyClaimRecord submitClaim(WarrantyClaimRecord claim);
-
-    WarrantyClaimRecord updateClaimStatus(Long claimId, String status);
-
-    Optional<WarrantyClaimRecord> getClaimById(Long id);
-
-    List<WarrantyClaimRecord> getClaimsBySerial(String serialNumber);
-
+    WarrantyClaimRecord createClaim(WarrantyClaimRecord claim);
     List<WarrantyClaimRecord> getAllClaims();
+    Optional<WarrantyClaimRecord> getClaimById(Long id);
+    WarrantyClaimRecord updateClaimStatus(Long id, String status);
+    void deleteClaim(Long id);
+    String getClaimReason(Long id);
+    List<WarrantyClaimRecord> getClaimsBySerial(String serialNumber);
 }

@@ -21,7 +21,6 @@ public class WarrantyClaimServiceImpl implements WarrantyClaimService {
 
     @Override
     public WarrantyClaimRecord createClaim(WarrantyClaimRecord claim) {
-        // Set default status if not provided
         if (claim.getClaimStatus() == null) {
             claim.setClaimStatus("NEW");
         }
@@ -43,7 +42,7 @@ public class WarrantyClaimServiceImpl implements WarrantyClaimService {
         Optional<WarrantyClaimRecord> optionalClaim = claimRepository.findById(id);
         if (optionalClaim.isPresent()) {
             WarrantyClaimRecord claim = optionalClaim.get();
-            claim.setClaimStatus(status);  // ✅ Updated to match your model
+            claim.setClaimStatus(status);
             return claimRepository.save(claim);
         }
         return null;
@@ -58,5 +57,10 @@ public class WarrantyClaimServiceImpl implements WarrantyClaimService {
     public String getClaimReason(Long id) {
         Optional<WarrantyClaimRecord> optionalClaim = claimRepository.findById(id);
         return optionalClaim.map(WarrantyClaimRecord::getClaimReason).orElse(null);
+    }
+
+    @Override
+    public List<WarrantyClaimRecord> getClaimsBySerial(String serialNumber) {
+        return claimRepository.findBySerialNumber(serialNumber);
     }
 }
