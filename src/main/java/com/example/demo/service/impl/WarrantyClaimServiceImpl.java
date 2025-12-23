@@ -1,55 +1,46 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.model.DeviceOwnershipRecord;
-import com.example.demo.model.WarrantyClaimRecord;
+import com.example.demo.entity.WarrantyClaimRecord;
+import com.example.demo.model.DeviceOwnership;
 import com.example.demo.repository.WarrantyClaimRepository;
 import com.example.demo.service.WarrantyClaimService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class WarrantyClaimServiceImpl implements WarrantyClaimService {
 
-    @Autowired
-    private WarrantyClaimRepository claimRepository;
+    private final WarrantyClaimRepository repository;
 
-    @Override
-    public WarrantyClaimRecord submitClaim(String description, DeviceOwnershipRecord device) {
-        WarrantyClaimRecord claim = new WarrantyClaimRecord();
-        claim.setDescription(description);
-        claim.setDevice(device);
-        claim.setSubmittedAt(LocalDateTime.now());
-        claim.setCreatedAt(LocalDateTime.now());
-        return claimRepository.save(claim);
+    public WarrantyClaimServiceImpl(WarrantyClaimRepository repository) {
+        this.repository = repository;
     }
 
     @Override
-    public List<WarrantyClaimRecord> getClaimsBySerial(String serialNumber) {
-        return claimRepository.findByDeviceSerialNumber(serialNumber);
+    public WarrantyClaimRecord createClaim(DeviceOwnership device, String reason) {
+        WarrantyClaimRecord claim = new WarrantyClaimRecord();
+        claim.setDevice(device);
+        claim.setClaimReason(reason);
+        claim.setApproved(false);
+        return repository.save(claim);
     }
 
     @Override
     public List<WarrantyClaimRecord> getAllClaims() {
-        return claimRepository.findAll();
+        return repository.findAll();
     }
 
     @Override
     public WarrantyClaimRecord getClaimById(Long id) {
-        Optional<WarrantyClaimRecord> claim = claimRepository.findById(id);
-        return claim.orElse(null);
+        return repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Claim not found"));
     }
 
     @Override
-    public WarrantyClaimRecord updateClaimStatus(Long id, String status) {
+    public WarrantyClaimRecord approveClaim(Long id) {
         WarrantyClaimRecord claim = getClaimById(id);
-        if (claim != null) {
-            claim.setStatus(status);
-            return claimRepository.save(claim);
-        }
-        return null;
+        claim.setApproved(true);
+        return repository.save(claim);
     }
 }

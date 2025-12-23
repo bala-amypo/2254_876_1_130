@@ -1,7 +1,7 @@
-package com.example.demo.model;
+package com.example.demo.entity;
 
+import com.example.demo.model.DeviceOwnership;
 import jakarta.persistence.*;
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "warranty_claims")
@@ -11,65 +11,23 @@ public class WarrantyClaimRecord {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String description;
-
-    private String status; // ✅ Add this field
-
     @ManyToOne
     @JoinColumn(name = "device_id")
-    private DeviceOwnershipRecord device;
+    private DeviceOwnership device;
 
-    private LocalDateTime createdAt;
-
-    private LocalDateTime submittedAt;
+    private String claimReason;
+    private boolean approved;
 
     // Getters and Setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public Long getId() {
-        return id;
-    }
+    public DeviceOwnership getDevice() { return device; }
+    public void setDevice(DeviceOwnership device) { this.device = device; }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    public String getClaimReason() { return claimReason; }
+    public void setClaimReason(String claimReason) { this.claimReason = claimReason; }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getStatus() { // ✅ Getter for status
-        return status;
-    }
-
-    public void setStatus(String status) { // ✅ Setter for status
-        this.status = status;
-    }
-
-    public DeviceOwnershipRecord getDevice() {
-        return device;
-    }
-
-    public void setDevice(DeviceOwnershipRecord device) {
-        this.device = device;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public LocalDateTime getSubmittedAt() {
-        return submittedAt;
-    }
-
-    public void setSubmittedAt(LocalDateTime submittedAt) {
-        this.submittedAt = submittedAt;
-    }
+    public boolean isApproved() { return approved; }
+    public void setApproved(boolean approved) { this.approved = approved; }
 }

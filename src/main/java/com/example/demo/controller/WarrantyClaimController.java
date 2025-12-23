@@ -1,42 +1,39 @@
 package com.example.demo.controller;
 
-import com.example.demo.model.DeviceOwnershipRecord;
-import com.example.demo.model.WarrantyClaimRecord;
+import com.example.demo.entity.WarrantyClaimRecord;
+import com.example.demo.model.DeviceOwnership;
 import com.example.demo.service.WarrantyClaimService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/claims")
+@RequestMapping("/warranty")
 public class WarrantyClaimController {
 
-    @Autowired
-    private WarrantyClaimService claimService;
+    private final WarrantyClaimService warrantyClaimService;
 
-    @PostMapping("/submit")
-    public WarrantyClaimRecord submitClaim(@RequestParam String description, @RequestBody DeviceOwnershipRecord device) {
-        return claimService.submitClaim(description, device);
+    public WarrantyClaimController(WarrantyClaimService warrantyClaimService) {
+        this.warrantyClaimService = warrantyClaimService;
+    }
+
+    @PostMapping("/claim")
+    public WarrantyClaimRecord createClaim(@RequestBody DeviceOwnership device, @RequestParam String reason) {
+        return warrantyClaimService.createClaim(device, reason);
     }
 
     @GetMapping("/all")
     public List<WarrantyClaimRecord> getAllClaims() {
-        return claimService.getAllClaims();
+        return warrantyClaimService.getAllClaims();
     }
 
     @GetMapping("/{id}")
     public WarrantyClaimRecord getClaimById(@PathVariable Long id) {
-        return claimService.getClaimById(id);
+        return warrantyClaimService.getClaimById(id);
     }
 
-    @PutMapping("/update-status/{id}")
-    public WarrantyClaimRecord updateClaimStatus(@PathVariable Long id, @RequestParam String status) {
-        return claimService.updateClaimStatus(id, status);
-    }
-
-    @GetMapping("/device/{serialNumber}")
-    public List<WarrantyClaimRecord> getClaimsBySerial(@PathVariable String serialNumber) {
-        return claimService.getClaimsBySerial(serialNumber);
+    @PatchMapping("/{id}/approve")
+    public WarrantyClaimRecord approveClaim(@PathVariable Long id) {
+        return warrantyClaimService.approveClaim(id);
     }
 }
