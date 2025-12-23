@@ -1,35 +1,33 @@
 package com.example.demo.controller;
 
 import com.example.demo.entity.WarrantyClaimRecord;
-import com.example.demo.model.DeviceOwnershipRecord;
 import com.example.demo.service.WarrantyClaimService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/warranty")
+@RequestMapping("/api/warranty-claims")
 public class WarrantyClaimController {
 
-    @Autowired
-    private WarrantyClaimService warrantyClaimService;
+    private final WarrantyClaimService service;
 
-    @PostMapping("/file")
-    public ResponseEntity<WarrantyClaimRecord> fileClaim(@RequestBody WarrantyClaimRecord claimRecord) {
-        WarrantyClaimRecord saved = warrantyClaimService.fileClaim(claimRecord);
-        return ResponseEntity.ok(saved);
+    public WarrantyClaimController(WarrantyClaimService service) {
+        this.service = service;
     }
 
-    @GetMapping("/all")
-    public ResponseEntity<List<WarrantyClaimRecord>> getAllClaims() {
-        return ResponseEntity.ok(warrantyClaimService.getAllClaims());
+    @PostMapping
+    public WarrantyClaimRecord create(@RequestBody WarrantyClaimRecord record) {
+        return service.create(record);
     }
 
-    @GetMapping("/device")
-    public ResponseEntity<List<WarrantyClaimRecord>> getClaimsByDevice(@RequestBody DeviceOwnershipRecord deviceOwnershipRecord) {
-        List<WarrantyClaimRecord> claims = warrantyClaimService.getClaimsByDevice(deviceOwnershipRecord);
-        return ResponseEntity.ok(claims);
+    @GetMapping
+    public List<WarrantyClaimRecord> getAll() {
+        return service.getAll();
+    }
+
+    @GetMapping("/{id}")
+    public WarrantyClaimRecord getById(@PathVariable Long id) {
+        return service.getById(id);
     }
 }
