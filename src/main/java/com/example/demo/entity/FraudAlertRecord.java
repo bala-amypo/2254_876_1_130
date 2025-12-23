@@ -30,7 +30,7 @@ public class FraudAlertRecord {
     private LocalDateTime alertDate;
 
     @Column(nullable = false)
-    private Boolean resolved = false;
+    private Boolean resolved;
 
     @ManyToOne
     @JoinColumn(name = "claim_id", insertable = false, updatable = false)
@@ -44,7 +44,7 @@ public class FraudAlertRecord {
     // --- Constructors ---
 
     public FraudAlertRecord() {
-        // Default constructor required by JPA
+        this.resolved = false;
     }
 
     public FraudAlertRecord(Long id, Long claimId, String serialNumber, String alertType,
@@ -95,7 +95,6 @@ public class FraudAlertRecord {
     public void setUser(User user) { this.user = user; }
 
     // --- JPA PrePersist ---
-
     @PrePersist
     public void prePersist() {
         if (alertDate == null) alertDate = LocalDateTime.now();

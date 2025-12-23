@@ -34,34 +34,65 @@ public class StolenDeviceReport {
         // Default constructor required by JPA
     }
 
-    public StolenDeviceReport(Long id, String serialNumber, String reportedBy, String details, LocalDateTime reportDate, DeviceOwnershipRecord device) {
+    public StolenDeviceReport(Long id, String serialNumber, String reportedBy, String details,
+                              LocalDateTime reportDate, DeviceOwnershipRecord device) {
         this.id = id;
         this.serialNumber = serialNumber;
         this.reportedBy = reportedBy;
         this.details = details;
-        this.reportDate = reportDate;
+        this.reportDate = reportDate != null ? reportDate : LocalDateTime.now();
         this.device = device;
     }
 
     // --- Getters and Setters ---
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public Long getId() {
+        return id;
+    }
 
-    public String getSerialNumber() { return serialNumber; }
-    public void setSerialNumber(String serialNumber) { this.serialNumber = serialNumber; }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    public String getReportedBy() { return reportedBy; }
-    public void setReportedBy(String reportedBy) { this.reportedBy = reportedBy; }
+    public String getSerialNumber() {
+        return serialNumber;
+    }
 
-    public String getDetails() { return details; }
-    public void setDetails(String details) { this.details = details; }
+    public void setSerialNumber(String serialNumber) {
+        this.serialNumber = serialNumber;
+    }
 
-    public LocalDateTime getReportDate() { return reportDate; }
-    public void setReportDate(LocalDateTime reportDate) { this.reportDate = reportDate; }
+    public String getReportedBy() {
+        return reportedBy;
+    }
 
-    public DeviceOwnershipRecord getDevice() { return device; }
-    public void setDevice(DeviceOwnershipRecord device) { this.device = device; }
+    public void setReportedBy(String reportedBy) {
+        this.reportedBy = reportedBy;
+    }
+
+    public String getDetails() {
+        return details;
+    }
+
+    public void setDetails(String details) {
+        this.details = details;
+    }
+
+    public LocalDateTime getReportDate() {
+        return reportDate;
+    }
+
+    public void setReportDate(LocalDateTime reportDate) {
+        this.reportDate = reportDate;
+    }
+
+    public DeviceOwnershipRecord getDevice() {
+        return device;
+    }
+
+    public void setDevice(DeviceOwnershipRecord device) {
+        this.device = device;
+    }
 
     // --- JPA PrePersist ---
 
