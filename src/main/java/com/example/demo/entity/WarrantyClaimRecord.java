@@ -1,52 +1,26 @@
 package com.example.demo.entity;
+
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
-import jakarta.persistence.*;
-
 @Entity
-@Table(name = "warranty_claims")
 public class WarrantyClaimRecord {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String deviceSerialNumber;
-    private String claimStatus;
-    private Double claimAmount;
+    private String productName;
+    private String claimReason;
 
-    public WarrantyClaimRecord() {}
+    // Getters and setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public Long getId() {
-        return id;
-    }
+    public String getProductName() { return productName; }
+    public void setProductName(String productName) { this.productName = productName; }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getDeviceSerialNumber() {
-        return deviceSerialNumber;
-    }
-
-    public void setDeviceSerialNumber(String deviceSerialNumber) {
-        this.deviceSerialNumber = deviceSerialNumber;
-    }
-
-    public String getClaimStatus() {
-        return claimStatus;
-    }
-
-    public void setClaimStatus(String claimStatus) {
-        this.claimStatus = claimStatus;
-    }
-
-    public Double getClaimAmount() {
-        return claimAmount;
-    }
-
-    public void setClaimAmount(Double claimAmount) {
-        this.claimAmount = claimAmount;
-    }
+    public String getClaimReason() { return claimReason; }
+    public void setClaimReason(String claimReason) { this.claimReason = claimReason; }
 }
