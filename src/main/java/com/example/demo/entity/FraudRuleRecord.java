@@ -1,4 +1,4 @@
-package com.example.demo.model;
+package com.example.demo.entity;
 
 import jakarta.persistence.*;
 
@@ -11,19 +11,17 @@ public class FraudRuleRecord {
     private Long id;
 
     private String ruleName;
-    private String description;
+    private String ruleDescription;
     private boolean active;
 
     public FraudRuleRecord() {}
 
-    public FraudRuleRecord(String ruleName, String description, boolean active) {
-        this.ruleName = ruleName;
-        this.description = description;
-        this.active = active;
-    }
-
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getRuleName() {
@@ -34,12 +32,12 @@ public class FraudRuleRecord {
         this.ruleName = ruleName;
     }
 
-    public String getDescription() {
-        return description;
+    public String getRuleDescription() {
+        return ruleDescription;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setRuleDescription(String ruleDescription) {
+        this.ruleDescription = ruleDescription;
     }
 
     public boolean isActive() {

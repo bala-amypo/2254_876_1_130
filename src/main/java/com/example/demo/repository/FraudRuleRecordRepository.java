@@ -1,16 +1,10 @@
-package com.example.demo.model;
+package com.example.demo.repository;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.example.demo.entity.FraudRuleRecord;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class WarrantyClaimRecord {
-
-    private Long id;
-    private String claimNumber;
-    private String productCode;
-    private boolean fraudulent;
+@Repository
+public interface FraudRuleRecordRepository
+        extends JpaRepository<FraudRuleRecord, Long> {
 }
