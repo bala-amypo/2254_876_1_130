@@ -1,48 +1,37 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.model.DeviceOwnershipRecord;
-import com.example.demo.repository.DeviceOwnershipRecordRepository;
+import com.example.demo.model.DeviceOwnership;
+import com.example.demo.repository.DeviceOwnershipRepository;
 import com.example.demo.service.DeviceOwnershipService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.NoSuchElementException;
 
+@Service
 public class DeviceOwnershipServiceImpl implements DeviceOwnershipService {
 
-    private final DeviceOwnershipRecordRepository deviceRepository;
+    private final DeviceOwnershipRepository repository;
 
-    public DeviceOwnershipServiceImpl(DeviceOwnershipRecordRepository deviceRepository) {
-        this.deviceRepository = deviceRepository;
+    @Autowired
+    public DeviceOwnershipServiceImpl(DeviceOwnershipRepository repository) {
+        this.repository = repository;
     }
 
     @Override
-    public DeviceOwnershipRecord registerDevice(DeviceOwnershipRecord device) {
-
-        if (deviceRepository.existsBySerialNumber(device.getSerialNumber())) {
-            throw new IllegalArgumentException("Serial number already exists");
-        }
-
-        return deviceRepository.save(device);
+    public DeviceOwnership create(DeviceOwnership ownership) {
+        return repository.save(ownership);
     }
 
     @Override
-    public DeviceOwnershipRecord getBySerial(String serialNumber) {
-        return deviceRepository.findBySerialNumber(serialNumber)
-                .orElseThrow(() -> new NoSuchElementException("Device not found"));
+    public List<DeviceOwnership> getAll() {
+        return repository.findAll();
     }
 
     @Override
-    public List<DeviceOwnershipRecord> getAllDevices() {
-        return deviceRepository.findAll();
-    }
-
-    @Override
-    public DeviceOwnershipRecord updateDeviceStatus(Long id, boolean active) {
-
-        DeviceOwnershipRecord device = deviceRepository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("Device not found"));
-
-        device.setActive(active);
-        return deviceRepository.save(device);
+    public DeviceOwnership getById(Long id) {
+        return repository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("DeviceOwnership not found"));
     }
 }
