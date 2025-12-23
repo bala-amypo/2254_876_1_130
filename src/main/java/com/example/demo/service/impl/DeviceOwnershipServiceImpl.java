@@ -1,12 +1,36 @@
-package com.example.demo.repository;
+package com.example.demo.service.impl;
 
-import com.example.demo.model.DeviceOwnershipRecord;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
+import com.example.demo.model.DeviceOwnership;
+import com.example.demo.repository.DeviceOwnershipRecordRepository;
+import com.example.demo.service.DeviceOwnershipService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Repository
-public interface DeviceOwnershipRecordRepository extends JpaRepository<DeviceOwnershipRecord, Long> {
-    List<DeviceOwnershipRecord> findByDeviceSerialNumber(String serialNumber);
+@Service
+public class DeviceOwnershipServiceImpl implements DeviceOwnershipService {
+
+    @Autowired
+    private DeviceOwnershipRecordRepository repository;
+
+    @Override
+    public DeviceOwnership addDevice(DeviceOwnership deviceOwnership) {
+        return repository.save(deviceOwnership);
+    }
+
+    @Override
+    public List<DeviceOwnership> getAllDevices() {
+        return repository.findAll();
+    }
+
+    @Override
+    public DeviceOwnership getDeviceBySerial(String serialNumber) {
+        return repository.findByDeviceSerialNumber(serialNumber).orElse(null);
+    }
+
+    @Override
+    public void deleteDevice(Long id) {
+        repository.deleteById(id);
+    }
 }

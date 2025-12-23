@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class DeviceOwnershipRecord {
+public class DeviceOwnership {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,4 +21,8 @@ public class DeviceOwnershipRecord {
     private String deviceSerialNumber;
     private String ownerName;
     private String purchaseDate;
+
+    // Optional: warranty info
+    private String warrantyStartDate;
+    private String warrantyEndDate;
 }
