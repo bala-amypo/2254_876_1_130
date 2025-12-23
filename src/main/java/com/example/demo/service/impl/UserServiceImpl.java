@@ -37,7 +37,7 @@ public class UserServiceImpl implements UserService {
         .password(passwordEncoder.encode(request.getPassword()))
         .roles(request.getRoles())
         .createdAt(java.time.LocalDateTime.now())
-        .build()
+        .build();
         return userRepository.save(user);
     }
 
