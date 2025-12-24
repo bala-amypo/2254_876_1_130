@@ -1,38 +1,35 @@
 package com.example.demo.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import lombok.*;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
+@Table(name = "device_ownership_records")
 public class DeviceOwnershipRecord {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String deviceSerialNumber;
+    @Column(unique = true)
+    private String serialNumber;
+
     private String ownerName;
-    private boolean active;
+    private String ownerEmail;
+    private LocalDate purchaseDate;
+    private LocalDate warrantyExpiration;
+    private Boolean active = true;
+    private LocalDateTime createdAt;
 
-    public DeviceOwnershipRecord() {}
-
-    public DeviceOwnershipRecord(String deviceSerialNumber, String ownerName, boolean active) {
-        this.deviceSerialNumber = deviceSerialNumber;
-        this.ownerName = ownerName;
-        this.active = active;
+    @PrePersist
+    public void onCreate() {
+        this.createdAt = LocalDateTime.now();
     }
-
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-
-    public String getDeviceSerialNumber() { return deviceSerialNumber; }
-    public void setDeviceSerialNumber(String deviceSerialNumber) { this.deviceSerialNumber = deviceSerialNumber; }
-
-    public String getOwnerName() { return ownerName; }
-    public void setOwnerName(String ownerName) { this.ownerName = ownerName; }
-
-    public boolean isActive() { return active; }
-    public void setActive(boolean active) { this.active = active; }
 }

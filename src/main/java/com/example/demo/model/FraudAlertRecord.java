@@ -1,42 +1,32 @@
 package com.example.demo.model;
 
 import jakarta.persistence.*;
+import lombok.*;
 
+import java.time.LocalDateTime;
+
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
-@Table(name = "fraud_alerts")
+@Table(name = "fraud_alert_records")
 public class FraudAlertRecord {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String deviceSerialNumber;
-    private String alertMessage;
+    private Long claimId;
+    private String serialNumber;
+    private String alertType;
+    private String severity;
+    private String message;
+    private Boolean resolved = false;
+    private LocalDateTime alertDate;
 
-    public FraudAlertRecord() {}
-
-    public FraudAlertRecord(String deviceSerialNumber, String alertMessage) {
-        this.deviceSerialNumber = deviceSerialNumber;
-        this.alertMessage = alertMessage;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getDeviceSerialNumber() {
-        return deviceSerialNumber;
-    }
-
-    public void setDeviceSerialNumber(String deviceSerialNumber) {
-        this.deviceSerialNumber = deviceSerialNumber;
-    }
-
-    public String getAlertMessage() {
-        return alertMessage;
-    }
-
-    public void setAlertMessage(String alertMessage) {
-        this.alertMessage = alertMessage;
+    @PrePersist
+    public void onCreate() {
+        this.alertDate = LocalDateTime.now();
     }
 }
