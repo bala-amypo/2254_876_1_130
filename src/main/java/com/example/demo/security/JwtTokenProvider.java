@@ -78,4 +78,15 @@ public class JwtTokenProvider {
                 .getBody()
                 .get("userId")).longValue();
     }
+    public String getEmail(String token) {
+        return extractAllClaims(token).getSubject();
+    }
+
+    @SuppressWarnings("unchecked")
+    public Set<String> getRoles(String token) {
+        return new HashSet<>(
+            (List<String>) extractAllClaims(token).get("roles")
+        );
+    }
+
 }
