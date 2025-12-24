@@ -7,6 +7,7 @@ import com.example.demo.service.StolenDeviceService;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Service
 public class StolenDeviceServiceImpl implements StolenDeviceService {
@@ -31,5 +32,13 @@ public class StolenDeviceServiceImpl implements StolenDeviceService {
     
     public List<StolenDeviceReport> getAllReports() {
         return stolenRepo.findAll();
+    }
+    
+    public Optional<StolenDeviceReport> getReportById(Long id) {
+        return stolenRepo.findById(id);
+    }
+    
+    public void deleteReport(Long id) {
+        stolenRepo.deleteById(id);
     }
 }

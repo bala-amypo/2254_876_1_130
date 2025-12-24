@@ -26,6 +26,10 @@ public class FraudRuleServiceImpl implements FraudRuleService {
         return repository.findByActiveTrue();
     }
     
+    public List<FraudRule> getAllRules() {
+        return repository.findAll();
+    }
+    
     public Optional<FraudRule> getRuleByCode(String ruleCode) {
         return repository.findByRuleCode(ruleCode);
     }
