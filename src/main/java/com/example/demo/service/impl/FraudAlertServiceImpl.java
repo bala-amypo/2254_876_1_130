@@ -14,7 +14,6 @@ public class FraudAlertServiceImpl implements FraudAlertService {
 
     private final FraudAlertRecordRepository repository;
 
-    // ✅ TEST CONSTRUCTOR
     public FraudAlertServiceImpl(FraudAlertRecordRepository repository) {
         this.repository = repository;
     }
@@ -43,7 +42,7 @@ public class FraudAlertServiceImpl implements FraudAlertService {
     }
 
     @Override
-    public List<FraudAlertRecord> getAllAlerts() {
+    public List<FraudAlertRecord> getAll() {
         return repository.findAll();
     }
 }
