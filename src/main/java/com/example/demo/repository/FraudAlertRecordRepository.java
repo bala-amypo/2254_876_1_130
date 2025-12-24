@@ -2,10 +2,18 @@ package com.example.demo.repository;
 
 import com.example.demo.model.FraudAlertRecord;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 
-@Repository
+import java.util.List;   // ✅ THIS IMPORT FIXES THE ERROR
+import java.util.Optional;
+
 public interface FraudAlertRecordRepository
         extends JpaRepository<FraudAlertRecord, Long> {
-                List<FraudAlertRecord> findByClaimId(Long claimId);
+
+    Optional<FraudAlertRecord> findById(Long id);
+
+    List<FraudAlertRecord> findByClaimId(Long claimId);
+
+    List<FraudAlertRecord> findBySerialNumber(String serialNumber);
+
+    List<FraudAlertRecord> findByResolved(Boolean resolved);
 }
