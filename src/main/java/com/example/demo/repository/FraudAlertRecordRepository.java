@@ -7,4 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface FraudAlertRecordRepository
         extends JpaRepository<FraudAlertRecord, Long> {
+                List<FraudAlertRecord> findByClaimId(Long claimId);
 }
