@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @Service
 public class StolenDeviceServiceImpl implements StolenDeviceService {
@@ -30,12 +29,21 @@ public class StolenDeviceServiceImpl implements StolenDeviceService {
     }
 
     @Override
-    public Optional<StolenDeviceReport> getReportById(Long id) {
-        return repository.findById(id);
+    public StolenDeviceReport getReportById(Long id) {
+        return repository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Request not found"));
     }
 
     @Override
     public List<StolenDeviceReport> getAllReports() {
         return repository.findAll();
+    }
+
+    @Override
+    public void deleteReport(Long id) {
+        if (!repository.existsById(id)) {
+            throw new NoSuchElementException("Request not found");
+        }
+        repository.deleteById(id);
     }
 }
