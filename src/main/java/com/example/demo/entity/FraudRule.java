@@ -1,34 +1,94 @@
-package com.example.demo.entity;
+package com.example.demo.model;
 
+/* ===== IMPORTS ===== */
 import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+import jakarta.persistence.Id;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.Column;
+import jakarta.persistence.PrePersist;
 
+import java.time.LocalDateTime;
+
+/* ===== ENTITY ===== */
 @Entity
-public class FraudRuleRecord {
+@Table(name = "fraud_rules")
+public class FraudRule {
 
+    /* ===== FIELDS ===== */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String ruleName;
-    private String description;
-    private boolean active;
 
-    public FraudRuleRecord() {}
-    public FraudRuleRecord(String ruleName, String description, boolean active) {
-        this.ruleName = ruleName;
+    @Column(unique = true, nullable = false)
+    private String ruleCode;
+
+    private String ruleType;
+
+    private String description;
+
+    private Boolean active = true;
+
+    private LocalDateTime createdAt;
+
+    /* ===== CONSTRUCTORS ===== */
+    public FraudRule() {
+    }
+
+    /* ===== LIFECYCLE CALLBACK ===== */
+    @PrePersist
+    public void onCreate() {
+        this.createdAt = LocalDateTime.now();
+    }
+
+    /* ===== GETTERS ===== */
+    public Long getId() {
+        return id;
+    }
+
+    public String getRuleCode() {
+        return ruleCode;
+    }
+
+    public String getRuleType() {
+        return ruleType;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    /* ===== SETTERS ===== */
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setRuleCode(String ruleCode) {
+        this.ruleCode = ruleCode;
+    }
+
+    public void setRuleType(String ruleType) {
+        this.ruleType = ruleType;
+    }
+
+    public void setDescription(String description) {
         this.description = description;
+    }
+
+    public void setActive(Boolean active) {
         this.active = active;
     }
 
-    // getters and setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-    public String getRuleName() { return ruleName; }
-    public void setRuleName(String ruleName) { this.ruleName = ruleName; }
-    public String getDescription() { return description; }
-    public void setDescription(String description) { this.description = description; }
-    public boolean isActive() { return active; }
-    public void setActive(boolean active) { this.active = active; }
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
 }
