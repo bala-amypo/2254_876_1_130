@@ -6,6 +6,8 @@ import io.jsonwebtoken.SignatureAlgorithm;
 
 import org.springframework.stereotype.Component;
 
+import jakarta.servlet.http.HttpServletRequest;
+
 import java.util.Date;
 import java.util.Set;
 import java.util.HashSet;
@@ -14,10 +16,7 @@ import java.util.List;
 @Component
 public class JwtTokenProvider {
 
-    // simple static secret for tests
     private final String secretKey = "test-secret-key";
-
-    // token validity: 1 hour
     private final long validityInMilliseconds = 3600000;
 
     public String createToken(Long userId, String email, Set<String> roles) {
@@ -37,6 +36,14 @@ public class JwtTokenProvider {
                 .compact();
     }
 
+    public String resolveToken(HttpServletRequest request) {
+        String bearer = request.getHeader("Authorization");
+        if (bearer != null && bearer.startsWith("Bearer ")) {
+            return bearer.substring(7);
+        }
+        return null;
+    }
+
     public boolean validateToken(String token) {
         try {
             extractAllClaims(token);
@@ -46,12 +53,12 @@ public class JwtTokenProvider {
         }
     }
 
-    public String getEmail(String token) {
+    public String getUsername(String token) {
         return extractAllClaims(token).getSubject();
     }
 
     @SuppressWarnings("unchecked")
-    public Set<String> getRoles(String token) {
+    public Set<String> extractRoles(String token) {
         return new HashSet<>(
                 (List<String>) extractAllClaims(token).get("roles")
         );
@@ -62,7 +69,6 @@ public class JwtTokenProvider {
         return id == null ? null : Long.valueOf(id.toString());
     }
 
-    // ===== REQUIRED PRIVATE HELPER =====
     private Claims extractAllClaims(String token) {
         return Jwts.parser()
                 .setSigningKey(secretKey)
