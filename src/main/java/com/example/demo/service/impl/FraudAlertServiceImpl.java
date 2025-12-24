@@ -19,6 +19,14 @@ public class FraudAlertServiceImpl implements FraudAlertService {
         return repository.save(alert);
     }
     
+    public FraudAlertRecord create(FraudAlertRecord alert) {
+        return repository.save(alert);
+    }
+    
+    public List<FraudAlertRecord> getAll() {
+        return repository.findAll();
+    }
+    
     public FraudAlertRecord resolveAlert(Long id) {
         FraudAlertRecord alert = repository.findById(id)
             .orElseThrow(() -> new NoSuchElementException("Alert not found"));
