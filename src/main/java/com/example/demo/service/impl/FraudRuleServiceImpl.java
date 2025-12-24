@@ -1,31 +1,47 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.entity.FraudRuleRecord;
-import com.example.demo.repository.FraudRuleRecordRepository;
+/* ===== IMPORTS ===== */
+import com.example.demo.model.FraudRule;
+import com.example.demo.repository.FraudRuleRepository;
 import com.example.demo.service.FraudRuleService;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class FraudRuleServiceImpl implements FraudRuleService {
 
-    @Autowired
-    private FraudRuleRecordRepository repository;
+    private final FraudRuleRepository fraudRuleRepository;
 
-    @Override
-    public FraudRuleRecord create(FraudRuleRecord record) {
-        return repository.save(record);
+    public FraudRuleServiceImpl(FraudRuleRepository fraudRuleRepository) {
+        this.fraudRuleRepository = fraudRuleRepository;
     }
 
     @Override
-    public List<FraudRuleRecord> getAll() {
-        return repository.findAll();
+    public FraudRule createRule(FraudRule rule) {
+        return fraudRuleRepository.save(rule);
     }
 
     @Override
-    public FraudRuleRecord getById(Long id) {
-        return repository.findById(id).orElse(null);
+    public FraudRule updateRule(Long id, FraudRule rule) {
+        rule.setId(id);
+        return fraudRuleRepository.save(rule);
+    }
+
+    @Override
+    public Optional<FraudRule> getRuleByCode(String ruleCode) {
+        return fraudRuleRepository.findByRuleCode(ruleCode);
+    }
+
+    @Override
+    public List<FraudRule> getActiveRules() {
+        return fraudRuleRepository.findByActiveTrue();
+    }
+
+    @Override
+    public List<FraudRule> getAllRules() {
+        return fraudRuleRepository.findAll();
     }
 }

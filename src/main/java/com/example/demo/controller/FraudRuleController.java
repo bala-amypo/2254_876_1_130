@@ -1,31 +1,36 @@
 package com.example.demo.controller;
 
-import com.example.demo.entity.FraudRuleRecord;
+/* ===== IMPORTS ===== */
+import com.example.demo.model.FraudRule;
 import com.example.demo.service.FraudRuleService;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/fraud-rules")
+@RequestMapping("/api/fraud-rules")
 public class FraudRuleController {
 
-    @Autowired
-    private FraudRuleService service;
+    private final FraudRuleService fraudRuleService;
+
+    public FraudRuleController(FraudRuleService fraudRuleService) {
+        this.fraudRuleService = fraudRuleService;
+    }
 
     @PostMapping
-    public FraudRuleRecord create(@RequestBody FraudRuleRecord record) {
-        return service.create(record);
+    public ResponseEntity<FraudRule> create(@RequestBody FraudRule rule) {
+        return ResponseEntity.ok(fraudRuleService.createRule(rule));
     }
 
     @GetMapping
-    public List<FraudRuleRecord> getAll() {
-        return service.getAll();
+    public ResponseEntity<List<FraudRule>> getAll() {
+        return ResponseEntity.ok(fraudRuleService.getAllRules());
     }
 
-    @GetMapping("/{id}")
-    public FraudRuleRecord getById(@PathVariable Long id) {
-        return service.getById(id);
+    @GetMapping("/active")
+    public ResponseEntity<List<FraudRule>> getActive() {
+        return ResponseEntity.ok(fraudRuleService.getActiveRules());
     }
 }

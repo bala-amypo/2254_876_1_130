@@ -1,8 +1,10 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.entity.WarrantyClaimRecord;
+/* ===== IMPORTS ===== */
+import com.example.demo.model.WarrantyClaimRecord;
 import com.example.demo.repository.WarrantyClaimRecordRepository;
 import com.example.demo.service.WarrantyClaimService;
+
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,18 +20,30 @@ public class WarrantyClaimServiceImpl implements WarrantyClaimService {
     }
 
     @Override
-    public WarrantyClaimRecord create(WarrantyClaimRecord claim) {
+    public WarrantyClaimRecord submitClaim(WarrantyClaimRecord claim) {
         return repository.save(claim);
     }
 
     @Override
-    public List<WarrantyClaimRecord> getAll() {
-        return repository.findAll();
+    public WarrantyClaimRecord updateClaimStatus(Long id, String status) {
+        WarrantyClaimRecord claim = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Request not found"));
+        claim.setStatus(status);
+        return repository.save(claim);
     }
 
     @Override
-    public WarrantyClaimRecord getById(Long id) {
-        Optional<WarrantyClaimRecord> claim = repository.findById(id);
-        return claim.orElse(null);
+    public Optional<WarrantyClaimRecord> getClaimById(Long id) {
+        return repository.findById(id);
+    }
+
+    @Override
+    public List<WarrantyClaimRecord> getClaimsBySerial(String serialNumber) {
+        return repository.findBySerialNumber(serialNumber);
+    }
+
+    @Override
+    public List<WarrantyClaimRecord> getAllClaims() {
+        return repository.findAll();
     }
 }
