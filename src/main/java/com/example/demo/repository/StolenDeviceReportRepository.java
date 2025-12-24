@@ -2,11 +2,17 @@ package com.example.demo.repository;
 
 import com.example.demo.model.StolenDeviceReport;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
-@Repository
-public interface StolenDeviceReportRepository extends JpaRepository<StolenDeviceReport, Long> {
-    List<StolenDeviceReport> findByDeviceSerialNumber(String serialNumber);
+public interface StolenDeviceReportRepository
+        extends JpaRepository<StolenDeviceReport, Long> {
+
+    // ✅ MUST match entity field name EXACTLY
+    List<StolenDeviceReport> findBySerialNumber(String serialNumber);
+
+    boolean existsBySerialNumber(String serialNumber);
+
+    Optional<StolenDeviceReport> findById(Long id);
 }

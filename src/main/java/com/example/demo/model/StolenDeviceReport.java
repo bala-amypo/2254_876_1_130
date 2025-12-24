@@ -17,11 +17,14 @@ public class StolenDeviceReport {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true)
+    // ✅ MUST be named serialNumber (per test helper)
+    @Column(unique = true, nullable = false)
     private String serialNumber;
 
     private String reportedBy;
+
     private String details;
+
     private LocalDateTime reportDate;
 
     @PrePersist
