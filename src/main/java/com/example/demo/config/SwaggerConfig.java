@@ -26,7 +26,7 @@ public class SwaggerConfig {
                 )
                 .addSecurityItem(new SecurityRequirement().addList("bearerAuth"))
                 .servers(List.of(
-                        new Server().url("")  // <-- PASTE YOUR URL HERE
+                        new Server().url("https://9144.32procr.amypo.ai")  // <-- PASTE YOUR URL HERE
                 ));
     }
 }
