@@ -32,3 +32,4 @@ public class FraudRuleController {
         return ResponseEntity.ok(fraudRuleService.getActiveRules());
     }
 }
+
