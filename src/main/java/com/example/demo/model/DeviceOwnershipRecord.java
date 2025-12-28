@@ -1,6 +1,6 @@
 package com.example.demo.model;
 
-import jakarta.persistence.*;  //
+import jakarta.persistence.*; // time related persistnce and jakarta for  importing lib
 import java.time.LocalDate;
 
 @Entity
