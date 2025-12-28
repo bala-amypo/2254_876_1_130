@@ -25,34 +25,75 @@ public class DeviceOwnershipRecord {
     }
     
     public Long getId() { 
-        return id; }
-    public void setId(Long id) { this.id = id; }
+        return id; 
+        }
+    public void setId(Long id) {
+     this.id = id; 
+     }
     
-    public String getSerialNumber() { return serialNumber; }
-    public void setSerialNumber(String serialNumber) { this.serialNumber = serialNumber; }
+    public String getSerialNumber() { 
+    return serialNumber;
+     }
+    public void setSerialNumber(String serialNumber) { 
+    this.serialNumber = serialNumber;
+     }
     
-    public String getOwnerName() { return ownerName; }
-    public void setOwnerName(String ownerName) { this.ownerName = ownerName; }
+    public String getOwnerName() {
+         return ownerName;
+          }
+    public void setOwnerName(String ownerName) {
+        
+     this.ownerName = ownerName; 
+     }
     
-    public String getOwnerEmail() { return ownerEmail; }
-    public void setOwnerEmail(String ownerEmail) { this.ownerEmail = ownerEmail; }
+    public String getOwnerEmail() {
+         return ownerEmail;
+          }
+    public void setOwnerEmail(String ownerEmail) {
+         this.ownerEmail = ownerEmail;
+          }
     
-    public LocalDate getWarrantyExpiration() { return warrantyExpiration; }
-    public void setWarrantyExpiration(LocalDate warrantyExpiration) { this.warrantyExpiration = warrantyExpiration; }
+    public LocalDate getWarrantyExpiration() {
+        
+     return warrantyExpiration;
+      }
+    public void setWarrantyExpiration(LocalDate warrantyExpiration)
+     {
+         this.warrantyExpiration = warrantyExpiration; 
+         }
     
-    public Boolean getActive() { return active; }
-    public void setActive(Boolean active) { this.active = active; }
+    public Boolean getActive() {
+        
+     return active; 
+     }
+    public void setActive(Boolean active) {
+         this.active = active;
+          }
     
     public static class DeviceOwnershipRecordBuilder {
         private DeviceOwnershipRecord record = new DeviceOwnershipRecord();
         
-        public DeviceOwnershipRecordBuilder id(Long id) { record.setId(id); return this; }
-        public DeviceOwnershipRecordBuilder serialNumber(String serialNumber) { record.setSerialNumber(serialNumber); return this; }
-        public DeviceOwnershipRecordBuilder ownerName(String ownerName) { record.setOwnerName(ownerName); return this; }
-        public DeviceOwnershipRecordBuilder ownerEmail(String ownerEmail) { record.setOwnerEmail(ownerEmail); return this; }
-        public DeviceOwnershipRecordBuilder warrantyExpiration(LocalDate warrantyExpiration) { record.setWarrantyExpiration(warrantyExpiration); return this; }
-        public DeviceOwnershipRecordBuilder active(Boolean active) { record.setActive(active); return this; }
+        public DeviceOwnershipRecordBuilder id(Long id) { 
+            record.setId(id); return this;
+             }
+        public DeviceOwnershipRecordBuilder serialNumber(String serialNumber) {
+            
+         record.setSerialNumber(serialNumber); return this;
+          }
+        public DeviceOwnershipRecordBuilder ownerName(String ownerName) { 
+            record.setOwnerName(ownerName); return this;
+             }
+        public DeviceOwnershipRecordBuilder ownerEmail(String ownerEmail) {
+             record.setOwnerEmail(ownerEmail); return this;
+              }
+        public DeviceOwnershipRecordBuilder warrantyExpiration(LocalDate warrantyExpiration) { 
+            record.setWarrantyExpiration(warrantyExpiration); return this;
+             }
+        public DeviceOwnershipRecordBuilder active(Boolean active) {
+             record.setActive(active); return this;
+              }
         
-        public DeviceOwnershipRecord build() { return record; }
+        public DeviceOwnershipRecord build() {
+             return record; }
     }
 }
