@@ -24,7 +24,8 @@ public class DeviceOwnershipRecord {
         return new DeviceOwnershipRecordBuilder();
     }
     
-    public Long getId() { return id; }
+    public Long getId() { 
+        return id; }
     public void setId(Long id) { this.id = id; }
     
     public String getSerialNumber() { return serialNumber; }
