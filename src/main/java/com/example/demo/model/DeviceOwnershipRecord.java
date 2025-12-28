@@ -74,26 +74,33 @@ public class DeviceOwnershipRecord {
         private DeviceOwnershipRecord record = new DeviceOwnershipRecord();
         
         public DeviceOwnershipRecordBuilder id(Long id) { 
-            record.setId(id); return this;
+            record.setId(id); 
+            return this;
              }
         public DeviceOwnershipRecordBuilder serialNumber(String serialNumber) {
             
-         record.setSerialNumber(serialNumber); return this;
+         record.setSerialNumber(serialNumber); 
+         return this;
           }
         public DeviceOwnershipRecordBuilder ownerName(String ownerName) { 
-            record.setOwnerName(ownerName); return this;
+            record.setOwnerName(ownerName);
+             return this;
              }
         public DeviceOwnershipRecordBuilder ownerEmail(String ownerEmail) {
-             record.setOwnerEmail(ownerEmail); return this;
+             record.setOwnerEmail(ownerEmail);
+              return this;
               }
         public DeviceOwnershipRecordBuilder warrantyExpiration(LocalDate warrantyExpiration) { 
-            record.setWarrantyExpiration(warrantyExpiration); return this;
+            record.setWarrantyExpiration(warrantyExpiration);
+             return this;
              }
         public DeviceOwnershipRecordBuilder active(Boolean active) {
-             record.setActive(active); return this;
+             record.setActive(active);
+              return this;
               }
         
         public DeviceOwnershipRecord build() {
-             return record; }
+             return record;
+              }
     }
 }
